@@ -27,12 +27,13 @@ FROM alpine:3.9
 
 RUN apk add --no-cache \
 bash \
-socat \
 tzdata \
-python3 \
-mariadb-dev \
 procps \
-psmisc
+psmisc \
+net-tools \
+socat \
+python3 \
+mariadb-dev
 
 ENV SEAFILE_VERSION=8.0.2
 ENV LD_LIBRARY_PATH=/lib:/usr/lib
