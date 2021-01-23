@@ -41,7 +41,7 @@ COPY --from=get /tmp/seafile-server-${SEAFILE_VERSION} /opt/seafile/seafile-serv
 COPY --from=pip /usr/lib/python3.6/site-packages /usr/lib/python3.6/site-packages
 COPY scripts /scripts
 RUN chmod u+x /scripts/*
-WORKDIR?
+
 EXPOSE 8080 8082 8001
 
 CMD ["/scripts/start.sh"]
