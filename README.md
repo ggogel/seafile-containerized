@@ -252,7 +252,7 @@ caddy.rewrite: /accounts/login* /oauth/login/?
 
 ### Docker Swarm
 
-If you want to stacks on a Docker Swarm with multiple nodes or if you want to run replicas of the frontend (clustering), there several things you have to consider first.
+If you want to deploy this stack on a Docker Swarm with multiple nodes or if you want to run replicas of the frontend (clustering), there are several things you have to consider first.
 
 **Important:** You can only deploy multiple replicas of the frontend services *seahub* and *seahub-media*. Deploying replicas of the backend or the database would cause data inconsistency or even data corruption.
 
