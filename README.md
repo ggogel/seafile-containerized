@@ -291,5 +291,5 @@ environment:
 #### Example
 You can check out this example and use it as a starting point for you Docker Swarm deployment. It is using [lucaslorentz/caddy-docker-proxy](https://manual.seafile.com/docker/deploy%20seafile%20with%20docker/) as the external reverse proxy and the GlusterFS plugin from [marcelo-ochoa/docker-volume-plugins](https://github.com/marcelo-ochoa/docker-volume-plugins). This resembles my personal production setup.
 ```
-    wget https://raw.githubusercontent.com/ggogel/seafile-containerized/master/compose/docker-compose.yml
+    wget https://raw.githubusercontent.com/ggogel/seafile-containerized/master/compose/docker-compose-swarm.yml
 ```
