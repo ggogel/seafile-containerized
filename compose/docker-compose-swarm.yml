@@ -17,6 +17,8 @@ services:
       - memcached
     networks:
       - seafile-net
+    deploy:
+      endpoint_mode: dnsrr
 
   seahub:
     image: ggogel/seahub:8.0.2
