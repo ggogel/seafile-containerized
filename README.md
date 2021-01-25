@@ -269,11 +269,11 @@ seafile-net:
 ```
 
 #### Reverse Proxy load balancing
-If you want to run frontend replicas (clustering), you'll need to enable IP hash based load balancing. The load balancer, in this case *seafile-caddy*, will then create so called sticky sessions, which means that a client connecting with a certain IP will be forwarded to the same service for the time being.
+If you want to run frontend replicas (clustering), you'll need to enable dnsrr endpoint mode, which is needed for proper load balancing.
 
-To enable IP hash based load balancing you have to configure the following options:
+To enable load balancing you have to configure the following options:
 
-Set the endpoint mode for the frontend services to dnsrr. This will enable *seafile-caddy* to see the IPs of all replicas, instead the default virtual IP (VIP) created by the Swarm routing mesh.
+Set the endpoint mode for the frontend services *seahub* and *seahub-media* to dnsrr. This will enable *seafile-caddy* to see the IPs of all replicas, instead the default virtual IP (VIP) created by the Swarm routing mesh.
 ```
 deploy:
       mode: replicated
@@ -287,6 +287,14 @@ environment:
       - SWARM_DNS=true
 ```
 
+The load balancer, in this case *seafile-caddy*, will then create so called sticky sessions, which means that a client connecting with a certain IP will be forwarded to the same service for the time being. Hashing is based on the header `X-Forwarded-For`. This is better than client ip based hashing, when you have another reverse proxy in front of *seafile-caddy*, which is highly recommended. With client ip based hashing *seafile-caddy* would just forward everything to the same container, as it only sees the IP of the reverse proxy. Instead the X-Forwarder-For header contains the actual client IP.
+
+It is also recommended to use dnsrr mode on the *seafile-server*, when you run multiple replicas of *seahub*. This will enable *seafile-server* to see the actual IPs of the *seahub* replicas when they connect to it, instead of a single virtual IP for all of them. This will circumvent probable IP:PORT overlaps in the TCP connection between *seahub* and *seafile-server* if you run many *seahub* replicas.
+```
+deploy:
+      endpoint_mode: dnsrr
+
+```
 
 #### Example
 You can check out this example and use it as a starting point for you Docker Swarm deployment. It is using [lucaslorentz/caddy-docker-proxy](https://manual.seafile.com/docker/deploy%20seafile%20with%20docker/) as the external reverse proxy and the GlusterFS plugin from [marcelo-ochoa/docker-volume-plugins](https://github.com/marcelo-ochoa/docker-volume-plugins). This resembles my personal production setup.
