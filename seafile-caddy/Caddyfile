@@ -5,6 +5,7 @@
 http:// https:// {
     reverse_proxy seahub:8000 {
 	    lb_policy header X-Forwarded-For
+        health_path /api2/server-info/
     }
     handle_path /seafhttp* {
         uri strip_prefix seafhttp
