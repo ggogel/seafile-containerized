@@ -23,6 +23,8 @@ python3-click \
 python3-termcolor \
 python3-colorlog \
 python3-pymysql \
+python3-jinja2 \
+python3-sqlalchemy \
 && rm -rf /var/lib/apt/lists/*
 
 ENV SEAFILE_VERSION=8.0.2
