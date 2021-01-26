@@ -68,6 +68,7 @@ mariadb-dev \
 libmemcached
 
 COPY --from=get /tmp/seafile-server*/seahub /opt/seafile/seafile-server-latest/seahub
+COPY --from=get /tmp/seafile-server*/runtime /opt/seafile/seafile-server-latest/runtime
 COPY --from=get /tmp/seafile-server*/seafile/lib64/python3.6/site-packages /opt/seafile/seafile-server-latest/seafile/lib64/python3.6/site-packages
 COPY --from=pip /usr/lib/python3.6/site-packages /usr/lib/python3.6/site-packages
 COPY scripts /scripts
