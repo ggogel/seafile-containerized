@@ -182,7 +182,7 @@ Networks:
         - doesn't support Docker Swarm
         - automatic Let's Encrypt with plugin
         - lacks a lot of advanced features
-    - [lucaslorentz/caddy-docker-proxy](https://manual.seafile.com/docker/deploy%20seafile%20with%20docker/) (recommended for Docker Swarm and advanced users)
+    - [lucaslorentz/caddy-docker-proxy](https://github.com/lucaslorentz/caddy-docker-proxy ) (recommended for Docker Swarm and advanced users)
         - designed for Docker Swarm but can be used on regular Docker too
         - automatic Let's Encrypt integrated
         - very feature rich
@@ -208,7 +208,7 @@ Networks:
         - VIRTUAL_HOST=seafile.mydomain.com
     ```
 
-    Example for [lucaslorentz/caddy-docker-proxy](https://manual.seafile.com/docker/deploy%20seafile%20with%20docker/) on Docker Swarm
+    Example for [lucaslorentz/caddy-docker-proxy](https://github.com/lucaslorentz/caddy-docker-proxy) on Docker Swarm
     ```
     seafile-caddy:
         image: ggogel/seafile-caddy:0.1
@@ -314,7 +314,7 @@ deploy:
 ```
 
 #### Example
-You can check out this example and use it as a starting point for you Docker Swarm deployment. It is using [lucaslorentz/caddy-docker-proxy](https://manual.seafile.com/docker/deploy%20seafile%20with%20docker/) as the external reverse proxy and the GlusterFS plugin from [marcelo-ochoa/docker-volume-plugins](https://github.com/marcelo-ochoa/docker-volume-plugins). This resembles my personal production setup.
+You can check out this example and use it as a starting point for you Docker Swarm deployment. It is using [lucaslorentz/caddy-docker-proxy](https://github.com/lucaslorentz/caddy-docker-proxy) as the external reverse proxy and the GlusterFS plugin from [marcelo-ochoa/docker-volume-plugins](https://github.com/marcelo-ochoa/docker-volume-plugins). This resembles my personal production setup.
 ```
     wget https://raw.githubusercontent.com/ggogel/seafile-containerized/master/compose/docker-compose-swarm.yml
 ```
