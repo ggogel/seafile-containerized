@@ -33,3 +33,10 @@ for d in ${dirs[*]}; do
         rm -rf /opt/seafile/$d && ln -sf $src /opt/seafile
     fi
 done
+
+if [[ ! -e /shared/seafile/conf/seahub.conf ]]; then
+    mv /opt/seafile/seafile-server-latest/runtime/seahub.conf /shared/seafile/conf/seahub.conf
+fi
+
+rm -f /opt/seafile/seafile-server-latest/runtime/seahub.conf
+ln -sf /shared/seafile/conf/seahub.conf /opt/seafile/seafile-server-latest/runtime/seahub.conf
