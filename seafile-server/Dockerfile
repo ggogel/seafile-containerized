@@ -29,9 +29,9 @@ python3-sqlalchemy \
 
 ENV SEAFILE_VERSION=8.0.2
 
+COPY --from=get /tmp/seafile-server-${SEAFILE_VERSION} /opt/seafile/seafile-server-${SEAFILE_VERSION}
 COPY scripts /scripts
 RUN chmod u+x /scripts/*
-COPY --from=get /tmp/seafile-server-${SEAFILE_VERSION} /opt/seafile/seafile-server-${SEAFILE_VERSION}
 
 RUN mkdir -p /opt/seafile/logs &&\
 ln -sf /dev/stdout /opt/seafile/logs/seafile.log &&\
