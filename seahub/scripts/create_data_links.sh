@@ -40,3 +40,7 @@ fi
 
 rm -f /opt/seafile/seafile-server-latest/runtime/seahub.conf
 ln -sf /shared/seafile/conf/seahub.conf /opt/seafile/seafile-server-latest/runtime/seahub.conf
+
+mkdir -p /shared/runtime
+rm -rf /opt/seafile/seafile-server-latest/runtime
+ln -sf /shared/runtime /opt/seafile/seafile-server-latest/runtime

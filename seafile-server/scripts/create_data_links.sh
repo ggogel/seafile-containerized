@@ -43,3 +43,8 @@ fi
 if [[ -e /shared/logs/var-log ]]; then
     rm -rf /shared/logs/var-log
 fi
+
+mkdir -p /shared/runtime
+ln -sf /opt/seafile/seafile-server-8.0.2 /opt/seafile/seafile-server-latest
+rm -rf /opt/seafile/seafile-server-latest/runtime
+ln -sf /shared/runtime /opt/seafile/seafile-server-latest/runtime

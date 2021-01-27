@@ -166,7 +166,7 @@ def check_upgrade():
     current_version = os.environ['SEAFILE_VERSION']
 
     if last_version == current_version:
-        fix_media_symlinks(current_version)
+        #fix_media_symlinks(current_version)
         return
     elif is_minor_upgrade(last_version, current_version):
         run_minor_upgrade(current_version)
