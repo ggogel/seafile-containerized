@@ -12,9 +12,6 @@ services:
       - SEAFILE_ADMIN_PASSWORD=asecret
       - HTTPS=false # Set this to true if you plan to use a reverse proxy with HTTPS. Can be changed later in the admin settings on the web-ui.
       - SEAFILE_SERVER_HOSTNAME=seafile.mydomain.com # Mandatory on first deployment!
-    depends_on:
-      - db
-      - memcached
     networks:
       - seafile-net
     deploy:
@@ -26,8 +23,9 @@ services:
       - seafile-data:/shared
       - seahub-avatars:/shared/seafile/seahub-data/avatars
       - seahub-custom:/shared/seafile/seahub-data/custom 
-    depends_on:
-      - seafile
+    environment:
+      - SEAFILE_ADMIN_EMAIL=me@example.com
+      - SEAFILE_ADMIN_PASSWORD=asecret
     networks:
       - seafile-net
     deploy:
