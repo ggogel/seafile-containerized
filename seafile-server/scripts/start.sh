@@ -17,8 +17,8 @@ function stop_server {
 }
 
 function start_socat {
+    echo "Waiting for SeaRPC socket..."
     while [ ! -S /opt/seafile/seafile-server-latest/runtime/seafile.sock ]; do
-        echo "Waiting for SeaRPC socket..."
         sleep 1
     done
     socat -d -d TCP-LISTEN:8001,fork,reuseaddr UNIX:/opt/seafile/seafile-server-latest/runtime/seafile.sock,forever
