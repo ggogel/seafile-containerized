@@ -70,22 +70,8 @@ def main():
 
     fix_gunicorn_bind()
 
-    admin_pw = {
-        'email': get_conf('SEAFILE_ADMIN_EMAIL', 'me@example.com'),
-        'password': get_conf('SEAFILE_ADMIN_PASSWORD', 'asecret'),
-    }
-    password_file = join(topdir, 'conf', 'admin.txt')
-    with open(password_file, 'w') as fp:
-        json.dump(admin_pw, fp)
-
-
-    try:
-        call('{} start'.format(get_script('seafile.sh')))
-        #call('{} start'.format(get_script('seahub.sh')))
-    finally:
-        if exists(password_file):
-            os.unlink(password_file)
-
+    call('{} start'.format(get_script('seafile.sh')))
+    
     print('seafile server is running now.')
     try:
         watch_controller()
