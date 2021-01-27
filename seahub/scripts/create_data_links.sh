@@ -40,3 +40,8 @@ fi
 
 rm -f /opt/seafile/seafile-server-latest/runtime/seahub.conf
 ln -sf /shared/seafile/conf/seahub.conf /opt/seafile/seafile-server-latest/runtime/seahub.conf
+ln -sf /shared/seafile/seahub-data /opt/seafile/seafile-server-latest/seahub-data
+rm -rf /opt/seafile/seafile-server-latest/seahub/media/avatars
+rm -rf /opt/seafile/seafile-server-latest/seahub/media/custom
+ln -sf /shared/seafile/seahub-data/avatars /opt/seafile/seafile-server-latest/seahub/media
+ln -sf /shared/seafile/seahub-data/custom /opt/seafile/seafile-server-latest/seahub/media
