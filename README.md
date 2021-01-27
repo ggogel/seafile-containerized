@@ -238,6 +238,10 @@ Networks:
 
 ### Upgrading Seafile Server
 The *seafile-server* images contains scripts that will detect if a newer version of *seafile-server* is deployed and will automatically run the migration scripts included in the Seafile package. Upgrade from 7.1 is succesfully tested.
+
+### User Avatars and Custom Logos
+
+If you are unable to upload user avatars and custom logos, check your `SERVICE_URL` in the admin settings. It should not contain any port number. It should begin with `https` if you use a reverse proxy with https.
     
 ### LDAP
 
@@ -314,7 +318,7 @@ deploy:
 ```
 
 #### Example
-You can check out this example and use it as a starting point for you Docker Swarm deployment. It is using [lucaslorentz/caddy-docker-proxy](https://github.com/lucaslorentz/caddy-docker-proxy) as the external reverse proxy and the GlusterFS plugin from [marcelo-ochoa/docker-volume-plugins](https://github.com/marcelo-ochoa/docker-volume-plugins). This resembles my personal production setup.
+You can check out this example and use it as a starting point for your Docker Swarm deployment. It is using [lucaslorentz/caddy-docker-proxy](https://github.com/lucaslorentz/caddy-docker-proxy) as the external reverse proxy and the GlusterFS plugin from [marcelo-ochoa/docker-volume-plugins](https://github.com/marcelo-ochoa/docker-volume-plugins). This resembles my personal production setup.
 ```
     wget https://raw.githubusercontent.com/ggogel/seafile-containerized/master/compose/docker-compose-swarm.yml
 ```
