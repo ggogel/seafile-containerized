@@ -49,6 +49,7 @@ pyjwt \
 pycryptodome \
 requests_oauthlib \
 django-pylibmc \
+configparser \
 && rm -r /root/.cache/pip
 
 FROM alpine:3.9
@@ -69,6 +70,8 @@ libmemcached
 
 COPY --from=get /tmp/seafile-server*/seahub /opt/seafile/seafile-server-latest/seahub
 COPY --from=get /tmp/seafile-server*/runtime /opt/seafile/seafile-server-latest/runtime
+COPY --from=get /tmp/seafile-server*/seahub.sh /opt/seafile/seafile-server-latest/seahub.sh
+COPY --from=get /tmp/seafile-server*/check_init_admin.py /opt/seafile/seafile-server-latest/check_init_admin.py
 COPY --from=get /tmp/seafile-server*/seafile/lib64/python3.6/site-packages /opt/seafile/seafile-server-latest/seafile/lib64/python3.6/site-packages
 COPY --from=pip /usr/lib/python3.6/site-packages /usr/lib/python3.6/site-packages
 COPY scripts /scripts
@@ -79,6 +82,8 @@ ENV CCNET_CONF_DIR=/opt/seafile/conf/ccnet
 ENV SEAFILE_CONF_DIR=/opt/seafile/seafile-data
 ENV SEAFILE_CENTRAL_CONF_DIR=/opt/seafile/conf
 ENV SEAFILE_RPC_PIPE_PATH=/opt/seafile/seafile-server-latest/runtime
+ENV SEAFILE_ADMIN_EMAIL=me@example.com
+ENV SEAFILE_ADMIN_PASSWORD=asecret
 
 RUN mkdir -p /opt/seafile/logs &&\
 ln -sf /dev/stdout /opt/seafile/logs/seahub.log
