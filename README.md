@@ -109,14 +109,7 @@ Networks:
      ```
     - TIME_ZONE=Europe/Berlin
      ```
-    Username / E-Mail of the first admin user.
-     ```
-    - SEAFILE_ADMIN_EMAIL=me@example.com
-     ```
-    Password of the first admin user.
-     ```
-    - SEAFILE_ADMIN_PASSWORD=asecret
-     ```
+   
     This will be used for the SERVICE_URL and FILE_SERVER_ROOT. 
     Important: Changing those values in the config files later won't have any effect because they are written to the database. Those values have priority over the config files. To change them enter the "System Admin" section on the web-ui. If you encounter issues with file upload, it's likely that those are configured incorrectly.
      ```
@@ -125,6 +118,16 @@ Networks:
     If you plan to use a reverse proxy with https, set this to true. This will replace http with https in the SERVICE_URL and FILE_SERVER_ROOT.
      ```
     - HTTPS=false
+     ```
+
+    ### *seahub*
+    Username / E-Mail of the first admin user.
+     ```
+    - SEAFILE_ADMIN_EMAIL=me@example.com
+     ```
+    Password of the first admin user.
+     ```
+    - SEAFILE_ADMIN_PASSWORD=asecret
      ```
 
     ### *db*
