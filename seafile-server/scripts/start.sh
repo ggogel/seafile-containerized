@@ -21,7 +21,7 @@ function start_socat {
     while [ ! -S /opt/seafile/seafile-server-latest/runtime/seafile.sock ]; do
         sleep 1
     done
-    socat -d -d TCP-LISTEN:8001,fork,reuseaddr UNIX:/opt/seafile/seafile-server-latest/runtime/seafile.sock,forever
+    socat -d -d UDP-LISTEN:8001,fork,reuseaddr UNIX:/opt/seafile/seafile-server-latest/runtime/seafile.sock,forever
 }
 
 function stop_socat {

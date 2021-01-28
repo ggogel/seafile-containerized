@@ -10,7 +10,7 @@ function start_seahub {
 
 function start_socat {
     mkdir -p /opt/seafile/seafile-server-latest/runtime
-    socat -d -d UNIX-LISTEN:/opt/seafile/seafile-server-latest/runtime/seafile.sock,fork TCP:seafile-server:8001,forever,keepalive,keepidle=10,keepintvl=10,keepcnt=2
+    socat -d -d UNIX-LISTEN:/opt/seafile/seafile-server-latest/runtime/seafile.sock,fork UDP:seafile-server:8001
 }
 
 function keep_running {
