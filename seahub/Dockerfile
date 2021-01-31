@@ -66,7 +66,8 @@ openjpeg \
 tiff \
 tk \
 mariadb-dev \
-libmemcached
+libmemcached \
+netcat-openbsd
 
 COPY --from=get /tmp/seafile-server*/seahub /opt/seafile/seafile-server-latest/seahub
 COPY --from=get /tmp/seafile-server*/runtime /opt/seafile/seafile-server-latest/runtime
