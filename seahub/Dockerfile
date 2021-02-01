@@ -8,7 +8,7 @@ RUN cd /tmp && \
     tar -zxvf seafile-server_${SEAFILE_VERSION}_x86-64.tar.gz && \
     rm -f seafile-server_${SEAFILE_VERSION}_x86-64.tar.gz
 
-FROM alpine:3.9 AS pip
+FROM alpine:3.13 AS pip
 
 RUN apk add --no-cache \
 python3-dev \
@@ -52,7 +52,7 @@ django-pylibmc \
 configparser \
 && rm -r /root/.cache/pip
 
-FROM alpine:3.9
+FROM alpine:3.13
 
 RUN apk add --no-cache \
 bash \
@@ -74,11 +74,11 @@ COPY --from=get /tmp/seafile-server*/runtime /opt/seafile/seafile-server-latest/
 COPY --from=get /tmp/seafile-server*/seahub.sh /opt/seafile/seafile-server-latest/seahub.sh
 COPY --from=get /tmp/seafile-server*/check_init_admin.py /opt/seafile/seafile-server-latest/check_init_admin.py
 COPY --from=get /tmp/seafile-server*/seafile/lib64/python3.6/site-packages /opt/seafile/seafile-server-latest/seafile/lib64/python3.6/site-packages
-COPY --from=pip /usr/lib/python3.6/site-packages /usr/lib/python3.6/site-packages
+COPY --from=pip /usr/lib/python3.8/site-packages /usr/lib/python3.8/site-packages
 COPY scripts /scripts
 RUN chmod u+x /scripts/*
 
-ENV PYTHONPATH=/usr/lib/python3.6/site-packages:/opt/seafile/seafile-server-latest/seahub/thirdpart:/opt/seafile/seafile-server-latest/seafile/lib64/python3.6/site-packages
+ENV PYTHONPATH=/usr/lib/python3.8/site-packages:/opt/seafile/seafile-server-latest/seahub/thirdpart:/opt/seafile/seafile-server-latest/seafile/lib64/python3.6/site-packages
 ENV CCNET_CONF_DIR=/opt/seafile/conf/ccnet
 ENV SEAFILE_CONF_DIR=/opt/seafile/seafile-data
 ENV SEAFILE_CENTRAL_CONF_DIR=/opt/seafile/conf
