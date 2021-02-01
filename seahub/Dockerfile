@@ -34,6 +34,7 @@ future \
 pillow \
 captcha \
 pyjwt \
+mysqlclient \
 django==2.2.* \
 django-pylibmc \
 django-simple-captcha \
