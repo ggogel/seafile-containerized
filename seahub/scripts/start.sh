@@ -13,11 +13,13 @@ function start_seahub {
 
 function start_socat {
     mkdir -p /opt/seafile/seafile-server-latest/runtime
-    while ! nc -z seafile-server 8001 2>/dev/null; do
-        sleep 1
+    while true; do
+        while ! nc -z seafile-server 8001 2>/dev/null; do
+            sleep 1
+        done
+        echo "Starting socat..."
+        socat -d -d UNIX-LISTEN:/opt/seafile/seafile-server-latest/runtime/seafile.sock,fork TCP:seafile-server:8001,forever,keepalive,keepidle=10,keepintvl=10,keepcnt=2
     done
-    echo "Starting socat..."
-    socat -d -d UNIX-LISTEN:/opt/seafile/seafile-server-latest/runtime/seafile.sock,fork TCP:seafile-server:8001,forever,keepalive,keepidle=10,keepintvl=10,keepcnt=2
 }
 
 function watch_server {
@@ -34,6 +36,10 @@ function watch_server {
     done
 }
 
+function logger {
+    tail -f /opt/seafile/logs/seahub.log | tee /proc/1/fd/1
+}
+
 function keep_running {
     while true; do
         tail -f /dev/null & wait ${!}
@@ -44,4 +50,5 @@ start_socat &
 init_seahub
 start_seahub &
 watch_server &
+logger
 keep_running

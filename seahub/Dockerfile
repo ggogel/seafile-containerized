@@ -8,6 +8,8 @@ RUN cd /tmp && \
     tar -zxvf seafile-server_${SEAFILE_VERSION}_x86-64.tar.gz && \
     rm -f seafile-server_${SEAFILE_VERSION}_x86-64.tar.gz
 
+RUN sed -i "s@.*INNER_FILE_SERVER_ROOT.*@INNER_FILE_SERVER_ROOT = os.environ.get('INNER_FILE_SERVER_ROOT')@" /tmp/seafile-server-${SEAFILE_VERSION}/seahub/seahub/settings.py
+
 FROM alpine:3.13 AS pip
 
 RUN apk add --no-cache \
@@ -28,28 +30,15 @@ libmemcached-dev
 
 RUN python3 -m pip install --upgrade pip &&\
 pip3 install --timeout=3600 \
-Django==2.2.14 \
 future \
-captcha \
-django-statici18n \
-django-post_office==3.3.0 \
-django-webpack_loader \
-gunicorn \
-mysqlclient \
-django-picklefield==2.1.1 \
-openpyxl \
-qrcode \
-django-formtools \
-django-simple-captcha \
-djangorestframework==3.11.1 \
-python-dateutil \
-requests \
 pillow \
+captcha \
 pyjwt \
-pycryptodome \
-requests_oauthlib \
+django==2.2.* \
 django-pylibmc \
-configparser \
+django-simple-captcha \
+django-pylibmc \
+django-simple-captcha \
 && rm -r /root/.cache/pip
 
 FROM alpine:3.13
@@ -83,11 +72,13 @@ ENV CCNET_CONF_DIR=/opt/seafile/conf/ccnet
 ENV SEAFILE_CONF_DIR=/opt/seafile/seafile-data
 ENV SEAFILE_CENTRAL_CONF_DIR=/opt/seafile/conf
 ENV SEAFILE_RPC_PIPE_PATH=/opt/seafile/seafile-server-latest/runtime
+ENV INNER_FILE_SERVER_ROOT=http://seafile-server:8082
+ENV SEAHUB_LOG_DIR=/opt/seafile/logs
 ENV SEAFILE_ADMIN_EMAIL=me@example.com
 ENV SEAFILE_ADMIN_PASSWORD=asecret
 
 RUN mkdir -p /opt/seafile/logs &&\
-ln -sf /dev/stdout /opt/seafile/logs/seahub.log
+touch /opt/seafile/logs/seahub.log
 
 EXPOSE 8000
 
