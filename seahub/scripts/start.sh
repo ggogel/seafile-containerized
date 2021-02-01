@@ -22,15 +22,15 @@ function start_socat {
 
 function watch_server {
     while true; do
-        if ! nc -z seafile-server 8080 2>/dev/null; then
+        sleep 2
+        if ! nc -z seafile-server 8082 2>/dev/null; then
             echo "Seafile server is unreachable. Stopping seahub..."
             pkill -f manage.py
-            while ! nc -z seafile-server 8080 2>/dev/null; do
+            while ! nc -z seafile-server 8082 2>/dev/null; do
                 sleep 1
             done
             start_seahub &
         fi
-        sleep 2
     done
 }
 
