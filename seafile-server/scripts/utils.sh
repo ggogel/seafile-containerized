@@ -38,6 +38,11 @@ function gc_cron {
         service cron start
     fi
 }
+
+function logger {
+    tail -f /opt/seafile/logs/common.log  | tee /proc/1/fd/1
+}
+
 function keep_running {
     while true; do
         tail -f /dev/null & wait ${!}
