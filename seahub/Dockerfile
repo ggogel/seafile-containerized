@@ -37,8 +37,6 @@ pyjwt \
 django==2.2.* \
 django-pylibmc \
 django-simple-captcha \
-django-pylibmc \
-django-simple-captcha \
 && rm -r /root/.cache/pip
 
 FROM alpine:3.13
