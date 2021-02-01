@@ -83,11 +83,12 @@ ENV CCNET_CONF_DIR=/opt/seafile/conf/ccnet
 ENV SEAFILE_CONF_DIR=/opt/seafile/seafile-data
 ENV SEAFILE_CENTRAL_CONF_DIR=/opt/seafile/conf
 ENV SEAFILE_RPC_PIPE_PATH=/opt/seafile/seafile-server-latest/runtime
+ENV SEAHUB_LOG_DIR=/opt/seafile/logs
 ENV SEAFILE_ADMIN_EMAIL=me@example.com
 ENV SEAFILE_ADMIN_PASSWORD=asecret
 
 RUN mkdir -p /opt/seafile/logs &&\
-ln -sf /dev/stdout /opt/seafile/logs/seahub.log
+touch /opt/seafile/logs/seahub.log
 
 EXPOSE 8000
 

@@ -36,6 +36,10 @@ function watch_server {
     done
 }
 
+function logger {
+    tail -f /opt/seafile/logs/seahub.log | tee /proc/1/fd/1
+}
+
 function keep_running {
     while true; do
         tail -f /dev/null & wait ${!}
@@ -46,4 +50,5 @@ start_socat &
 init_seahub
 start_seahub &
 watch_server &
+logger
 keep_running
