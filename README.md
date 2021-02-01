@@ -273,6 +273,21 @@ For OAuth the same network problem as with LDAP will occur, but here you will ne
 caddy.rewrite: /accounts/login* /oauth/login/?
 ```
 
+### Garbage Collection
+Seafile has a block-based storage backend. This means that every file is associated to one or many blocks. If a file is permanently deleted from the trash bin, those blocks need to be cleared in order to free disk space. This process is called garbage collection. 
+
+You can manually run the garbage collection with `docker exec`, where `seafile-server` is the name of the container running *seafile-server*:
+```
+docker exec -it seafile-server /scripts/gc.sh
+```
+
+You can schedule a cron job for garbage collection, by adding the following environment variable to *seafile-server*:
+```
+- GC_CRON=0 6 * * SUN
+```
+This would run the garbage collection every sunday at 6AM.
+
+
 ### Docker Swarm
 
 If you want to deploy this stack on a Docker Swarm with multiple nodes or if you want to run replicas of the frontend (clustering), there are several things you have to consider first.
