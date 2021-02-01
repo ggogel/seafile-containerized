@@ -26,9 +26,9 @@ function start_socat {
 
 function stop_socat {
     echo "Stopping socat..."
-    ps aux | grep '[s]ocat' | awk '{print $2}' | xargs kill -15 |& tee /dev/null
+    pkill -15 -f socat
     sleep 5
-    ps aux | grep '[s]ocat' | awk '{print $2}' | xargs kill -9 |& tee /dev/null
+    pkill -9 -f socat
 }
 
 function keep_running {
