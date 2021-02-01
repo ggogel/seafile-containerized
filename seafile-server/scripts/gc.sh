@@ -1,5 +1,4 @@
 #!/bin/bash
-set -e
 source /scripts/utils.sh
 SEAFILE_DIR=/opt/seafile/seafile-server-latest
 
@@ -13,11 +12,7 @@ else
     echo "Seafile Pro: Perform online garbage collection."
 fi
 
-(
-    set +e
-    $SEAFILE_DIR/seaf-gc.sh "$@" | tee -a /opt/seafile/logs/gc.log
-    exit "${PIPESTATUS[0]}"
-) gc_exit_code=$?
+$SEAFILE_DIR/seaf-gc.sh "$@"
 
 if [[ $SEAFILE_SERVER != *"pro"* ]]; then
     echo "Seafile CE: Offline garbage collection completed. Starting Seafile."
@@ -25,4 +20,3 @@ if [[ $SEAFILE_SERVER != *"pro"* ]]; then
     $SEAFILE_DIR/seafile.sh start
     start_socat
 fi
-exit $gc_exit_code
