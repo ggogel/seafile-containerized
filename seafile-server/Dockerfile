@@ -35,11 +35,12 @@ COPY scripts /scripts
 RUN chmod u+x /scripts/*
 
 RUN mkdir -p /opt/seafile/logs &&\
-ln -sf /dev/stdout /opt/seafile/logs/seafile.log &&\
-ln -sf /dev/stdout /opt/seafile/logs/controller.log &&\
-ln -sf /dev/stdout /opt/seafile/logs/ccnet.log &&\
-ln -sf /dev/stdout /opt/seafile/logs/gc.log &&\
-ln -sf /dev/stdout /opt/seafile/logs/seafdav.log
+touch /opt/seafile/logs/common.log &&\
+ln -sf /opt/seafile/logs/common.log /opt/seafile/logs/seafile.log &&\
+ln -sf /opt/seafile/logs/common.log /opt/seafile/logs/controller.log &&\
+ln -sf /opt/seafile/logs/common.log /opt/seafile/logs/ccnet.log &&\
+ln -sf /opt/seafile/logs/common.log /opt/seafile/logs/gc.log &&\
+ln -sf /opt/seafile/logs/common.log /opt/seafile/logs/seafdav.log
 
 EXPOSE 8080 8082 8001
 
