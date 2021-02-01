@@ -13,7 +13,7 @@ fi
 
 (
     set +e
-    $SEAFILE_DIR/seaf-gc.sh "$@" | tee -a /var/log/gc.log
+    $SEAFILE_DIR/seaf-gc.sh "$@" | tee -a /opt/seafile/logs/gc.log
     exit "${PIPESTATUS[0]}"
 ) gc_exit_code=$?
 
