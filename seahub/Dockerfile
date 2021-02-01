@@ -30,28 +30,15 @@ libmemcached-dev
 
 RUN python3 -m pip install --upgrade pip &&\
 pip3 install --timeout=3600 \
-Django==2.2.14 \
 future \
-captcha \
-django-statici18n \
-django-post_office==3.3.0 \
-django-webpack_loader \
-gunicorn \
-mysqlclient \
-django-picklefield==2.1.1 \
-openpyxl \
-qrcode \
-django-formtools \
-django-simple-captcha \
-djangorestframework==3.11.1 \
-python-dateutil \
-requests \
 pillow \
+captcha \
 pyjwt \
-pycryptodome \
-requests_oauthlib \
+django==2.2.* \
 django-pylibmc \
-configparser \
+django-simple-captcha \
+django-pylibmc \
+django-simple-captcha \
 && rm -r /root/.cache/pip
 
 FROM alpine:3.9
