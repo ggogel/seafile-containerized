@@ -26,9 +26,9 @@ function start_socat {
 
 function stop_socat {
     echo "Stopping socat..."
-    pkill -15 -f socat
+    pkill -15 socat
     sleep 5
-    pkill -9 -f socat
+    pkill -9 socat
 }
 
 function keep_running {
