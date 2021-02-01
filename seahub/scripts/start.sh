@@ -29,7 +29,7 @@ function watch_server {
             done
             start_seahub &
         fi
-        sleep 1
+        sleep 5
     done
 }
 
