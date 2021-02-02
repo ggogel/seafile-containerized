@@ -27,7 +27,7 @@ A fully containerized deployment of Seafile for Docker and Docker Swarm.
     - The caddy reverse proxy serves as a single entry point to the stack. Everything else runs in an isolated network.
     - Using [Alpine Linux](https://alpinelinux.org/about/) based images for the frontend, which is designed with security in mind and comes with proactive security features.
 - Reworked Dockerfiles featuring multi-stage builds, allowing for smaller images and faster builds.
-- Seafile 8.0
+- Schedule offline garbage collection with cron job
 
 ## Structure
 
@@ -295,7 +295,7 @@ If you want to deploy this stack on a Docker Swarm with multiple nodes or if you
 **Important:** You can only deploy multiple replicas of the frontend services *seahub* and *seahub-media*. Deploying replicas of the backend or the database would cause data inconsistency or even data corruption.
 
 #### Storage
-In order to make the same volumes available to services running on different nodes, you need an advanced storage solution. This could either be distributed storage like GlusterFS and Ceph or a network storage like a NFS share. The volumes are then usually mounted through storage plugins. The repository [marcelo-ochoa/docker-volume-plugins](https://github.com/marcelo-ochoa/docker-volume-plugins) contains some good storage plugins for Docker Swarm.
+In order to make the same volumes available to services running on different nodes, you need an advanced storage solution. This could either be distributed storage like GlusterFS, Ceph or NFS. The volumes are then usually mounted through storage plugins. The repository [marcelo-ochoa/docker-volume-plugins](https://github.com/marcelo-ochoa/docker-volume-plugins) contains some good storage plugins for Docker Swarm.
 
 
 #### Network
