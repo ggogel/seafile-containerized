@@ -64,7 +64,11 @@ COPY --from=get /tmp/seafile-server*/check_init_admin.py /opt/seafile/seafile-se
 COPY --from=get /tmp/seafile-server*/seafile/lib64/python3.6/site-packages /opt/seafile/seafile-server-latest/seafile/lib64/python3.6/site-packages
 COPY --from=pip /usr/lib/python3.8/site-packages /usr/lib/python3.8/site-packages
 COPY scripts /scripts
+
 RUN chmod u+x /scripts/*
+RUN mkdir -p /opt/seafile/logs &&\
+touch /opt/seafile/logs/seahub.log &&\
+mkdir -p /opt/seafile/pids
 
 ENV PYTHONPATH=/usr/lib/python3.8/site-packages:/opt/seafile/seafile-server-latest/seahub/thirdpart:/opt/seafile/seafile-server-latest/seafile/lib64/python3.6/site-packages:/opt/seafile/seafile-server-latest/seahub
 ENV CCNET_CONF_DIR=/opt/seafile/conf/ccnet
@@ -76,8 +80,6 @@ ENV SEAHUB_LOG_DIR=/opt/seafile/logs
 ENV SEAFILE_ADMIN_EMAIL=me@example.com
 ENV SEAFILE_ADMIN_PASSWORD=asecret
 ENV PYTHON=python3
-RUN mkdir -p /opt/seafile/logs &&\
-touch /opt/seafile/logs/seahub.log
 
 EXPOSE 8000
 
