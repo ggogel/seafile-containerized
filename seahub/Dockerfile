@@ -75,7 +75,7 @@ ENV INNER_FILE_SERVER_ROOT=http://seafile-server:8082
 ENV SEAHUB_LOG_DIR=/opt/seafile/logs
 ENV SEAFILE_ADMIN_EMAIL=me@example.com
 ENV SEAFILE_ADMIN_PASSWORD=asecret
-
+ENV PYTHON=python3
 RUN mkdir -p /opt/seafile/logs &&\
 touch /opt/seafile/logs/seahub.log
 
