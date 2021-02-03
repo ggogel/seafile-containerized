@@ -3,7 +3,7 @@
 function init_seahub {
     /scripts/create_data_links.sh
     echo "{ \"email\": \"${SEAFILE_ADMIN_EMAIL}\",\"password\": \"${SEAFILE_ADMIN_PASSWORD}\"}" >/opt/seafile/conf/admin.txt
-    python3 /opt/seafile/seafile-server-latest/check_init_admin.py
+    sed -i 's@bind =.*@bind = "0.0.0.0:8000"@' /opt/seafile/conf/gunicorn.conf.py
 }
 
 function start_seahub {
