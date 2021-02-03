@@ -143,20 +143,20 @@ Networks:
 
     **If you set up Seafile from scratch you can skip this part.**
 
-    The [official Docker deployment](https://manual.seafile.com/docker/deploy%20seafile%20with%20docker/) uses [bind mounts](https://docs.docker.com/storage/bind-mounts/) to the host path instead of actual docker volumes. This was probably chosen to create compatibility between a native install and the docker deployment. This deployment uses [named volumes](https://docs.docker.com/storage/volumes/), which come with several advantages over bind mounts and are the recommended mechanism for persisted storage on Docker. The default path for named volumes on Docker is `/var/lib/docker/volumes/VOLUME_NAME/_data`.
+    The [official Docker deployment](https://manual.seafile.com/docker/deploy%20seafile%20with%20docker/) uses [bind mounts](https://docs.docker.com/storage/bind-mounts/) to the host path instead of actual docker volumes. This was probably chosen to create compatibility between a native install and the docker deployment. This deployment uses [named volumes](https://docs.docker.com/storage/volumes/), which come with several advantages over bind mounts and are the recommended mechanism for persisted storage on Docker. The default path for named volumes on Docker is `/var/lib/docker/volumes/PROJECT-NAME_VOLUME-NAME/_data`.
 
    
     To migrate storage from the official Docker deployment run:
     ```
-    mkdir -p /var/lib/docker/volumes/seafile-data/_data
-    mkdir -p /var/lib/docker/volumes/seafile-mariadb/_data
-    mkdir -p /var/lib/docker/volumes/seahub-custom/_data
-    mkdir -p /var/lib/docker/volumes/seahub-avatars/_data
+    mkdir -p /var/lib/docker/volumes/seafile_seafile-data/_data
+    mkdir -p /var/lib/docker/volumes/seafile_seafile-mariadb/_data
+    mkdir -p /var/lib/docker/volumes/seafile_seahub-custom/_data
+    mkdir -p /var/lib/docker/volumes/seafile_seahub-avatars/_data
 
-    cp -r /opt/seafile-data /var/lib/docker/volumes/seafile-data/_data
-    cp -r /opt/seafile-mysql/db /var/lib/docker/volumes/seafile-mariadb/_data
-    mv /var/lib/docker/volumes/seafile-data/_data/seafile/seahub-data/custom /var/lib/docker/volumes/seahub-custom/_data
-    mv /var/lib/docker/volumes/seafile-data/_data/seafile/seahub-data/avatars /var/lib/docker/volumes/seahub-avatars/_data
+    cp -r /opt/seafile-data /var/lib/docker/volumes/seafile_seafile-data/_data
+    cp -r /opt/seafile-mysql/db /var/lib/docker/volumes/seafile_seafile-mariadb/_data
+    mv /var/lib/docker/volumes/seafile_seafile-data/_data/seafile/seahub-data/custom /var/lib/docker/volumes/seafile_seahub-custom/_data
+    mv /var/lib/docker/volumes/seafile_seafile-data/_data/seafile/seahub-data/avatars /var/lib/docker/volumes/seafile_seahub-avatars/_data
 
     ```
     Of course you could also just use the old paths but I would strongly advise against that.
@@ -229,7 +229,7 @@ Networks:
     #### Docker Compose
     After you followed the above steps and you have configured everything correctly run:
     ```
-    docker-compose up -d
+    docker-compose -p seafile up -d
     ```
     #### Docker Swarm
     After you followed the above steps and you have configured everything correctly run:
