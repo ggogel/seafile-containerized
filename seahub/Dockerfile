@@ -66,7 +66,7 @@ COPY --from=pip /usr/lib/python3.8/site-packages /usr/lib/python3.8/site-package
 COPY scripts /scripts
 RUN chmod u+x /scripts/*
 
-ENV PYTHONPATH=/usr/lib/python3.8/site-packages:/opt/seafile/seafile-server-latest/seahub/thirdpart:/opt/seafile/seafile-server-latest/seafile/lib64/python3.6/site-packages
+ENV PYTHONPATH=/usr/lib/python3.8/site-packages:/opt/seafile/seafile-server-latest/seahub/thirdpart:/opt/seafile/seafile-server-latest/seafile/lib64/python3.6/site-packages:/opt/seafile/seafile-server-latest/seahub
 ENV CCNET_CONF_DIR=/opt/seafile/conf/ccnet
 ENV SEAFILE_CONF_DIR=/opt/seafile/seafile-data
 ENV SEAFILE_CENTRAL_CONF_DIR=/opt/seafile/conf
