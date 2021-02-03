@@ -163,11 +163,11 @@ Networks:
 
      *Tip:* If you want to use a different path, like a separate drive, to store your Docker volumes, simply create a symbolic link like this:
     ```
-    docker service stop
+    service docker stop
     mv /var/lib/docker/volumes /var/lib/docker/volumes-bak
     mkdir -p /mnt/external/volumes
     ln -sf /mnt/external/volumes /var/lib/docker
-    docker service start
+    service docker start
     ```
 
 5. ***(Optional) Reverse Proxy***
