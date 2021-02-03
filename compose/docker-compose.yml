@@ -67,6 +67,7 @@ services:
       - "80:80" # Point your reverse proxy to port 80 of this service
     networks:
       - seafile-net
+      - default
 
 networks:
   seafile-net:
