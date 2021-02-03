@@ -7,8 +7,7 @@ function init_seahub {
 }
 
 function start_seahub {
-    echo "Starting seahub..."
-    python3 /opt/seafile/seafile-server-latest/seahub/manage.py runserver 0.0.0.0:8000
+    /opt/seafile/seafile-server-latest/seahub.sh start
 }
 
 function start_socat {
@@ -26,8 +25,7 @@ function watch_server {
     while true; do
         sleep 2
         if ! nc -z seafile-server 8082 2>/dev/null; then
-            echo "Seafile server is unreachable. Stopping seahub..."
-            pkill -f manage.py
+            /opt/seafile/seafile-server-latest/seahub.sh stop
             while ! nc -z seafile-server 8082 2>/dev/null; do
                 sleep 1
             done
