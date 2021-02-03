@@ -3,12 +3,11 @@
 function init_seahub {
     /scripts/create_data_links.sh
     echo "{ \"email\": \"${SEAFILE_ADMIN_EMAIL}\",\"password\": \"${SEAFILE_ADMIN_PASSWORD}\"}" >/opt/seafile/conf/admin.txt
-    python3 /opt/seafile/seafile-server-latest/check_init_admin.py
+    sed -i 's@bind =.*@bind = "0.0.0.0:8000"@' /opt/seafile/conf/gunicorn.conf.py
 }
 
 function start_seahub {
-    echo "Starting seahub..."
-    python3 /opt/seafile/seafile-server-latest/seahub/manage.py runserver 0.0.0.0:8000
+    /opt/seafile/seafile-server-latest/seahub.sh start
 }
 
 function start_socat {
@@ -26,8 +25,7 @@ function watch_server {
     while true; do
         sleep 2
         if ! nc -z seafile-server 8082 2>/dev/null; then
-            echo "Seafile server is unreachable. Stopping seahub..."
-            pkill -f manage.py
+            /opt/seafile/seafile-server-latest/seahub.sh stop
             while ! nc -z seafile-server 8082 2>/dev/null; do
                 sleep 1
             done

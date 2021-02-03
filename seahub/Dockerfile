@@ -10,6 +10,8 @@ RUN cd /tmp && \
 
 RUN sed -i "s@.*INNER_FILE_SERVER_ROOT.*@INNER_FILE_SERVER_ROOT = os.environ.get('INNER_FILE_SERVER_ROOT')@" /tmp/seafile-server-${SEAFILE_VERSION}/seahub/seahub/settings.py
 
+RUN sed -i '/warning_if_seafile_not_running;/d' /tmp/seafile-server-${SEAFILE_VERSION}/seahub.sh
+
 FROM alpine:3.13 AS pip
 
 RUN apk add --no-cache \
@@ -64,9 +66,13 @@ COPY --from=get /tmp/seafile-server*/check_init_admin.py /opt/seafile/seafile-se
 COPY --from=get /tmp/seafile-server*/seafile/lib64/python3.6/site-packages /opt/seafile/seafile-server-latest/seafile/lib64/python3.6/site-packages
 COPY --from=pip /usr/lib/python3.8/site-packages /usr/lib/python3.8/site-packages
 COPY scripts /scripts
-RUN chmod u+x /scripts/*
 
-ENV PYTHONPATH=/usr/lib/python3.8/site-packages:/opt/seafile/seafile-server-latest/seahub/thirdpart:/opt/seafile/seafile-server-latest/seafile/lib64/python3.6/site-packages
+RUN chmod u+x /scripts/*
+RUN mkdir -p /opt/seafile/logs &&\
+touch /opt/seafile/logs/seahub.log &&\
+mkdir -p /opt/seafile/pids
+
+ENV PYTHONPATH=/usr/lib/python3.8/site-packages:/opt/seafile/seafile-server-latest/seahub/thirdpart:/opt/seafile/seafile-server-latest/seafile/lib64/python3.6/site-packages:/opt/seafile/seafile-server-latest/seahub
 ENV CCNET_CONF_DIR=/opt/seafile/conf/ccnet
 ENV SEAFILE_CONF_DIR=/opt/seafile/seafile-data
 ENV SEAFILE_CENTRAL_CONF_DIR=/opt/seafile/conf
@@ -75,9 +81,7 @@ ENV INNER_FILE_SERVER_ROOT=http://seafile-server:8082
 ENV SEAHUB_LOG_DIR=/opt/seafile/logs
 ENV SEAFILE_ADMIN_EMAIL=me@example.com
 ENV SEAFILE_ADMIN_PASSWORD=asecret
-
-RUN mkdir -p /opt/seafile/logs &&\
-touch /opt/seafile/logs/seahub.log
+ENV PYTHON=python3
 
 EXPOSE 8000
 
