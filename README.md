@@ -287,6 +287,12 @@ You can schedule a cron job for garbage collection, by adding the following envi
 ```
 This would run the garbage collection every sunday at 6AM.
 
+### Access Log
+In order to make the access log of *seahub* visible through `docker logs` add the following line to the `gunicorn.conf.py`:
+```
+accesslog = '/proc/1/fd/1'
+```
+
 
 ### Docker Swarm
 
