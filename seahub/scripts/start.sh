@@ -17,7 +17,7 @@ function start_socat {
             sleep 1
         done
         echo "Starting socat..."
-        socat -d -d UNIX-LISTEN:/opt/seafile/seafile-server-latest/runtime/seafile.sock,fork TCP:seafile-server:8001,forever,keepalive,keepidle=10,keepintvl=10,keepcnt=2
+        socat -d -d UNIX-LISTEN:/opt/seafile/seafile-server-latest/runtime/seafile.sock,fork,unlink-early TCP:seafile-server:8001,forever,keepalive,keepidle=10,keepintvl=10,keepcnt=2
     done
 }
 
