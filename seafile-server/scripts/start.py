@@ -52,8 +52,6 @@ def main():
     check_upgrade()
     os.chdir(installdir)
 
-    fix_gunicorn_bind()
-
     call('{} start'.format(get_script('seafile.sh')))
     
     print('seafile server is running now.')
