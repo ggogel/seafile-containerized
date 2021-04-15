@@ -2,7 +2,7 @@ FROM alpine:3.13 AS get
 
 RUN apk add --no-cache wget
 
-ENV SEAFILE_SERVER=seafile-server SEAFILE_VERSION=8.0.3
+ENV SEAFILE_SERVER=seafile-server SEAFILE_VERSION=8.0.4
 
 RUN cd /tmp && \
     wget https://download.seadrive.org/seafile-server_${SEAFILE_VERSION}_x86-64.tar.gz && \
@@ -28,7 +28,7 @@ python3-jinja2 \
 python3-sqlalchemy \
 && rm -rf /var/lib/apt/lists/*
 
-ENV SEAFILE_VERSION=8.0.3
+ENV SEAFILE_VERSION=8.0.4
 
 COPY --from=get /tmp/seafile-server-${SEAFILE_VERSION} /opt/seafile/seafile-server-${SEAFILE_VERSION}
 COPY scripts /scripts
