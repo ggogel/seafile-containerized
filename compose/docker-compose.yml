@@ -1,14 +1,15 @@
 version: '3.8'
 services:
   seafile-server:
-    image: ggogel/seafile-server:8.0.4
+    image: ggogel/seafile-server:8.0.5
     volumes:
       - seafile-data:/shared 
     environment:
       - DB_HOST=db
       - DB_ROOT_PASSWD=db_dev
       - TIME_ZONE=Europe/Berlin
-      - HTTPS=false # Set this to true if you plan to use a reverse proxy with HTTPS. Can be changed later in the admin settings on the web-ui.
+      - HTTPS=true
+      - SEAFILE_SERVER_LETSENCRYPT=true # Set this to true if you plan to use a reverse proxy with HTTPS. Can be changed later in the admin settings on the web-ui.
       - SEAFILE_SERVER_HOSTNAME=seafile.mydomain.com # Mandatory on first deployment!
     depends_on:
       - db
@@ -18,7 +19,7 @@ services:
       - seafile-net
 
   seahub:
-    image: ggogel/seahub:8.0.4
+    image: ggogel/seahub:8.0.5
     volumes:
       - seafile-data:/shared
       - seahub-avatars:/shared/seafile/seahub-data/avatars
@@ -33,7 +34,7 @@ services:
       - seafile-net
   
   seahub-media:
-    image: ggogel/seahub-media:8.0.4
+    image: ggogel/seahub-media:8.0.5
     volumes:
      - seahub-avatars:/usr/share/caddy/media/avatars
      - seahub-custom:/usr/share/caddy/media/custom
