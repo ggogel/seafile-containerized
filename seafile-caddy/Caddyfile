@@ -10,7 +10,9 @@ http:// https:// {
         uri strip_prefix seafhttp
         reverse_proxy seafile-server:8082
     }
-    reverse_proxy /seafdav* seafile-server:8080
+    reverse_proxy /seafdav* seafile-server:8080 {
+        header_up Destination https:// http://
+    }
     reverse_proxy /media/* seahub-media:80 {
 	    lb_policy header X-Forwarded-For
     }
