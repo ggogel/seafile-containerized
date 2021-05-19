@@ -62,7 +62,7 @@ services:
       - seafile-net
 
   seafile-caddy:
-    image: ggogel/seafile-caddy:1.0.3
+    image: ggogel/seafile-caddy:1.0.4
     environment:
       - SWARM_DNS=true
     networks:
