@@ -84,6 +84,9 @@ Networks:
     ```
     wget https://raw.githubusercontent.com/ggogel/seafile-containerized/master/compose/docker-compose.yml
     ```
+    
+    _Note:_ We expect certain services names. Do not rename services except `db`.
+    
     #### Docker Swarm 
 
     If you run a single node swarm and don't want to run multiple replicas, you can use the same compose file. Otherwise refer to [Additional Information / Docker Swarm](#Docker-Swarm-1).
@@ -201,12 +204,14 @@ Networks:
     Example for [jwilder/nginx-proxy](https://github.com/nginx-proxy/nginx-proxy)
     ```
     seafile-caddy:
-        image: ggogel/seafile-caddy:0.1
-        ports:
-            80:80
+        image: ggogel/seafile-caddy:1.0.4
+        expose:
+        - "80"
         networks:
         - seafile-net
+        - default
         environment:
+        - VIRTUAL_PORT=80
         - VIRTUAL_HOST=seafile.mydomain.com
     ```
 
