@@ -1,7 +1,7 @@
 version: '3.8'
 services:
   seafile-server:
-    image: ggogel/seafile-server:8.0.5
+    image: ggogel/seafile-server:8.0.6
     volumes:
       - seafile-data:/shared 
     environment:
@@ -19,7 +19,7 @@ services:
       - seafile-net
 
   seahub:
-    image: ggogel/seahub:8.0.5
+    image: ggogel/seahub:8.0.6
     volumes:
       - seafile-data:/shared
       - seahub-avatars:/shared/seafile/seahub-data/avatars
@@ -34,7 +34,7 @@ services:
       - seafile-net
   
   seahub-media:
-    image: ggogel/seahub-media:8.0.5
+    image: ggogel/seahub-media:8.0.6
     volumes:
      - seahub-avatars:/usr/share/caddy/media/avatars
      - seahub-custom:/usr/share/caddy/media/custom
