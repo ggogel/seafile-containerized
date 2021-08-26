@@ -30,6 +30,7 @@ services:
     depends_on:
       - seafile-server
       - seafile-caddy
+      - seahub-media
     networks:
       - seafile-net
   
@@ -39,9 +40,6 @@ services:
      - seahub-avatars:/usr/share/caddy/media/avatars
      - seahub-custom:/usr/share/caddy/media/custom
     depends_on:
-      - seafile-server
-      - db
-      - memcached
       - seafile-caddy
     networks:
       - seafile-net
