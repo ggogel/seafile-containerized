@@ -63,7 +63,7 @@ COPY --from=get /tmp/seafile-server*/seahub /opt/seafile/seafile-server-latest/s
 COPY --from=get /tmp/seafile-server*/runtime /opt/seafile/seafile-server-latest/runtime
 COPY --from=get /tmp/seafile-server*/seahub.sh /opt/seafile/seafile-server-latest/seahub.sh
 COPY --from=get /tmp/seafile-server*/check_init_admin.py /opt/seafile/seafile-server-latest/check_init_admin.py
-COPY --from=get /tmp/seafile-server*/seafile/lib/python3/site-packages /opt/seafile/seafile-server-latest/seafile/lib64/python3/site-packages
+COPY --from=get /tmp/seafile-server*/seafile/lib/python3/site-packages /opt/seafile/seafile-server-latest/seafile/lib/python3/site-packages
 COPY --from=pip /usr/lib/python3.8/site-packages /usr/lib/python3.8/site-packages
 COPY scripts /scripts
 
