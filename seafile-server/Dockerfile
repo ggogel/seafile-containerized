@@ -19,6 +19,8 @@ tzdata \
 psmisc \
 net-tools \
 libmariadb-dev \
+ldap-utils \
+ca-certificates \
 python3 \
 python3-click \
 python3-termcolor \
@@ -40,7 +42,8 @@ ln -sf /opt/seafile/logs/common.log /opt/seafile/logs/seafile.log &&\
 ln -sf /opt/seafile/logs/common.log /opt/seafile/logs/controller.log &&\
 ln -sf /opt/seafile/logs/common.log /opt/seafile/logs/ccnet.log &&\
 ln -sf /opt/seafile/logs/common.log /opt/seafile/logs/gc.log &&\
-ln -sf /opt/seafile/logs/common.log /opt/seafile/logs/seafdav.log
+ln -sf /opt/seafile/logs/common.log /opt/seafile/logs/seafdav.log &&\
+echo "TLS_REQCERT     allow" >> /etc/ldap/ldap.conf
 
 EXPOSE 8080 8082 8001
 
