@@ -30,7 +30,8 @@ dirs=(
 for d in ${dirs[*]}; do
     src=/shared/seafile/$d
     if [[ -e $src ]]; then
-        rm -rf /opt/seafile/$d && ln -sf $src /opt/seafile
+        rm -rf /opt/seafile/$d
+        ln -sf $src /opt/seafile
     fi
 done
 
