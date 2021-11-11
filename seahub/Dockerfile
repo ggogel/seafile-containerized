@@ -37,7 +37,7 @@ pillow \
 captcha \
 pyjwt \
 mysqlclient \
-django==2.2.* \
+django==3.2.9 \
 django-pylibmc \
 django-simple-captcha \
 && rm -r /root/.cache/pip
