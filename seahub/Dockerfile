@@ -1,5 +1,5 @@
-FROM alpine:3.13.5 AS get
-ENV SEAFILE_SERVER=seafile-server SEAFILE_VERSION=8.0.7
+FROM alpine:3.13.6 AS get
+ENV SEAFILE_SERVER=seafile-server SEAFILE_VERSION=9.0.0
 
 RUN apk add --no-cache wget
 
@@ -12,7 +12,9 @@ RUN sed -i "s@.*INNER_FILE_SERVER_ROOT.*@INNER_FILE_SERVER_ROOT = os.environ.get
 
 RUN sed -i '/warning_if_seafile_not_running;/d' /tmp/seafile-server-${SEAFILE_VERSION}/seahub.sh
 
-FROM alpine:3.13.5 AS pip
+RUN sed -i '1s;^;from django.core.cache import cache\n;' /tmp/seafile-server-${SEAFILE_VERSION}/seahub/seahub/onlyoffice/views.py
+
+FROM alpine:3.13.6 AS pip
 
 RUN apk add --no-cache \
 python3-dev \
@@ -37,12 +39,12 @@ pillow \
 captcha \
 pyjwt \
 mysqlclient \
-django==2.2.* \
+django==3.2.9 \
 django-pylibmc \
 django-simple-captcha \
 && rm -r /root/.cache/pip
 
-FROM alpine:3.13.5
+FROM alpine:3.13.6
 
 RUN apk add --no-cache \
 bash \
@@ -57,13 +59,14 @@ tiff \
 tk \
 mariadb-dev \
 libmemcached \
-netcat-openbsd
+netcat-openbsd \
+gcompat
 
 COPY --from=get /tmp/seafile-server*/seahub /opt/seafile/seafile-server-latest/seahub
 COPY --from=get /tmp/seafile-server*/runtime /opt/seafile/seafile-server-latest/runtime
 COPY --from=get /tmp/seafile-server*/seahub.sh /opt/seafile/seafile-server-latest/seahub.sh
 COPY --from=get /tmp/seafile-server*/check_init_admin.py /opt/seafile/seafile-server-latest/check_init_admin.py
-COPY --from=get /tmp/seafile-server*/seafile/lib64/python3.6/site-packages /opt/seafile/seafile-server-latest/seafile/lib64/python3.6/site-packages
+COPY --from=get /tmp/seafile-server*/seafile/lib/python3/site-packages /opt/seafile/seafile-server-latest/seafile/lib/python3/site-packages
 COPY --from=pip /usr/lib/python3.8/site-packages /usr/lib/python3.8/site-packages
 COPY scripts /scripts
 
@@ -72,7 +75,7 @@ RUN mkdir -p /opt/seafile/logs &&\
 touch /opt/seafile/logs/seahub.log &&\
 mkdir -p /opt/seafile/pids
 
-ENV PYTHONPATH=/usr/lib/python3.8/site-packages:/opt/seafile/seafile-server-latest/seahub/thirdpart:/opt/seafile/seafile-server-latest/seafile/lib64/python3.6/site-packages:/opt/seafile/seafile-server-latest/seahub
+ENV PYTHONPATH=/usr/lib/python3.8/site-packages:/opt/seafile/seafile-server-latest/seahub/thirdpart:/opt/seafile/seafile-server-latest/seafile/lib/python3/site-packages:/opt/seafile/seafile-server-latest/seahub
 ENV CCNET_CONF_DIR=/opt/seafile/conf/ccnet
 ENV SEAFILE_CONF_DIR=/opt/seafile/seafile-data
 ENV SEAFILE_CENTRAL_CONF_DIR=/opt/seafile/conf
