@@ -12,8 +12,6 @@ RUN sed -i "s@.*INNER_FILE_SERVER_ROOT.*@INNER_FILE_SERVER_ROOT = os.environ.get
 
 RUN sed -i '/warning_if_seafile_not_running;/d' /tmp/seafile-server-${SEAFILE_VERSION}/seahub.sh
 
-RUN sed -i '1s;^;from django.core.cache import cache\n;' /tmp/seafile-server-${SEAFILE_VERSION}/seahub/seahub/onlyoffice/views.py
-
 FROM alpine:3.13.6 AS pip
 
 RUN apk add --no-cache \
