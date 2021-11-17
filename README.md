@@ -30,7 +30,7 @@ A fully containerized deployment of Seafile for Docker and Docker Swarm.
     1. [OAuth](#oauth)
     1. [Garbage Collection](#garbage-collection)
     1. [Access Log](#access-log)
-    1. [Additional Information / Docker Swarm](#docker-swarm)
+    1. [Docker Swarm](#Docker-Swarm-1)
         1. [Storage](#storage)
         1. [Network](#network)
         1. [Reverse Proxy load balancing](#reverse-proxy-load-balancing)
