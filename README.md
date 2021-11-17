@@ -243,6 +243,21 @@ Networks:
     ```
 ## Additional Information
 
+### Enable the New GoLang Fileserver coming with 9.0
+
+The Seafile team has reimplemented the previous Python fileserver component in GoLang. With 9.0 both variants are included in Seafile. By default the old Python fileserver is actived. The new one is supposed to provide better performance in high concurrency workloads.
+
+To activate it add the following line to `seafile-data/seafile/conf/seafile.conf`:
+
+```
+[fileserver]
+use_go_fileserver = true
+```
+
+Then restart or recreate the seafile-server container.
+
+Note: After enabling it, you might need to clear your brwoser cache, in order for avatars to load.
+
 ### Upgrading Seafile Server
 The *seafile-server* images contains scripts that will detect if a newer version of *seafile-server* is deployed and will automatically run the migration scripts included in the Seafile package. Upgrade from 7.1 is succesfully tested.
 
