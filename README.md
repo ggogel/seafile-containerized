@@ -204,7 +204,7 @@ Networks:
     Example for [jwilder/nginx-proxy](https://github.com/nginx-proxy/nginx-proxy)
     ```
     seafile-caddy:
-        image: ggogel/seafile-caddy:1.0.4
+        image: ggogel/seafile-caddy:1.0.6
         expose:
         - "80"
         networks:
