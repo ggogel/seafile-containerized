@@ -1,7 +1,7 @@
 version: '3.8'
 services:   
   seafile-server:
-    image: ggogel/seafile-server:9.0.0
+    image: ggogel/seafile-server:9.0.1
     volumes:
       - seafile-data:/shared 
     environment:
@@ -18,7 +18,7 @@ services:
       endpoint_mode: dnsrr
 
   seahub:
-    image: ggogel/seahub:9.0.0
+    image: ggogel/seahub:9.0.1
     volumes:
       - seafile-data:/shared
       - seahub-avatars:/shared/seafile/seahub-data/avatars
@@ -46,7 +46,7 @@ services:
       endpoint_mode: dnsrr
 
   db:
-    image: mariadb:latest
+    image: mariadb:10.7.1
     environment:
       - MYSQL_ROOT_PASSWORD=db_dev
       - MYSQL_LOG_CONSOLE=true
@@ -56,7 +56,7 @@ services:
       - seafile-net
 
   memcached:
-    image: memcached:latest
+    image: memcached:1.6.12
     entrypoint: memcached -m 1024
     networks:
       - seafile-net
