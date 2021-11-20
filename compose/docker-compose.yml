@@ -45,7 +45,7 @@ services:
       - seafile-net
 
   db:
-    image: mariadb:10.5.8
+    image: mariadb:10.7.1
     environment:
       - MYSQL_ROOT_PASSWORD=db_dev
       - MYSQL_LOG_CONSOLE=true
