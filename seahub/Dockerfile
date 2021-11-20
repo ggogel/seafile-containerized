@@ -1,4 +1,4 @@
-FROM alpine:3.14.3 AS get
+FROM alpine:3.13.6 AS get
 ENV SEAFILE_SERVER=seafile-server SEAFILE_VERSION=9.0.0
 
 RUN apk add --no-cache wget
@@ -14,7 +14,7 @@ RUN sed -i '/warning_if_seafile_not_running;/d' /tmp/seafile-server-${SEAFILE_VE
 
 RUN sed -i '1s;^;from django.core.cache import cache\n;' /tmp/seafile-server-${SEAFILE_VERSION}/seahub/seahub/onlyoffice/views.py
 
-FROM alpine:3.14.3 AS pip
+FROM alpine:3.13.6 AS pip
 
 RUN apk add --no-cache \
 python3-dev \
@@ -44,7 +44,7 @@ django-pylibmc \
 django-simple-captcha \
 && rm -r /root/.cache/pip
 
-FROM alpine:3.14.3
+FROM alpine:3.13.6
 
 RUN apk add --no-cache \
 bash \
