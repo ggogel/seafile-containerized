@@ -40,6 +40,7 @@ mysqlclient \
 django==3.2.9 \
 django-pylibmc \
 django-simple-captcha \
+pycryptodome==3.12.0 \
 && rm -r /root/.cache/pip
 
 FROM alpine:3.13.7
