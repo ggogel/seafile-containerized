@@ -1,7 +1,7 @@
 version: '3.8'
 services:   
   seafile-server:
-    image: ggogel/seafile-server:8.0.7
+    image: ggogel/seafile-server:8.0.8
     volumes:
       - seafile-data:/shared 
     environment:
@@ -18,7 +18,7 @@ services:
       endpoint_mode: dnsrr
 
   seahub:
-    image: ggogel/seahub:8.0.7
+    image: ggogel/seahub:8.0.8
     volumes:
       - seafile-data:/shared
       - seahub-avatars:/shared/seafile/seahub-data/avatars
