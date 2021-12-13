@@ -9,7 +9,6 @@ services:
       - DB_ROOT_PASSWD=db_dev
       - TIME_ZONE=Europe/Berlin
       - HTTPS=true
-      - SEAFILE_SERVER_LETSENCRYPT=true # Set this to true if you plan to use a reverse proxy with HTTPS. Can be changed later in the admin settings on the web-ui.
       - SEAFILE_SERVER_HOSTNAME=seafile.mydomain.com # Mandatory on first deployment!
     depends_on:
       - db
