@@ -37,7 +37,7 @@ A fully containerized deployment of Seafile for Docker and Docker Swarm.
         1. [Example](#example)
 
 ## Features
-- Complete redesign of the [official Docker deployment](https://manual.seafile.com/docker/deploy%20seafile%20with%20docker/) with containerization best-practices in mind.
+- Complete redesign of the [official Docker deployment](https://manual.seafile.com/docker/deploy_seafile_with_docker/) with containerization best-practices in mind.
 - Runs seahub (frontend) and seafile server (backend) in separate containers, which commuicate with each other over TCP.
 - Cluster without pro edition.
 - Completely removed Nginx and self-implemented Let's Encrypt and replaced it with two caddy services.
