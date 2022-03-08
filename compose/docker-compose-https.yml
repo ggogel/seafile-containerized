@@ -1,0 +1,123 @@
+version: '3.8'
+services:
+  nginx-proxy:
+    container_name: nginx-proxy
+    image: nginxproxy/nginx-proxy
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - certs:/etc/nginx/certs
+      - vhost:/etc/nginx/vhost.d
+      - html:/usr/share/nginx/html
+      - /var/run/docker.sock:/tmp/docker.sock:ro
+    networks:
+      - seafile-net
+      - default
+
+  nginx-proxy-acme:
+    image: nginxproxy/acme-companion
+    volumes:
+      - certs:/etc/nginx/certs
+      - vhost:/etc/nginx/vhost.d
+      - html:/usr/share/nginx/html
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+      - acme:/etc/acme.sh
+    environment:
+      - DEFAULT_EMAIL=me@example.com
+      - NGINX_PROXY_CONTAINER=nginx-proxy
+    depends_on:
+      - nginx-proxy
+    networks:
+      - seafile-net
+      - default
+
+  seafile-server:
+    image: ggogel/seafile-server:9.0.4
+    volumes:
+      - seafile-data:/shared
+    environment:
+      - DB_HOST=db
+      - DB_ROOT_PASSWD=db_dev
+      - TIME_ZONE=Europe/Berlin
+      - HTTPS=true
+      - SEAFILE_SERVER_HOSTNAME=seafile.mydomain.com # Mandatory on first deployment!
+      - GC_CRON=0 6 * * SUN # Garbage collection
+    depends_on:
+      - db
+      - memcached
+      - seafile-caddy
+    networks:
+      - seafile-net
+
+  seahub:
+    image: ggogel/seahub:9.0.4
+    volumes:
+      - seafile-data:/shared
+      - seahub-avatars:/shared/seafile/seahub-data/avatars
+      - seahub-custom:/shared/seafile/seahub-data/custom
+    environment:
+      - SEAFILE_ADMIN_EMAIL=me@example.com
+      - SEAFILE_ADMIN_PASSWORD=asecret
+    depends_on:
+      - seafile-server
+      - seafile-caddy
+      - seahub-media
+    networks:
+      - seafile-net
+
+  seahub-media:
+    image: ggogel/seahub-media:9.0.4
+    volumes:
+     - seahub-avatars:/usr/share/caddy/media/avatars
+     - seahub-custom:/usr/share/caddy/media/custom
+    depends_on:
+      - seafile-caddy
+    networks:
+      - seafile-net
+
+  db:
+    image: mariadb:10.7.1
+    environment:
+      - MYSQL_ROOT_PASSWORD=db_dev
+      - MYSQL_LOG_CONSOLE=true
+    volumes:
+      - seafile-mariadb:/var/lib/mysql
+    networks:
+      - seafile-net
+
+  memcached:
+    image: memcached:1.6.14
+    entrypoint: memcached -m 1024
+    networks:
+      - seafile-net
+
+  seafile-caddy:
+    image: ggogel/seafile-caddy:1.0.6
+    expose:
+      - "80"
+    networks:
+      - seafile-net
+    environment:
+      - VIRTUAL_PORT=80
+      - VIRTUAL_HOST=seafile.mydomain.com
+      - LETSENCRYPT_HOST=seafile.mydomain.com
+    depends_on:
+      - nginx-proxy
+      - nginx-proxy-acme
+
+networks:
+  seafile-net:
+    internal: true
+
+volumes:
+  seafile-data:
+  seafile-mariadb:
+  seahub-avatars:
+  seahub-custom:
+
+  # https://github.com/nginx-proxy/acme-companion
+  certs:
+  vhost:
+  html:
+  acme:

@@ -193,14 +193,23 @@ Networks:
 
 5. ***(Optional) Reverse Proxy***
     
-    Short version:
+    **Short version:**
+
     The caddy reverse proxy integrated in the deployment exposes **port 80**. Point your reverse proxy to that port.
     
-    Long version:
-    This deployment does by design **not** include a reverse proxy that is capable of https and Let's Encrypt, because usually Docker users already have some docker-based reverse proxy solution deployed, which does exactly that. If you're using Docker for a while already, you probably know what to do and you can skip this section.
+    If you don't have an existing reverse proxy that provides https, you can use this example as a starting point. It uses [nginx-proxy/nginx-proxy
+    ](https://github.com/nginx-proxy/nginx-proxy) as the reverse proxy and [nginx-proxy/acme-companion](https://github.com/nginx-proxy/acme-companion) to provide https via Let's Encrypt:
 
-    If you are new to Docker or you are interested in another revers proxy solution, have a look at those options:
-    - [jwilder/nginx-proxy](https://github.com/nginx-proxy/nginx-proxy) (recommended for beginners)
+    ```
+        wget https://raw.githubusercontent.com/ggogel/seafile-containerized/master/compose/docker-compose-https.yml
+    ```
+
+    **Long version:**
+
+    By default, this deployment does **not** include a reverse proxy that is capable of https and Let's Encrypt. This is by design, because usually Docker users already have some docker-based reverse proxy solution deployed, which does exactly that. If you're using Docker for a while already, you probably know what to do and you can skip this section.
+
+    If you are new to Docker or you are interested in another reverse proxy solution, have a look at those options:
+    - [nginx-proxy/nginx-proxy](https://github.com/nginx-proxy/nginx-proxy) (recommended for beginners)
         - popular solution for beginners
         - doesn't support Docker Swarm
         - automatic Let's Encrypt with plugin
@@ -219,7 +228,7 @@ Networks:
 
     Refer to the respective documentation. Often this is just one line you have to add to the `docker-compose.yml`. 
 
-    Example for [jwilder/nginx-proxy](https://github.com/nginx-proxy/nginx-proxy)
+    Example for [nginx-proxy/nginx-proxy](https://github.com/nginx-proxy/nginx-proxy)
     ```
     seafile-caddy:
         image: ggogel/seafile-caddy:1.0.6
