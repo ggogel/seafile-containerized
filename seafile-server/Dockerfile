@@ -28,6 +28,7 @@ python3-colorlog \
 python3-pymysql \
 python3-jinja2 \
 python3-sqlalchemy \
+python3-pycryptodome \
 && rm -rf /var/lib/apt/lists/*
 
 ENV SEAFILE_VERSION=9.0.4
