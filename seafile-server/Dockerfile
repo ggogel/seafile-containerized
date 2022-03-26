@@ -28,7 +28,14 @@ python3-colorlog \
 python3-pymysql \
 python3-jinja2 \
 python3-sqlalchemy \
+python3-pip \
+python3-setuptools \
 && rm -rf /var/lib/apt/lists/*
+
+RUN python3 -m pip install --upgrade pip &&\
+pip3 install --timeout=3600 \
+pycryptodome==3.12.0 \
+&& rm -r /root/.cache/pip    
 
 ENV SEAFILE_VERSION=9.0.4
 
