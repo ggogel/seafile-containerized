@@ -31,6 +31,8 @@ python3-sqlalchemy \
 python3-pycryptodome \
 && rm -rf /var/lib/apt/lists/*
 
+RUN cp -r  /usr/lib/python3/dist-packages/Cryptodome /usr/lib/python3/dist-packages/Crypto
+
 ENV SEAFILE_VERSION=9.0.4
 
 COPY --from=get /tmp/seafile-server-${SEAFILE_VERSION} /opt/seafile/seafile-server-${SEAFILE_VERSION}
