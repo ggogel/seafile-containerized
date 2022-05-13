@@ -2,14 +2,14 @@ FROM alpine:3.13.10 AS get
 
 RUN apk add --no-cache wget
 
-ENV SEAFILE_SERVER=seafile-server SEAFILE_VERSION=9.0.4
+ENV SEAFILE_SERVER=seafile-server SEAFILE_VERSION=9.0.5
 
 RUN cd /tmp && \
     wget https://download.seadrive.org/seafile-server_${SEAFILE_VERSION}_x86-64.tar.gz && \
     tar -zxvf seafile-server_${SEAFILE_VERSION}_x86-64.tar.gz && \
     rm -f seafile-server_${SEAFILE_VERSION}_x86-64.tar.gz
 
-FROM ubuntu:focal-20220316
+FROM ubuntu:focal-20220426
 
 RUN apt-get update && \
 DEBIAN_FRONTEND=noninteractive apt-get install -y \
@@ -33,7 +33,7 @@ python3-pycryptodome \
 
 RUN cp -r  /usr/lib/python3/dist-packages/Cryptodome /usr/lib/python3/dist-packages/Crypto
 
-ENV SEAFILE_VERSION=9.0.4
+ENV SEAFILE_VERSION=9.0.5
 
 COPY --from=get /tmp/seafile-server-${SEAFILE_VERSION} /opt/seafile/seafile-server-${SEAFILE_VERSION}
 COPY scripts /scripts
