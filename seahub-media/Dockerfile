@@ -8,6 +8,6 @@ RUN cd /tmp && \
     tar -zxvf seafile-server_${SEAFILE_VERSION}_x86-64.tar.gz && \
     rm -f seafile-server_${SEAFILE_VERSION}_x86-64.tar.gz
 
-FROM caddy:2.4.6-alpine
+FROM caddy:2.4.9-alpine
 
 COPY --from=get /tmp/seafile-server*/seahub/media /usr/share/caddy/media
