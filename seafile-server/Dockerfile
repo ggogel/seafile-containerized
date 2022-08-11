@@ -1,4 +1,4 @@
-FROM alpine:3.13.10 AS get
+FROM alpine:3.13.12 AS get
 
 RUN apk add --no-cache wget
 
