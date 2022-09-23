@@ -18,7 +18,7 @@ services:
       - seafile-net
 
   seahub:
-    image: ggogel/seahub:9.0.9
+    image: seahub-alpine2
     volumes:
       - seafile-data:/shared
       - seahub-avatars:/shared/seafile/seahub-data/avatars
