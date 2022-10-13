@@ -12,7 +12,7 @@ RUN sed -i "s@.*INNER_FILE_SERVER_ROOT.*@INNER_FILE_SERVER_ROOT = os.environ.get
 
 RUN sed -i '/warning_if_seafile_not_running;/d' /tmp/seafile-server-${SEAFILE_VERSION}/seahub.sh
 
-FROM python:3.8.14-alpine3.16 AS pip
+FROM python:3.8.15-alpine3.16 AS pip
 
 RUN apk add --no-cache \
 mariadb-dev \
@@ -40,7 +40,7 @@ django-simple-captcha \
 pycryptodome==3.12.0 \
 && rm -r /root/.cache/pip
 
-FROM python:3.8.14-alpine3.16
+FROM python:3.8.15-alpine3.16
 
 RUN apk add --no-cache \
 bash \
