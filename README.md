@@ -44,8 +44,11 @@ A fully containerized deployment of Seafile for Docker and Docker Swarm.
 - Increased Security:
     - The caddy reverse proxy serves as a single entry point to the stack. Everything else runs in an isolated network.
     - Using [Alpine Linux](https://alpinelinux.org/about/) based images for the frontend, which is designed with security in mind and comes with proactive security features.
+    - Official Seafile Docker deployment uses entirely outdated base images and dependencies. Here base images and dependencies are updated on a regular basis.
 - Reworked Dockerfiles featuring multi-stage builds, allowing for smaller images and faster builds.
-- Schedule offline garbage collection with cron job
+- Schedule offline garbage collection with cron job.
+- Runs upgrade scripts automatically when a new image version is deployed.
+- All features of Seafile Community Edition are included.
 
 ## Structure
 
