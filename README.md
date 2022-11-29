@@ -1,18 +1,22 @@
 [![Docker Cloud Automated build](https://img.shields.io/docker/cloud/automated/ggogel/seafile-server?label=docker%20build%3A%20seafile-server%20)](https://hub.docker.com/r/ggogel/seafile-server)
 [![Docker Cloud Build Status](https://img.shields.io/docker/cloud/build/ggogel/seafile-server?label=docker%20build%3A%20seafile-server%20)](https://hub.docker.com/r/ggogel/seafile-server)
-[![Docker Image Version (latest semver)](https://img.shields.io/docker/v/ggogel/seafile-server?sort=semver&label=version%3A%20seafile-server%20)](https://hub.docker.com/r/ggogel/seafile-server)
+[![Docker Image Version (tag latest semver)](https://img.shields.io/docker/v/ggogel/seafile-server/9.0.9)](https://hub.docker.com/r/ggogel/seafile-server)
+[![Docker Pulls](https://img.shields.io/docker/pulls/ggogel/seafile-server)](https://hub.docker.com/r/ggogel/seafile-server)
 
 [![Docker Cloud Automated build](https://img.shields.io/docker/cloud/automated/ggogel/seahub?label=docker%20build%3A%20seahub)](https://hub.docker.com/r/ggogel/seahub)
 [![Docker Cloud Build Status](https://img.shields.io/docker/cloud/build/ggogel/seahub?label=docker%20build%3A%20seahub)](https://hub.docker.com/r/ggogel/seahub)
-[![Docker Image Version (latest semver)](https://img.shields.io/docker/v/ggogel/seahub?sort=semver&label=version%3A%20seahub%20)](https://hub.docker.com/r/ggogel/seahub)
+[![Docker Image Version (tag latest semver)](https://img.shields.io/docker/v/ggogel/seahub/9.0.9)](https://hub.docker.com/r/ggogel/seahub)
+[![Docker Pulls](https://img.shields.io/docker/pulls/ggogel/seahub)](https://hub.docker.com/r/ggogel/seahub)
 
 [![Docker Cloud Automated build](https://img.shields.io/docker/cloud/automated/ggogel/seahub-media?label=docker%20build%3A%20seahub-media)](https://hub.docker.com/r/ggogel/seahub-media)
 [![Docker Cloud Build Status](https://img.shields.io/docker/cloud/build/ggogel/seahub-media?label=docker%20build%3A%20seahub-media)](https://hub.docker.com/r/ggogel/seahub-media)
-[![Docker Image Version (latest semver)](https://img.shields.io/docker/v/ggogel/seahub-media?sort=semver&label=version%3A%20seahub-media%20)](https://hub.docker.com/r/ggogel/seahub-media)
+[![Docker Image Version (tag latest semver)](https://img.shields.io/docker/v/ggogel/seahub/9.0.9)](https://hub.docker.com/r/ggogel/seahub-media)
+[![Docker Pulls](https://img.shields.io/docker/pulls/ggogel/seahub-media)](https://hub.docker.com/r/ggogel/seahub-media)
 
 [![Docker Cloud Automated build](https://img.shields.io/docker/cloud/automated/ggogel/seafile-caddy?label=docker%20build%3A%20seafile-caddy)](https://hub.docker.com/r/ggogel/seafile-caddy)
 [![Docker Cloud Build Status](https://img.shields.io/docker/cloud/build/ggogel/seafile-caddy?label=docker%20build%3A%20seafile-caddy)](https://hub.docker.com/r/ggogel/seafile-caddy)
-[![Docker Image Version (latest semver)](https://img.shields.io/docker/v/ggogel/seafile-caddy?sort=semver&label=version%3A%20seafile-caddy%20)](https://hub.docker.com/r/ggogel/seafile-caddy)
+[![Docker Image Version (tag latest semver)](https://img.shields.io/docker/v/ggogel/seafile-caddy/1.0.6)](https://hub.docker.com/r/ggogel/seafile-caddy)
+[![Docker Pulls](https://img.shields.io/docker/pulls/ggogel/seafile-caddy)](https://hub.docker.com/r/ggogel/seafile-caddy)
 
 
 # Containerized Seafile Deployment
