@@ -34,7 +34,7 @@ pillow \
 captcha \
 pyjwt \
 mysqlclient \
-django==3.2.9 \
+django==3.2.16 \
 django-pylibmc \
 django-simple-captcha \
 pycryptodome==3.12.0 \
