@@ -27,18 +27,6 @@ A fully containerized deployment of Seafile for Docker and Docker Swarm.
 1. [Structure](#structure)
 1. [Getting Started](#getting-started)
 1. [Additional Information](#additional-information)
-    1. [Enable the New GoLang Fileserver coming with 9.0](#enable-the-new-golang-fileserver-coming-with-90)
-    1. [Upgrading Seafile Server](#upgrading-seafile-server)
-    1. [User Avatars and Custom Logos](#user-avatars-and-custom-logos)
-    1. [LDAP](#ldap)
-    1. [OAuth](#oauth)
-    1. [Garbage Collection](#garbage-collection)
-    1. [Access Log](#access-log)
-    1. [Docker Swarm](#Docker-Swarm-1)
-        1. [Storage](#storage)
-        1. [Network](#network)
-        1. [Reverse Proxy load balancing](#reverse-proxy-load-balancing)
-        1. [Example](#example)
 
 ## Features
 - Complete redesign of the [official Docker deployment](https://manual.seafile.com/docker/deploy%20seafile%20with%20docker/) with containerization best-practices in mind.
