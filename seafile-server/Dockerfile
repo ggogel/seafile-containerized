@@ -9,8 +9,7 @@ RUN cd /tmp && \
     tar -zxvf seafile-server_${SEAFILE_VERSION}_x86-64.tar.gz && \
     rm -f seafile-server_${SEAFILE_VERSION}_x86-64.tar.gz
 
-FROM ubuntu:focal-20221130
-
+FROM ubuntu:focal-20230126
 
 RUN apt-get update && \
 DEBIAN_FRONTEND=noninteractive apt-get install -y \
