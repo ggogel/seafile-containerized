@@ -1,5 +1,5 @@
 FROM alpine:3.16.3 AS get
-ENV SEAFILE_SERVER=seafile-server SEAFILE_VERSION=9.0.10
+ENV SEAFILE_SERVER=seafile-server SEAFILE_VERSION=10.0.0
 
 RUN apk add --no-cache wget
 
@@ -29,15 +29,15 @@ libmemcached-dev
 
 RUN python3 -m pip install --upgrade pip &&\
 pip3 install --timeout=3600 \
-future \
-pillow \
-captcha \
-pyjwt \
-mysqlclient \
+future==0.18.* \
+pillow==9.3.* \
+captcha==0.4 \
+pyjwt==2.6.* \
+mysqlclient==2.1.* \
 django==3.2.16 \
 django-pylibmc \
-django-simple-captcha \
-pycryptodome==3.12.0 \
+django-simple-captcha==0.5.* \
+pycryptodome==3.16.* \
 && rm -r /root/.cache/pip
 
 FROM python:3.8.16-alpine3.16
