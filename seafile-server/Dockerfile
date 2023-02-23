@@ -2,7 +2,7 @@ FROM alpine:3.16.3 AS get
 
 RUN apk add --no-cache wget
 
-ENV SEAFILE_SERVER=seafile-server SEAFILE_VERSION=9.0.10
+ENV SEAFILE_SERVER=seafile-server SEAFILE_VERSION=10.0.0
 
 RUN cd /tmp && \
     wget https://download.seadrive.org/seafile-server_${SEAFILE_VERSION}_x86-64.tar.gz && \
@@ -34,7 +34,7 @@ python3-lxml \
 
 RUN cp -r  /usr/lib/python3/dist-packages/Cryptodome /usr/lib/python3/dist-packages/Crypto
 
-ENV SEAFILE_VERSION=9.0.10
+ENV SEAFILE_VERSION=10.0.0
 
 COPY --from=get /tmp/seafile-server-${SEAFILE_VERSION} /opt/seafile/seafile-server-${SEAFILE_VERSION}
 COPY scripts /scripts
