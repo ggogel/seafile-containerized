@@ -40,7 +40,7 @@ function gc_cron {
 }
 
 function logger {
-    tail -f /opt/seafile/logs/common.log  | tee /proc/1/fd/1
+    tail -f /opt/seafile/logs/common.log | tee
 }
 
 function keep_running {
