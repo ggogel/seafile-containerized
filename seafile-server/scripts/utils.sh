@@ -48,3 +48,14 @@ function keep_running {
         tail -f /dev/null & wait ${!}
     done
 }
+
+function sig_kill_all () {
+    pkill -SIGKILL -f "seaf-server -c ${default_ccnet_conf_dir}"
+    pkill -SIGKILL -f "fileserver -c ${default_ccnet_conf_dir}"
+    pkill -SIGKILL -f "seafevents.main"
+    pkill -SIGKILL -f "convert_server.py"
+    pkill -SIGKILL -f "soffice.*--invisible --nocrashreport"
+    pkill -SIGKILL -f  "wsgidav.server.server_cli"
+    pkill -SIGKILL -f  "notification-server -c ${central_config_dir}"
+    pkill -SIGKILL -f  "seafile-monitor.sh"
+}
