@@ -102,7 +102,7 @@ Networks:
     
     #### Docker Swarm 
 
-    If you run a single node swarm and don't want to run multiple replicas, you can use the same compose file. Otherwise refer to [Additional Information / Docker Swarm](#Docker-Swarm-1).
+    If you run a single node swarm and don't want to run multiple replicas, you can use the same compose file. Otherwise refer to [Wiki / Docker Swarm](https://github.com/ggogel/seafile-containerized/wiki/Docker-Swarm).
    
 
 3. ***Set environment variables***
