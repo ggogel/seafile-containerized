@@ -1,4 +1,4 @@
-FROM alpine:3.17.2 AS get
+FROM alpine:3.17.3 AS get
 ENV SEAFILE_SERVER=seafile-server SEAFILE_VERSION=10.0.0
 
 RUN apk add --no-cache wget
