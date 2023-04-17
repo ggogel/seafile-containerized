@@ -20,5 +20,5 @@ if [[ $SEAFILE_SERVER != *"pro"* ]]; then
     echo "Seafile CE: Offline garbage collection completed. Starting Seafile."
     sleep 3
     $SEAFILE_DIR/seafile.sh start
-    start_socat
+    start_socat &
 fi
