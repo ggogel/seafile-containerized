@@ -48,6 +48,7 @@ services:
     environment:
       - MYSQL_ROOT_PASSWORD=db_dev
       - MYSQL_LOG_CONSOLE=true
+      - MARIADB_AUTO_UPGRADE=true
     volumes:
       - seafile-mariadb:/var/lib/mysql
     networks:
