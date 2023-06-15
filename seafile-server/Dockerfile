@@ -9,7 +9,7 @@ RUN cd /tmp && \
     tar -zxvf seafile-server_${SEAFILE_VERSION}_x86-64.tar.gz && \
     rm -f seafile-server_${SEAFILE_VERSION}_x86-64.tar.gz
 
-FROM ubuntu:jammy-20230308
+FROM ubuntu:jammy-20230522
 
 RUN apt-get update && \
 DEBIAN_FRONTEND=noninteractive apt-get install -y \
