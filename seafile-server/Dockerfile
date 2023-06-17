@@ -49,6 +49,6 @@ ln -sf /opt/seafile/logs/common.log /opt/seafile/logs/gc.log &&\
 ln -sf /opt/seafile/logs/common.log /opt/seafile/logs/seafdav.log &&\
 echo "TLS_REQCERT     allow" >> /etc/ldap/ldap.conf
 
-EXPOSE 8080 8082 8001
+EXPOSE 8001 8080 8082 8083
 
 CMD ["/scripts/start.sh"]
