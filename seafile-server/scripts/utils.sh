@@ -34,7 +34,11 @@ function stop_socat {
 function gc_cron {
     if [[ ! -z $GC_CRON ]]; then
         echo "Scheduling garbage collection..."
-        (crontab -l ; echo "$GC_CRON /scripts/gc.sh >> /opt/seafile/logs/gc.log 2>&1") | crontab
+        
+        if ! crontab -l | grep -Fxq "$GC_CRON /scripts/gc.sh >> /opt/seafile/logs/gc.log 2>&1"; then
+            (crontab -l ; echo "$GC_CRON /scripts/gc.sh >> /opt/seafile/logs/gc.log 2>&1") | crontab
+        fi
+        
         service cron start
     fi
 }
