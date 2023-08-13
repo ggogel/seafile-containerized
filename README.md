@@ -159,30 +159,32 @@ Networks:
 
     **If you set up Seafile from scratch you can skip this part.**
 
- This deployment uses [named volumes](https://docs.docker.com/storage/volumes/), which come with several advantages over bind mounts, used in the official Seafile Docker deployment. They are the recommended mechanism for persisted storage on Docker. 
- 
- The default path for named volumes on Docker is `/var/lib/docker/volumes/PROJECT-NAME_VOLUME-NAME/_data`.
-
-    To migrate storage from the official Docker deployment or native (non-Docker) deployment run:
-    ```
-    mkdir -p /var/lib/docker/volumes/seafile_seafile-data/_data
-    mkdir -p /var/lib/docker/volumes/seafile_seafile-mariadb/_data
-    mkdir -p /var/lib/docker/volumes/seafile_seahub-custom/_data
-    mkdir -p /var/lib/docker/volumes/seafile_seahub-avatars/_data
-
-    cp -r /opt/seafile-data /var/lib/docker/volumes/seafile_seafile-data/_data
-    cp -r /opt/seafile-mysql/db /var/lib/docker/volumes/seafile_seafile-mariadb/_data
-    mv /var/lib/docker/volumes/seafile_seafile-data/_data/seafile/seahub-data/custom /var/lib/docker/volumes/seafile_seahub-custom/_data
-    mv /var/lib/docker/volumes/seafile_seafile-data/_data/seafile/seahub-data/avatars /var/lib/docker/volumes/seafile_seahub-avatars/_data
-    ```
+     This deployment uses [named volumes](https://docs.docker.com/storage/volumes/), which come with several advantages over bind mounts, used in the official Seafile Docker deployment. They are the recommended mechanism for persisted storage on Docker. 
+     
+     The default path for named volumes on Docker is `/var/lib/docker/volumes/PROJECT-NAME_VOLUME-NAME/_data`.
     
-    If you are migration from a native (non-Docker) deployment, you additonaly need to change the ownership of the folders:
-    ```
-    chown -R root:root /var/lib/docker/volumes/seafile_seafile-data
-    chown -R root:root /var/lib/docker/volumes/seafile_seafile-mariadb
-    chown -R root:root /var/lib/docker/volumes/seafile_seahub-custom
-    chown -R root:root /var/lib/docker/volumes/seafile_seahub-avatars
-    ```
+     To migrate storage from the official Docker deployment or native (non-Docker) deployment run:
+
+```
+mkdir -p /var/lib/docker/volumes/seafile_seafile-data/_data
+mkdir -p /var/lib/docker/volumes/seafile_seafile-mariadb/_data
+mkdir -p /var/lib/docker/volumes/seafile_seahub-custom/_data
+mkdir -p /var/lib/docker/volumes/seafile_seahub-avatars/_data
+
+cp -r /opt/seafile-data /var/lib/docker/volumes/seafile_seafile-data/_data
+cp -r /opt/seafile-mysql/db /var/lib/docker/volumes/seafile_seafile-mariadb/_data
+mv /var/lib/docker/volumes/seafile_seafile-data/_data/seafile/seahub-data/custom /var/lib/docker/volumes/seafile_seahub-custom/_data
+mv /var/lib/docker/volumes/seafile_seafile-data/_data/seafile/seahub-data/avatars /var/lib/docker/volumes/seafile_seahub-avatars/_data
+```
+
+If you are migrating from a native (non-Docker) deployment, you additionally need to change the ownership of the folders:
+    
+```
+chown -R root:root /var/lib/docker/volumes/seafile_seafile-data
+chown -R root:root /var/lib/docker/volumes/seafile_seafile-mariadb
+chown -R root:root /var/lib/docker/volumes/seafile_seahub-custom
+chown -R root:root /var/lib/docker/volumes/seafile_seahub-avatars
+```
 
 5. ***(Optional) Reverse Proxy***
     
