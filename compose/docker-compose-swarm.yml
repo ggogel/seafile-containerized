@@ -46,7 +46,7 @@ services:
       endpoint_mode: dnsrr
 
   db:
-    image: mariadb:10.11.4
+    image: mariadb:10.11.5
     environment:
       - MYSQL_ROOT_PASSWORD=db_dev
       - MYSQL_LOG_CONSOLE=true
