@@ -40,7 +40,7 @@ jobs:
       run: |
         LATEST_TAG=$(curl -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
         https://api.github.com/repos/${{ github.repository }}/tags | \
-        jq -r --arg FOLDER "$FOLDER_CHANGED" '.[] | select(.name | startswith($FOLDER)) | .name' | head -1)
+        jq -r --arg FOLDER "$FOLDER_CHANGED" --arg VERSION "$SEAFILE_VERSION" '.[] | select(.name | startswith($FOLDER + "-" + $VERSION)) | .name' | sort -V | tail -1)
 
         if [[ $LATEST_TAG ]]; then
           PREVIOUS_BUILD=$(echo $LATEST_TAG | awk -F_ '{print $3}')
