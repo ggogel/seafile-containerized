@@ -69,9 +69,18 @@ jobs:
     - name: Get Commit Messages
       run: |
         MESSAGES=""
-        for commit in $(git log --since="$LAST_TAG..HEAD" --pretty=format:'%H' -- $FOLDER_CHANGED); do
-          MESSAGE=$(git log --format=%B -n 1 $commit)
-          MESSAGES="$MESSAGES$commit: $MESSAGE\n"
+        if [[ "$LAST_TAG" == "0" ]]; then
+          COMMIT_RANGE="--all"
+        else
+          LAST_COMMIT_FOR_TAG=$(git rev-list -n 1 $LAST_TAG)
+          COMMIT_RANGE="${LAST_COMMIT_FOR_TAG}..HEAD"
+        fi
+
+        for commit in $(git log --pretty=format:'%H' $COMMIT_RANGE); do
+          if git diff-tree --no-commit-id --name-only -r $commit | grep "^$FOLDER_CHANGED/"; then
+            MESSAGE=$(git log --format=%B -n 1 $commit)
+            MESSAGES="$MESSAGES\n$commit: $MESSAGE"
+          fi
         done
         echo "MESSAGES=$MESSAGES" >> $GITHUB_ENV
         echo "MESSAGES=$MESSAGES"
