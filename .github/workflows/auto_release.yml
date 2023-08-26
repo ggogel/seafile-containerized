@@ -1,0 +1,56 @@
+name: Automatic Release
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  create_release:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Check out code
+      uses: actions/checkout@v2
+
+    - name: Determine Changed Directory and Extract Version
+      id: dir_version
+      run: |
+        FOLDER_CHANGED=$(git diff --name-only HEAD^ HEAD | cut -d '/' -f1 | uniq)
+        if [[ -f "$FOLDER_CHANGED/Dockerfile" ]]; then
+          SEAFILE_VERSION=$(grep 'SEAFILE_VERSION' $FOLDER_CHANGED/Dockerfile | awk -F= '{print $2}' | tr -d ' "')
+          echo "SEAFILE_VERSION=$SEAFILE_VERSION" >> $GITHUB_ENV
+        fi
+        echo "FOLDER_CHANGED=$FOLDER_CHANGED" >> $GITHUB_ENV
+
+    - name: Get Previous Build Number and Compute Next
+      id: build_number
+      run: |
+        # Use GitHub API to fetch previous release. Adjust based on your naming convention.
+        PREVIOUS_BUILD=$(curl -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
+        https://api.github.com/repos/${{ github.repository }}/releases | \
+        jq -r --arg FOLDER "$FOLDER_CHANGED" '.[] | select(.name | startswith($FOLDER)) | .name' | head -1 | awk -F_ '{print $3}')
+        
+        if [[ $PREVIOUS_BUILD ]]; then
+          NEXT_BUILD=$(printf "%03d" $((10#$PREVIOUS_BUILD + 1)))
+        else
+          NEXT_BUILD="001"
+        fi
+        echo "NEXT_BUILD=$NEXT_BUILD" >> $GITHUB_ENV
+
+    - name: Get Commit Messages
+      id: commit_messages
+      run: |
+        MESSAGES=$(git log --pretty=format:"%s" $(git describe --tags --abbrev=0)..HEAD)
+        echo "MESSAGES=$MESSAGES" >> $GITHUB_ENV
+
+    - name: Create Release
+      if: env.FOLDER_CHANGED != '' && env.SEAFILE_VERSION != ''
+      uses: actions/create-release@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        tag_name: ${{ env.FOLDER_CHANGED }}_${{ env.SEAFILE_VERSION }}_${{ env.NEXT_BUILD }}
+        release_name: ${{ env.FOLDER_CHANGED }}_${{ env.SEAFILE_VERSION }}_${{ env.NEXT_BUILD }}
+        body: ${{ env.MESSAGES }}
+        draft: false
+        prerelease: false
