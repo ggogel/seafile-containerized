@@ -32,8 +32,7 @@ jobs:
           FOLDER_CHANGED=$(git diff --name-only HEAD^ HEAD | cut -d '/' -f1 | uniq)
         fi
         if [[ -f "$FOLDER_CHANGED/Dockerfile" ]]; then
-          SEAFILE_VERSION=$(grep 'SEAFILE_VERSION' $FOLDER_CHANGED/Dockerfile | awk -F'SEAFILE_VERSION=' '{print $2}' | awk '{print $1}')
-          SEAFILE_VERSION=$(echo "$SEAFILE_VERSION" | tr -d '\n\r')
+          SEAFILE_VERSION=$(grep 'SEAFILE_VERSION' $FOLDER_CHANGED/Dockerfile | awk -F'SEAFILE_VERSION=' '{print $2}' | awk '{print $1}' | tr -d '\n')
           echo "SEAFILE_VERSION=$SEAFILE_VERSION" >> $GITHUB_ENV
         fi
         echo "FOLDER_CHANGED=$FOLDER_CHANGED" >> $GITHUB_ENV
