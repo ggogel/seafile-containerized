@@ -37,15 +37,27 @@ jobs:
         fi
         echo "FOLDER_CHANGED=$FOLDER_CHANGED" >> $GITHUB_ENV
 
-    - name: Get Previous Build Number and Compute Next
+    - name: Get Previous Tag and Build Number
       id: build_number
       run: |
-        LATEST_TAG=$(curl -sH "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
-        "https://api.github.com/repos/${{ github.repository }}/tags" | \
-        jq -r --arg FOLDER "$FOLDER_CHANGED" --arg VERSION "$SEAFILE_VERSION" '.[] | select(.name | startswith($FOLDER + "-" + $VERSION)) | .name' | sort -V | tail -1)
-        
+        PAGE=1
+        LATEST_TAG=""
+        while true; do
+          TAGS=$(curl -sH "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
+            "https://api.github.com/repos/${{ github.repository }}/tags?per_page=100&page=$PAGE")
+          if [[ -z "$TAGS" ]]; then
+            break
+          fi
+          TAG=$(echo "$TAGS" | jq -r --arg FOLDER "$FOLDER_CHANGED" --arg VERSION "$SEAFILE_VERSION" '.[] | select(.name | startswith($FOLDER + "-" + $VERSION)) | .name' | sort -V | tail -1)
+          if [[ -n "$TAG" ]] && [[ -z "$LATEST_TAG" || "$TAG" > "$LATEST_TAG" ]]; then
+            LATEST_TAG="$TAG"
+          fi
+          PAGE=$((PAGE + 1))
+        done
+
         echo "LATEST_TAG=$LATEST_TAG"
-        
+        echo "LATEST_TAG=$LATEST_TAG" >> $GITHUB_ENV
+
         if [[ $LATEST_TAG ]]; then
           PREVIOUS_BUILD=$(echo $LATEST_TAG | awk -F_ '{print $2}')
           echo "PREVIOUS_BUILD=$PREVIOUS_BUILD"
@@ -56,26 +68,14 @@ jobs:
         echo "NEXT_BUILD=$NEXT_BUILD" >> $GITHUB_ENV
         echo "NEXT_BUILD = $NEXT_BUILD"
 
-    - name: Get Last Tag for Folder
-      id: last_tag
-      run: |
-        LAST_TAG=$(curl -sH "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
-        "https://api.github.com/repos/${{ github.repository }}/tags" | \
-        jq -r --arg FOLDER "$FOLDER_CHANGED" --arg VERSION "$SEAFILE_VERSION" '.[] | select(.name | startswith($FOLDER + "-" + $VERSION)) | .name' | sort -V | tail -1)
-        if [[ -z "$LAST_TAG" ]]; then
-          echo "LAST_TAG=0" >> $GITHUB_ENV
-        else
-          echo "LAST_TAG=$LAST_TAG" >> $GITHUB_ENV
-        fi
-
     - name: Get Commit Messages
       id: get_messages
       run: |
         MESSAGES=""
-        if [[ "$LAST_TAG" == "0" ]]; then
+        if [[ -z "$LATEST_TAG" ]]; then
           COMMIT_RANGE="--all"
         else
-          LAST_COMMIT_FOR_TAG=$(git rev-list -n 1 refs/tags/$LAST_TAG)
+          LAST_COMMIT_FOR_TAG=$(git rev-list -n 1 refs/tags/$LATEST_TAG)
           COMMIT_RANGE="${LAST_COMMIT_FOR_TAG}..HEAD"
         fi
         
