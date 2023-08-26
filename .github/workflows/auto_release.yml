@@ -41,7 +41,7 @@ jobs:
         LATEST_TAG=$(curl -sH "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
         "https://api.github.com/repos/${{ github.repository }}/tags" | \
         jq -r --arg FOLDER "$FOLDER_CHANGED" --arg VERSION "$SEAFILE_VERSION" '.[] | select(.name | startswith($FOLDER + "-" + $VERSION)) | .name' | sort -V | tail -1)
-
+        
         echo "LATEST_TAG=$LATEST_TAG"
         
         if [[ $LATEST_TAG ]]; then
@@ -54,11 +54,26 @@ jobs:
         echo "NEXT_BUILD=$NEXT_BUILD" >> $GITHUB_ENV
         echo "NEXT_BUILD = $NEXT_BUILD"
 
-    - name: Get Commit Messages
-      id: commit_messages
+    - name: Get Last Tag for Folder
+      id: last_tag
       run: |
-        MESSAGES=$(git log --pretty=format:"%s" $(git describe --tags --abbrev=0)..HEAD -- $FOLDER_CHANGED)
+        LAST_TAG=$(curl -sH "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
+        "https://api.github.com/repos/${{ github.repository }}/tags" | \
+        jq -r --arg FOLDER "$FOLDER_CHANGED" --arg VERSION "$SEAFILE_VERSION" '.[] | select(.name | startswith($FOLDER + "-" + $VERSION)) | .name' | sort -V | tail -1)
+        if [[ -z "$LAST_TAG" ]]; then
+          echo "LAST_TAG=0" >> $GITHUB_ENV
+        else
+          echo "LAST_TAG=$LAST_TAG" >> $GITHUB_ENV
+
+    - name: Get Commit Messages
+      run: |
+        MESSAGES=""
+        for commit in $(git log --since="$LAST_TAG..HEAD" --pretty=format:'%H' -- $FOLDER_CHANGED); do
+          MESSAGE=$(git log --format=%B -n 1 $commit)
+          MESSAGES="$MESSAGES$commit: $MESSAGE\n"
+        done
         echo "MESSAGES=$MESSAGES" >> $GITHUB_ENV
+        echo "MESSAGES=$MESSAGES"
 
     - name: Create Release
       if: env.FOLDER_CHANGED != '' && env.SEAFILE_VERSION != ''
