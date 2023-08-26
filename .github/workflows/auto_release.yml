@@ -4,6 +4,15 @@ on:
   push:
     branches:
       - main
+    paths:
+      - 'seafile-server/**'
+      - 'seahub/**'
+      - 'seahub-media/**'
+  workflow_dispatch:
+    inputs:
+      folder:
+        description: 'Which folder to release (seafile-server/seahub/seahub-media)?'
+        required: true
 
 jobs:
   create_release:
@@ -15,7 +24,11 @@ jobs:
     - name: Determine Changed Directory and Extract Version
       id: dir_version
       run: |
-        FOLDER_CHANGED=$(git diff --name-only HEAD^ HEAD | cut -d '/' -f1 | uniq)
+        if [ "${{ github.event_name }}" == "workflow_dispatch" ]; then
+          FOLDER_CHANGED=${{ github.event.inputs.folder }}
+        else
+          FOLDER_CHANGED=$(git diff --name-only HEAD^ HEAD | cut -d '/' -f1 | uniq)
+        fi
         if [[ -f "$FOLDER_CHANGED/Dockerfile" ]]; then
           SEAFILE_VERSION=$(grep 'SEAFILE_VERSION' $FOLDER_CHANGED/Dockerfile | awk -F= '{print $2}' | tr -d ' "')
           echo "SEAFILE_VERSION=$SEAFILE_VERSION" >> $GITHUB_ENV
@@ -25,7 +38,6 @@ jobs:
     - name: Get Previous Build Number and Compute Next
       id: build_number
       run: |
-        # Use GitHub API to fetch previous release. Adjust based on your naming convention.
         PREVIOUS_BUILD=$(curl -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
         https://api.github.com/repos/${{ github.repository }}/releases | \
         jq -r --arg FOLDER "$FOLDER_CHANGED" '.[] | select(.name | startswith($FOLDER)) | .name' | head -1 | awk -F_ '{print $3}')
@@ -40,7 +52,7 @@ jobs:
     - name: Get Commit Messages
       id: commit_messages
       run: |
-        MESSAGES=$(git log --pretty=format:"%s" $(git describe --tags --abbrev=0)..HEAD)
+        MESSAGES=$(git log --pretty=format:"%s" -- "$FOLDER_CHANGED" $(git describe --tags --abbrev=0)..HEAD)
         echo "MESSAGES=$MESSAGES" >> $GITHUB_ENV
 
     - name: Create Release
