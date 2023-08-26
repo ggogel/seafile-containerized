@@ -44,7 +44,7 @@ jobs:
 
         if [[ $LATEST_TAG ]]; then
           PREVIOUS_BUILD=$(echo $LATEST_TAG | awk -F_ '{print $3}')
-          NEXT_BUILD=$(printf "%03d" $((10#$PREVIOUS_BUILD + 1)))
+          NEXT_BUILD=$(printf "%03d" $((PREVIOUS_BUILD + 1)))
         else
           NEXT_BUILD="001"
         fi
