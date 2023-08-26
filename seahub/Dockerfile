@@ -37,7 +37,7 @@ mysqlclient==2.1.* \
 django==3.2.16 \
 django-pylibmc \
 django-simple-captcha==0.5.* \
-pycryptodome==3.16.* \
+pycryptodome==3.18.* \
 && rm -r /root/.cache/pip
 
 FROM python:3.10.13-alpine3.18
