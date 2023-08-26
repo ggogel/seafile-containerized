@@ -42,7 +42,6 @@ jobs:
           exit 0
         fi
 
-        echo "FOLDER_CHANGED=$FOLDER_CHANGED"
         echo "FOLDER_CHANGED=$FOLDER_CHANGED" >> $GITHUB_ENV
         
         if [[ -f "$FOLDER_CHANGED/Dockerfile" ]]; then
@@ -58,18 +57,15 @@ jobs:
         "https://api.github.com/repos/${{ github.repository }}/tags?per_page=100" | \
         jq -r --arg FOLDER "$FOLDER_CHANGED" --arg VERSION "$SEAFILE_VERSION" '.[] | select(.name | startswith($FOLDER + "-" + $VERSION)) | .name' | sort -V | tail -1)
         
-        echo "LATEST_TAG=$LATEST_TAG"
         echo "LATEST_TAG=$LATEST_TAG" >> $GITHUB_ENV
 
         if [[ $LATEST_TAG ]]; then
           PREVIOUS_BUILD=$(echo $LATEST_TAG | awk -F_ '{print $2}')
-          echo "PREVIOUS_BUILD=$PREVIOUS_BUILD"
           NEXT_BUILD=$(printf "%03d" $((PREVIOUS_BUILD + 1)))
         else
           NEXT_BUILD="001"
         fi
         echo "NEXT_BUILD=$NEXT_BUILD" >> $GITHUB_ENV
-        echo "NEXT_BUILD = $NEXT_BUILD"
 
     - name: Get Commit Messages
       if: env.FOLDER_CHANGED != '' && env.SEAFILE_VERSION != ''
@@ -91,7 +87,7 @@ jobs:
         done
 
         MESSAGES="Seafile version: $SEAFILE_VERSION"$'\n'"Image build version: $NEXT_BUILD"$'\n'"Changelog:"$'\n'"$MESSAGES"
-        echo "::set-output name=formatted_messages::${MESSAGES//$'\n'/'%0A'}"
+        echo "FORMATTED_MESSAGES=${MESSAGES//$'\n'/'%0A'}" >> $GITHUB_ENV
 
     - name: Create Release
       if: env.FOLDER_CHANGED != '' && env.SEAFILE_VERSION != ''
@@ -101,6 +97,6 @@ jobs:
       with:
         tag_name: ${{ env.FOLDER_CHANGED }}-${{ env.SEAFILE_VERSION }}_${{ env.NEXT_BUILD }}
         release_name: ${{ env.FOLDER_CHANGED }}-${{ env.SEAFILE_VERSION }}_${{ env.NEXT_BUILD }}
-        body: ${{ steps.get_messages.outputs.formatted_messages }}
+        body: ${{ env.FORMATTED_MESSAGES }}
         draft: false
         prerelease: false
