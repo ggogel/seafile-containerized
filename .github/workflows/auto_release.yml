@@ -64,6 +64,7 @@ jobs:
           echo "LAST_TAG=0" >> $GITHUB_ENV
         else
           echo "LAST_TAG=$LAST_TAG" >> $GITHUB_ENV
+        fi
 
     - name: Get Commit Messages
       run: |
