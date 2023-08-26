@@ -87,7 +87,7 @@ jobs:
         done
 
         MESSAGES="Seafile version: $SEAFILE_VERSION"$'\n'"Image build version: $NEXT_BUILD"$'\n'"Changelog:"$'\n'"$MESSAGES"
-        echo "::set-output name=formatted_messages::$MESSAGES"
+        echo "::set-output name=formatted_messages::${MESSAGES//$'\n'/'%0A'}"
 
     - name: Create Release
       if: env.FOLDER_CHANGED != '' && env.SEAFILE_VERSION != ''
@@ -100,4 +100,3 @@ jobs:
         body: ${{ steps.get_messages.outputs.formatted_messages }}
         draft: false
         prerelease: false
-
