@@ -3,7 +3,7 @@ name: Automatic Release
 on:
   push:
     branches:
-      - main
+      - master
     paths:
       - 'seafile-server/**'
       - 'seahub/**'
