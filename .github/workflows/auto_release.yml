@@ -72,7 +72,7 @@ jobs:
         if [[ "$LAST_TAG" == "0" ]]; then
           COMMIT_RANGE="--all"
         else
-          LAST_COMMIT_FOR_TAG=$(git rev-list -n 1 $LAST_TAG)
+          LAST_COMMIT_FOR_TAG=$(git rev-list -n 1 refs/tags/$LAST_TAG)
           COMMIT_RANGE="${LAST_COMMIT_FOR_TAG}..HEAD"
         fi
 
