@@ -78,14 +78,25 @@ jobs:
           COMMIT_RANGE="${LAST_COMMIT_FOR_TAG}..HEAD"
         fi
 
+        MESSAGES+="Seafile version: $SEAFILE_VERSION\n"
+        MESSAGES+="Image build version: $NEXT_BUILD\n"
+        MESSAGES+="Changelog:\n"
+        
         for commit in $(git log --pretty=format:'%H' $COMMIT_RANGE); do
           if git diff-tree --no-commit-id --name-only -r $commit | grep "^$FOLDER_CHANGED/"; then
             MESSAGE=$(git log --format=%B -n 1 $commit)
-            MESSAGES="$MESSAGES\n$commit: $MESSAGE"
+            MESSAGES+="- $commit: $MESSAGE\n"
           fi
         done
+
         echo "MESSAGES=$MESSAGES" >> $GITHUB_ENV
-        echo "MESSAGES=$MESSAGES"
+        echo -e "MESSAGES=$MESSAGES"
+      shell: /usr/bin/bash -e {0}
+      env:
+        SEAFILE_VERSION: ${{ env.SEAFILE_VERSION }}
+        FOLDER_CHANGED: ${{ env.FOLDER_CHANGED }}
+        NEXT_BUILD: ${{ env.NEXT_BUILD }}
+        LAST_TAG: ${{ env.LAST_TAG }}
 
     - name: Create Release
       if: env.FOLDER_CHANGED != '' && env.SEAFILE_VERSION != ''
