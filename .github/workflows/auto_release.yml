@@ -31,23 +31,28 @@ jobs:
       id: dir_version
       run: |
         if [ "${{ github.event_name }}" == "workflow_dispatch" ]; then
-          FOLDER_CHANGED=${{ github.event.inputs.folder }}
+          if [ "${{ github.event.inputs.folder }}" == "${{ matrix.folder }}" ]; then
+            FOLDER_CHANGED=${{ github.event.inputs.folder }}
+          else
+            echo "Manually triggered for folder ${ { github.event.inputs.folder } }, but current job is for folder ${ { matrix.folder } }. Skipping."
+            exit 0
+          fi
         else
           CHANGED_FOLDERS=$(git diff --name-only HEAD^ HEAD | cut -d '/' -f1 | uniq)
           [[ "$CHANGED_FOLDERS" =~ "${{ matrix.folder }}" ]] && FOLDER_CHANGED="${{ matrix.folder }}" || FOLDER_CHANGED=""
         fi
-        
+            
         if [ -z "$FOLDER_CHANGED" ]; then
           echo "Skipping as ${{ matrix.folder }} didn't change."
           exit 0
         fi
-
+    
         echo "FOLDER_CHANGED=$FOLDER_CHANGED" >> $GITHUB_ENV
-        
+            
         if [[ -f "$FOLDER_CHANGED/Dockerfile" ]]; then
           SEAFILE_VERSION=$(grep -m 1 'SEAFILE_VERSION' $FOLDER_CHANGED/Dockerfile | awk -F'SEAFILE_VERSION=' '{print $2}' | awk '{print $1}' | tr -d '\n')
           echo "SEAFILE_VERSION=$SEAFILE_VERSION" >> $GITHUB_ENV
-        fi
+        fi   
 
     - name: Get Previous Tag and Build Number
       if: env.FOLDER_CHANGED != '' && env.SEAFILE_VERSION != ''
