@@ -38,11 +38,12 @@ jobs:
     - name: Get Previous Build Number and Compute Next
       id: build_number
       run: |
-        PREVIOUS_BUILD=$(curl -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
-        https://api.github.com/repos/${{ github.repository }}/releases | \
-        jq -r --arg FOLDER "$FOLDER_CHANGED" '.[] | select(.name | startswith($FOLDER)) | .name' | head -1 | awk -F_ '{print $3}')
-        
-        if [[ $PREVIOUS_BUILD ]]; then
+        LATEST_TAG=$(curl -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
+        https://api.github.com/repos/${{ github.repository }}/tags | \
+        jq -r --arg FOLDER "$FOLDER_CHANGED" '.[] | select(.name | startswith($FOLDER)) | .name' | head -1)
+
+        if [[ $LATEST_TAG ]]; then
+          PREVIOUS_BUILD=$(echo $LATEST_TAG | awk -F_ '{print $3}')
           NEXT_BUILD=$(printf "%03d" $((10#$PREVIOUS_BUILD + 1)))
         else
           NEXT_BUILD="001"
