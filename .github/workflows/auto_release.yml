@@ -52,12 +52,7 @@ jobs:
           NEXT_BUILD="001"
         fi
         echo "NEXT_BUILD=$NEXT_BUILD" >> $GITHUB_ENV
-
-    - name: Debugging Info
-      run: |
-        echo "LATEST_TAG = $LATEST_TAG"
         echo "NEXT_BUILD = $NEXT_BUILD"
-
 
     - name: Get Commit Messages
       id: commit_messages
