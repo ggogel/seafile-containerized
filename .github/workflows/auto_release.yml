@@ -40,20 +40,9 @@ jobs:
     - name: Get Previous Tag and Build Number
       id: build_number
       run: |
-        PAGE=1
-        LATEST_TAG=""
-        while true; do
-          TAGS=$(curl -sH "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
-            "https://api.github.com/repos/${{ github.repository }}/tags?per_page=100&page=$PAGE")
-          if [[ -z "$TAGS" ]]; then
-            break
-          fi
-          TAG=$(echo "$TAGS" | jq -r --arg FOLDER "$FOLDER_CHANGED" --arg VERSION "$SEAFILE_VERSION" '.[] | select(.name | startswith($FOLDER + "-" + $VERSION)) | .name' | sort -V | tail -1)
-          if [[ -n "$TAG" ]] && [[ -z "$LATEST_TAG" || "$TAG" > "$LATEST_TAG" ]]; then
-            LATEST_TAG="$TAG"
-          fi
-          PAGE=$((PAGE + 1))
-        done
+        LATEST_TAG=$(curl -sH "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
+        "https://api.github.com/repos/${{ github.repository }}/tags?per_page=100" | \
+        jq -r --arg FOLDER "$FOLDER_CHANGED" --arg VERSION "$SEAFILE_VERSION" '.[] | select(.name | startswith($FOLDER + "-" + $VERSION)) | .name' | sort -V | tail -1)
 
         echo "LATEST_TAG=$LATEST_TAG"
         echo "LATEST_TAG=$LATEST_TAG" >> $GITHUB_ENV
