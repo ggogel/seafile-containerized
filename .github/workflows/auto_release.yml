@@ -38,17 +38,26 @@ jobs:
     - name: Get Previous Build Number and Compute Next
       id: build_number
       run: |
-        LATEST_TAG=$(curl -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
-        https://api.github.com/repos/${{ github.repository }}/tags | \
+        LATEST_TAG=$(curl -sH "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
+        "https://api.github.com/repos/${{ github.repository }}/tags" | \
         jq -r --arg FOLDER "$FOLDER_CHANGED" --arg VERSION "$SEAFILE_VERSION" '.[] | select(.name | startswith($FOLDER + "-" + $VERSION)) | .name' | sort -V | tail -1)
 
+        echo "LATEST_TAG=$LATEST_TAG"
+        
         if [[ $LATEST_TAG ]]; then
-          PREVIOUS_BUILD=$(echo $LATEST_TAG | awk -F_ '{print $3}')
+          PREVIOUS_BUILD=$(echo $LATEST_TAG | awk -F_ '{print $2}')
+          echo "PREVIOUS_BUILD=$PREVIOUS_BUILD"
           NEXT_BUILD=$(printf "%03d" $((PREVIOUS_BUILD + 1)))
         else
           NEXT_BUILD="001"
         fi
         echo "NEXT_BUILD=$NEXT_BUILD" >> $GITHUB_ENV
+
+    - name: Debugging Info
+      run: |
+        echo "LATEST_TAG = $LATEST_TAG"
+        echo "NEXT_BUILD = $NEXT_BUILD"
+
 
     - name: Get Commit Messages
       id: commit_messages
