@@ -69,6 +69,7 @@ jobs:
         fi
 
     - name: Get Commit Messages
+      id: get_messages
       run: |
         MESSAGES=""
         if [[ "$LAST_TAG" == "0" ]]; then
@@ -81,15 +82,12 @@ jobs:
         for commit in $(git log --pretty=format:'%H' $COMMIT_RANGE); do
           if git diff-tree --no-commit-id --name-only -r $commit | grep "^$FOLDER_CHANGED/"; then
             MESSAGE=$(git log --format=%B -n 1 $commit)
-            MESSAGES="$MESSAGES- $commit: $MESSAGE\n"
+            MESSAGES="$MESSAGES- $commit: $MESSAGE"$'\n'
           fi
         done
 
-        MESSAGES="Seafile version: $SEAFILE_VERSION\nImage build version: $NEXT_BUILD\nChangelog:\n$MESSAGES"
-        
-        echo "MESSAGES<<EOF" >> $GITHUB_ENV
-        echo "$MESSAGES" >> $GITHUB_ENV
-        echo "EOF" >> $GITHUB_ENV
+        MESSAGES="Seafile version: $SEAFILE_VERSION"$'\n'"Image build version: $NEXT_BUILD"$'\n'"Changelog:"$'\n'"$MESSAGES"
+        echo "::set-output name=formatted_messages::$MESSAGES"
 
     - name: Create Release
       if: env.FOLDER_CHANGED != '' && env.SEAFILE_VERSION != ''
@@ -99,6 +97,7 @@ jobs:
       with:
         tag_name: ${{ env.FOLDER_CHANGED }}-${{ env.SEAFILE_VERSION }}_${{ env.NEXT_BUILD }}
         release_name: ${{ env.FOLDER_CHANGED }}-${{ env.SEAFILE_VERSION }}_${{ env.NEXT_BUILD }}
-        body: ${{ env.MESSAGES }}
+        body: ${{ steps.get_messages.outputs.formatted_messages }}
         draft: false
         prerelease: false
+
