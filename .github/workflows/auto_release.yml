@@ -52,7 +52,7 @@ jobs:
     - name: Get Commit Messages
       id: commit_messages
       run: |
-        MESSAGES=$(git log --pretty=format:"%s" -- "$FOLDER_CHANGED" $(git describe --tags --abbrev=0)..HEAD)
+        MESSAGES=$(git log --pretty=format:"%s" $(git describe --tags --abbrev=0)..HEAD -- $FOLDER_CHANGED)
         echo "MESSAGES=$MESSAGES" >> $GITHUB_ENV
 
     - name: Create Release
@@ -61,8 +61,8 @@ jobs:
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
-        tag_name: ${{ env.FOLDER_CHANGED }}_${{ env.SEAFILE_VERSION }}_${{ env.NEXT_BUILD }}
-        release_name: ${{ env.FOLDER_CHANGED }}_${{ env.SEAFILE_VERSION }}_${{ env.NEXT_BUILD }}
+        tag_name: ${{ env.FOLDER_CHANGED }}-${{ env.SEAFILE_VERSION }}_${{ env.NEXT_BUILD }}
+        release_name: ${{ env.FOLDER_CHANGED }}-${{ env.SEAFILE_VERSION }}_${{ env.NEXT_BUILD }}
         body: ${{ env.MESSAGES }}
         draft: false
         prerelease: false
