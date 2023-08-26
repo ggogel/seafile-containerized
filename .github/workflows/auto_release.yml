@@ -17,6 +17,10 @@ on:
 jobs:
   create_release:
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        folder: ['seafile-server', 'seahub', 'seahub-media']
+      fail-fast: false
     steps:
     - name: Check out code
       uses: actions/checkout@v3
@@ -29,21 +33,29 @@ jobs:
         if [ "${{ github.event_name }}" == "workflow_dispatch" ]; then
           FOLDER_CHANGED=${{ github.event.inputs.folder }}
         else
-          FOLDER_CHANGED=$(git diff --name-only HEAD^ HEAD | cut -d '/' -f1 | uniq)
+          CHANGED_FOLDERS=$(git diff --name-only HEAD^ HEAD | cut -d '/' -f1 | uniq)
+          [[ "$CHANGED_FOLDERS" =~ "${{ matrix.folder }}" ]] && FOLDER_CHANGED="${{ matrix.folder }}" || FOLDER_CHANGED=""
         fi
+        echo "FOLDER_CHANGED=$FOLDER_CHANGED"
+        
+        if [ -z "$FOLDER_CHANGED" ]; then
+          echo "Skipping as ${{ matrix.folder }} didn't change."
+          exit 0
+        fi
+        
         if [[ -f "$FOLDER_CHANGED/Dockerfile" ]]; then
           SEAFILE_VERSION=$(grep -m 1 'SEAFILE_VERSION' $FOLDER_CHANGED/Dockerfile | awk -F'SEAFILE_VERSION=' '{print $2}' | awk '{print $1}' | tr -d '\n')
           echo "SEAFILE_VERSION=$SEAFILE_VERSION" >> $GITHUB_ENV
         fi
-        echo "FOLDER_CHANGED=$FOLDER_CHANGED" >> $GITHUB_ENV
 
     - name: Get Previous Tag and Build Number
+      if: env.FOLDER_CHANGED != '' && env.SEAFILE_VERSION != ''
       id: build_number
       run: |
         LATEST_TAG=$(curl -sH "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
         "https://api.github.com/repos/${{ github.repository }}/tags?per_page=100" | \
         jq -r --arg FOLDER "$FOLDER_CHANGED" --arg VERSION "$SEAFILE_VERSION" '.[] | select(.name | startswith($FOLDER + "-" + $VERSION)) | .name' | sort -V | tail -1)
-
+        
         echo "LATEST_TAG=$LATEST_TAG"
         echo "LATEST_TAG=$LATEST_TAG" >> $GITHUB_ENV
 
@@ -58,6 +70,7 @@ jobs:
         echo "NEXT_BUILD = $NEXT_BUILD"
 
     - name: Get Commit Messages
+      if: env.FOLDER_CHANGED != '' && env.SEAFILE_VERSION != ''
       id: get_messages
       run: |
         MESSAGES=""
