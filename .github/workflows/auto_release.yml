@@ -11,7 +11,7 @@ on:
   workflow_dispatch:
     inputs:
       folder:
-        description: 'Which folder to release (seafile-server/seahub/seahub-media)?'
+        description: 'Which folder to release?'
         required: true
 
 jobs:
@@ -102,7 +102,9 @@ jobs:
           MESSAGES="Seafile version: $SEAFILE_VERSION"$'\n'"Image build version: $NEXT_BUILD"$'\n'"Changelog:"$'\n'"$MESSAGES"
         fi
         
-        echo "FORMATTED_MESSAGES=${MESSAGES//$'\n'/'%0A'}" >> $GITHUB_ENV
+        MESSAGES="${MESSAGES//$'\n'/'%0A'}
+
+        echo "MESSAGES=$MESSAGES" >> $GITHUB_ENV
 
     - name: Create Release
       if: env.FOLDER_CHANGED != '' && env.SEAFILE_VERSION != ''
@@ -112,6 +114,6 @@ jobs:
       with:
         tag_name: ${{ env.FOLDER_CHANGED }}-${{ env.SEAFILE_VERSION }}_${{ env.NEXT_BUILD }}
         release_name: ${{ env.FOLDER_CHANGED }}-${{ env.SEAFILE_VERSION }}_${{ env.NEXT_BUILD }}
-        body: ${{ env.FORMATTED_MESSAGES }}
+        body: ${{ env.MESSAGES }}
         draft: false
         prerelease: false
