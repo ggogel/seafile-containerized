@@ -1,21 +1,26 @@
 {
+    "extends": [
+      "config:base"
+    ],
+    "separateMinorPatch": true,
     "separateMajorMinor": true,
     "separateMultipleMajor": true,
     "regexManagers": [
-        {
+      {
         "datasource": "docker",
         "depNameTemplate": "ubuntu",
         "fileMatch": ["^.*/?Dockerfile$"],
         "regexPattern": "^FROM ubuntu:(?<majorVersion>[a-zA-Z]+)-(?<build>\\d+)",
         "versioning": "simple"
-        }
+      }
     ],
     "packageRules": [
-        {
+      {
         "datasources": ["docker"],
         "depNameList": ["ubuntu"],
         "allowedVersions": "/^{{majorVersion}}-/",
         "versioning": "simple"
-        }
+      }
     ]
-}
+  }
+  
