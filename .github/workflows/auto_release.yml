@@ -1,18 +1,13 @@
 name: Automatic Release
 
 on:
-  push:
-    branches:
-      - master
-    paths:
-      - 'seafile-server/**'
-      - 'seahub/**'
-      - 'seahub-media/**'
   workflow_dispatch:
     inputs:
       folder:
         description: 'Which folder to release?'
         required: true
+  schedule:
+    - cron: '0 0 * * *'
 
 jobs:
   create_release:
@@ -35,7 +30,7 @@ jobs:
             FOLDER_CHANGED=${{ github.event.inputs.folder }}
           else
             echo "Manually triggered for folder $${{ github.event.inputs.folder }}, but current job is for folder $${{ matrix.folder }}. Skipping."
-            exit 0
+            exit 78
           fi
         else
           CHANGED_FOLDERS=$(git diff --name-only HEAD^ HEAD | cut -d '/' -f1 | uniq)
@@ -44,7 +39,7 @@ jobs:
             
         if [ -z "$FOLDER_CHANGED" ]; then
           echo "Skipping as ${{ matrix.folder }} didn't change."
-          exit 0
+          exit 78
         fi
     
         echo "FOLDER_CHANGED=$FOLDER_CHANGED" >> $GITHUB_ENV
@@ -75,6 +70,7 @@ jobs:
         else
           NEXT_BUILD="001"
         fi
+
         echo "NEXT_BUILD=$NEXT_BUILD" >> $GITHUB_ENV
 
     - name: Get Commit Messages
@@ -82,6 +78,7 @@ jobs:
       id: get_messages
       run: |
         MESSAGES=""
+
         if [[ -z "$LATEST_TAG" ]]; then
           COMMIT_RANGE="--all"
         else
@@ -95,6 +92,10 @@ jobs:
             MESSAGES="$MESSAGES- $commit: $MESSAGE"$'\n'
           fi
         done
+        
+        if [[ -z "$MESSAGES" ]]; then
+          exit 78
+        fi
 
         if [[ "$FOLDER_CHANGED" == "seafile-caddy" ]]; then
           MESSAGES="Caddy version: $SEAFILE_VERSION"$'\n'"Image build version: $NEXT_BUILD"$'\n'"Changelog:"$'\n'"$MESSAGES"
@@ -114,7 +115,6 @@ jobs:
       with:
         tag_name: ${{ env.FOLDER_CHANGED }}-${{ env.SEAFILE_VERSION }}_${{ env.NEXT_BUILD }}
         release_name: ${{ env.FOLDER_CHANGED }}-${{ env.SEAFILE_VERSION }}_${{ env.NEXT_BUILD }}
-        body: |
-          ${{ env.MESSAGES }}
+        body: ${{ env.MESSAGES }}
         draft: false
         prerelease: false
