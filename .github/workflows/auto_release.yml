@@ -34,7 +34,7 @@ jobs:
           if [ "${{ github.event.inputs.folder }}" == "${{ matrix.folder }}" ]; then
             FOLDER_CHANGED=${{ github.event.inputs.folder }}
           else
-            echo "Manually triggered for folder ${ { github.event.inputs.folder } }, but current job is for folder ${ { matrix.folder } }. Skipping."
+            echo "Manually triggered for folder $${{ github.event.inputs.folder }}, but current job is for folder $${{ matrix.folder }}. Skipping."
             exit 0
           fi
         else
