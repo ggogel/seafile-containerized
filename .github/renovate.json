@@ -7,19 +7,15 @@
     "separateMultipleMajor": true,
     "regexManagers": [
       {
-        "datasource": "docker",
-        "depNameTemplate": "ubuntu",
         "fileMatch": ["^.*/?Dockerfile$"],
-        "regexPattern": "^FROM ubuntu:(?<majorVersion>[a-zA-Z]+)-(?<build>\\d+)",
-        "versioning": "simple"
+        "matchStrings": ["^FROM ubuntu:(?<majorVersion>[a-zA-Z]+)-(?<build>\\d+)"]
       }
     ],
     "packageRules": [
       {
         "datasources": ["docker"],
-        "depNameList": ["ubuntu"],
-        "allowedVersions": "/^{{majorVersion}}-/",
-        "versioning": "simple"
+        "packageNames": ["ubuntu"],
+        "allowedVersions": "/^{{majorVersion}}-/"
       }
     ]
   }
