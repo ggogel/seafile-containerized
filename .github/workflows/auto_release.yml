@@ -45,6 +45,7 @@ jobs:
         [[ "$CHANGED_FOLDERS" =~ "${{ matrix.folder }}" ]] && FOLDER_CHANGED="${{ matrix.folder }}" || FOLDER_CHANGED=""
 
         if [ -z "$FOLDER_CHANGED" ]; then
+          echo "PROCEED=false" >> $GITHUB_ENV
           exit 0
         fi
         echo "FOLDER_CHANGED=$FOLDER_CHANGED" >> $GITHUB_ENV
@@ -58,6 +59,7 @@ jobs:
         fi
 
     - name: Get Commit Messages
+      if: env.PROCEED != 'false'
       id: get_messages
       run: |
         MESSAGES=""
@@ -69,6 +71,7 @@ jobs:
         done
 
         if [ -z "$MESSAGES" ]; then
+          echo "PROCEED=false" >> $GITHUB_ENV
           exit 0
         fi
 
@@ -81,6 +84,7 @@ jobs:
         echo "MESSAGES=$MESSAGES" >> $GITHUB_ENV
 
     - name: Create Release
+      if: env.PROCEED != 'false'
       uses: actions/create-release@v1
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
