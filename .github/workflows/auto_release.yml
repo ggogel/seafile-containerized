@@ -19,7 +19,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        folder: ['seafile-server', 'seahub', 'seahub-media']
+        folder: ['seafile-server', 'seahub', 'seahub-media', 'seafile-caddy']
       fail-fast: false
     steps:
     - name: Check out code
@@ -50,9 +50,14 @@ jobs:
         echo "FOLDER_CHANGED=$FOLDER_CHANGED" >> $GITHUB_ENV
             
         if [[ -f "$FOLDER_CHANGED/Dockerfile" ]]; then
-          SEAFILE_VERSION=$(grep -m 1 'SEAFILE_VERSION' $FOLDER_CHANGED/Dockerfile | awk -F'SEAFILE_VERSION=' '{print $2}' | awk '{print $1}' | tr -d '\n')
-          echo "SEAFILE_VERSION=$SEAFILE_VERSION" >> $GITHUB_ENV
-        fi   
+          if [[ "$FOLDER_CHANGED" == "seafile-caddy" ]]; then
+            CADDY_VERSION=$(grep -m 1 'FROM caddy:' $FOLDER_CHANGED/Dockerfile | awk -F':' '{print $2}' | awk -F'-' '{print $1}' | tr -d '\n')
+            echo "SEAFILE_VERSION=$CADDY_VERSION" >> $GITHUB_ENV
+          else
+            SEAFILE_VERSION=$(grep -m 1 'SEAFILE_VERSION' $FOLDER_CHANGED/Dockerfile | awk -F'SEAFILE_VERSION=' '{print $2}' | awk '{print $1}' | tr -d '\n')
+            echo "SEAFILE_VERSION=$SEAFILE_VERSION" >> $GITHUB_ENV
+          fi
+        fi
 
     - name: Get Previous Tag and Build Number
       if: env.FOLDER_CHANGED != '' && env.SEAFILE_VERSION != ''
@@ -91,7 +96,12 @@ jobs:
           fi
         done
 
-        MESSAGES="Seafile version: $SEAFILE_VERSION"$'\n'"Image build version: $NEXT_BUILD"$'\n'"Changelog:"$'\n'"$MESSAGES"
+        if [[ "$FOLDER_CHANGED" == "seafile-caddy" ]]; then
+          MESSAGES="Caddy version: $SEAFILE_VERSION"$'\n'"Image build version: $NEXT_BUILD"$'\n'"Changelog:"$'\n'"$MESSAGES"
+        else
+          MESSAGES="Seafile version: $SEAFILE_VERSION"$'\n'"Image build version: $NEXT_BUILD"$'\n'"Changelog:"$'\n'"$MESSAGES"
+        fi
+        
         echo "FORMATTED_MESSAGES=${MESSAGES//$'\n'/'%0A'}" >> $GITHUB_ENV
 
     - name: Create Release
