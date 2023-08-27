@@ -1,13 +1,13 @@
 name: Automatic Release
 
 on:
+  schedule:
+    - cron: '0 0 * * *'  # Scheduled to run every day at midnight
   workflow_dispatch:
     inputs:
       folder:
         description: 'Which folder to release?'
         required: true
-  schedule:
-    - cron: '0 0 * * *'
 
 jobs:
   create_release:
@@ -16,6 +16,7 @@ jobs:
       matrix:
         folder: ['seafile-server', 'seahub', 'seahub-media', 'seafile-caddy']
       fail-fast: false
+
     steps:
     - name: Check out code
       uses: actions/checkout@v3
@@ -26,45 +27,33 @@ jobs:
       id: dir_version
       run: |
         if [ "${{ github.event_name }}" == "workflow_dispatch" ]; then
-          if [ "${{ github.event.inputs.folder }}" == "${{ matrix.folder }}" ]; then
-            FOLDER_CHANGED=${{ github.event.inputs.folder }}
-          else
-            echo "Manually triggered for folder $${{ github.event.inputs.folder }}, but current job is for folder $${{ matrix.folder }}. Skipping."
-            exit 78
-          fi
+          FOLDER_CHANGED=${{ github.event.inputs.folder }}
         else
-          CHANGED_FOLDERS=$(git diff --name-only HEAD^ HEAD | cut -d '/' -f1 | uniq)
+          CHANGED_FOLDERS=$(git diff --name-only $(git describe --tags --abbrev=0)..HEAD | cut -d '/' -f1 | uniq)
           [[ "$CHANGED_FOLDERS" =~ "${{ matrix.folder }}" ]] && FOLDER_CHANGED="${{ matrix.folder }}" || FOLDER_CHANGED=""
         fi
-            
+        
         if [ -z "$FOLDER_CHANGED" ]; then
-          echo "Skipping as ${{ matrix.folder }} didn't change."
           exit 78
         fi
     
         echo "FOLDER_CHANGED=$FOLDER_CHANGED" >> $GITHUB_ENV
-            
-        if [[ -f "$FOLDER_CHANGED/Dockerfile" ]]; then
-          if [[ "$FOLDER_CHANGED" == "seafile-caddy" ]]; then
-            CADDY_VERSION=$(grep -m 1 'FROM caddy:' $FOLDER_CHANGED/Dockerfile | awk -F':' '{print $2}' | awk -F'-' '{print $1}' | tr -d '\n')
-            echo "SEAFILE_VERSION=$CADDY_VERSION" >> $GITHUB_ENV
-          else
-            SEAFILE_VERSION=$(grep -m 1 'SEAFILE_VERSION' $FOLDER_CHANGED/Dockerfile | awk -F'SEAFILE_VERSION=' '{print $2}' | awk '{print $1}' | tr -d '\n')
-            echo "SEAFILE_VERSION=$SEAFILE_VERSION" >> $GITHUB_ENV
-          fi
+
+        if [[ "$FOLDER_CHANGED" == "seafile-caddy" ]]; then
+          CADDY_VERSION=$(grep -m 1 'FROM caddy:' $FOLDER_CHANGED/Dockerfile | awk -F':' '{print $2}' | awk -F'-' '{print $1}' | tr -d '\n')
+          echo "SEAFILE_VERSION=$CADDY_VERSION" >> $GITHUB_ENV
+        else
+          SEAFILE_VERSION=$(grep -m 1 'SEAFILE_VERSION' $FOLDER_CHANGED/Dockerfile | awk -F'SEAFILE_VERSION=' '{print $2}' | awk '{print $1}' | tr -d '\n')
+          echo "SEAFILE_VERSION=$SEAFILE_VERSION" >> $GITHUB_ENV
         fi
 
     - name: Get Previous Tag and Build Number
-      if: env.FOLDER_CHANGED != '' && env.SEAFILE_VERSION != ''
       id: build_number
       run: |
-        LATEST_TAG=$(curl -sH "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
-        "https://api.github.com/repos/${{ github.repository }}/tags?per_page=100" | \
-        jq -r --arg FOLDER "$FOLDER_CHANGED" --arg VERSION "$SEAFILE_VERSION" '.[] | select(.name | startswith($FOLDER + "-" + $VERSION)) | .name' | sort -V | tail -1)
-        
-        echo "LATEST_TAG=$LATEST_TAG" >> $GITHUB_ENV
+        LATEST_TAG=$(git describe --tags --match "${{ env.FOLDER_CHANGED }}-*" 2>/dev/null)
 
-        if [[ $LATEST_TAG ]]; then
+        if [[ -n "$LATEST_TAG" ]]; then
+          echo "LATEST_TAG=$LATEST_TAG" >> $GITHUB_ENV
           PREVIOUS_BUILD=$(echo $LATEST_TAG | awk -F_ '{print $2}')
           NEXT_BUILD=$(printf "%03d" $((PREVIOUS_BUILD + 1)))
         else
@@ -74,7 +63,6 @@ jobs:
         echo "NEXT_BUILD=$NEXT_BUILD" >> $GITHUB_ENV
 
     - name: Get Commit Messages
-      if: env.FOLDER_CHANGED != '' && env.SEAFILE_VERSION != ''
       id: get_messages
       run: |
         MESSAGES=""
@@ -82,8 +70,7 @@ jobs:
         if [[ -z "$LATEST_TAG" ]]; then
           COMMIT_RANGE="--all"
         else
-          LAST_COMMIT_FOR_TAG=$(git rev-list -n 1 refs/tags/$LATEST_TAG)
-          COMMIT_RANGE="${LAST_COMMIT_FOR_TAG}..HEAD"
+          COMMIT_RANGE="${LATEST_TAG}..HEAD"
         fi
         
         for commit in $(git log --pretty=format:'%H' $COMMIT_RANGE); do
@@ -92,8 +79,8 @@ jobs:
             MESSAGES="$MESSAGES- $commit: $MESSAGE"$'\n'
           fi
         done
-        
-        if [[ -z "$MESSAGES" ]]; then
+
+        if [ -z "$MESSAGES" ]; then
           exit 78
         fi
 
@@ -104,17 +91,16 @@ jobs:
         fi
         
         MESSAGES="${MESSAGES//$'\n'/%0A}"
-
         echo "MESSAGES=$MESSAGES" >> $GITHUB_ENV
 
     - name: Create Release
-      if: env.FOLDER_CHANGED != '' && env.SEAFILE_VERSION != ''
       uses: actions/create-release@v1
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
         tag_name: ${{ env.FOLDER_CHANGED }}-${{ env.SEAFILE_VERSION }}_${{ env.NEXT_BUILD }}
         release_name: ${{ env.FOLDER_CHANGED }}-${{ env.SEAFILE_VERSION }}_${{ env.NEXT_BUILD }}
-        body: ${{ env.MESSAGES }}
+        body: |
+          ${{ env.MESSAGES }}
         draft: false
         prerelease: false
