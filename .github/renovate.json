@@ -8,7 +8,9 @@
     "regexManagers": [
       {
         "fileMatch": ["^.*/?Dockerfile$"],
-        "matchStrings": ["^FROM ubuntu:(?<majorVersion>[a-zA-Z]+)-(?<build>\\d+)"]
+        "matchStrings": ["^FROM (?<depName>ubuntu):(?<currentValue>[a-zA-Z]+)-(?<build>\\d+)"],
+        "depNameTemplate": "{{depName}}",
+        "datasourceTemplate": "docker"
       }
     ],
     "packageRules": [
