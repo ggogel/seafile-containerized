@@ -45,7 +45,7 @@ jobs:
         [[ "$CHANGED_FOLDERS" =~ "${{ matrix.folder }}" ]] && FOLDER_CHANGED="${{ matrix.folder }}" || FOLDER_CHANGED=""
 
         if [ -z "$FOLDER_CHANGED" ]; then
-          exit 1
+          exit 0
         fi
         echo "FOLDER_CHANGED=$FOLDER_CHANGED" >> $GITHUB_ENV
 
@@ -69,7 +69,7 @@ jobs:
         done
 
         if [ -z "$MESSAGES" ]; then
-          exit 1
+          exit 0
         fi
 
         if [[ "$FOLDER_CHANGED" == "seafile-caddy" ]]; then
