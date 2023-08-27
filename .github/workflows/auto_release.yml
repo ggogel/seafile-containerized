@@ -3,11 +3,7 @@ name: Automatic Release
 on:
   schedule:
     - cron: '0 0 * * *'  # Scheduled to run every day at midnight
-  workflow_dispatch:
-    inputs:
-      folder:
-        description: 'Which folder to release?'
-        required: true
+  workflow_dispatch: {}
 
 jobs:
   create_release:
@@ -23,20 +19,34 @@ jobs:
       with:
         fetch-depth: 0
 
+    - name: Get Previous Tag and Build Number
+      id: build_number
+      run: |
+        LATEST_TAG=$(git describe --tags --match "${{ matrix.folder }}-*" 2>/dev/null)
+        echo "LATEST_TAG=$LATEST_TAG" >> $GITHUB_ENV
+
+        if [[ -n "$LATEST_TAG" ]]; then
+          PREVIOUS_BUILD=$(echo $LATEST_TAG | awk -F_ '{print $2}')
+          NEXT_BUILD=$(printf "%03d" $((PREVIOUS_BUILD + 1)))
+        else
+          NEXT_BUILD="001"
+        fi
+        echo "NEXT_BUILD=$NEXT_BUILD" >> $GITHUB_ENV
+
     - name: Determine Changed Directory and Extract Version
       id: dir_version
       run: |
-        if [ "${{ github.event_name }}" == "workflow_dispatch" ]; then
-          FOLDER_CHANGED=${{ github.event.inputs.folder }}
+        if [[ -z "$LATEST_TAG" ]]; then
+          COMMIT_RANGE="--all"
         else
-          CHANGED_FOLDERS=$(git diff --name-only $(git describe --tags --abbrev=0)..HEAD | cut -d '/' -f1 | uniq)
-          [[ "$CHANGED_FOLDERS" =~ "${{ matrix.folder }}" ]] && FOLDER_CHANGED="${{ matrix.folder }}" || FOLDER_CHANGED=""
+          COMMIT_RANGE="${LATEST_TAG}..HEAD"
         fi
-        
+        CHANGED_FOLDERS=$(git diff --name-only $COMMIT_RANGE | cut -d '/' -f1 | uniq)
+        [[ "$CHANGED_FOLDERS" =~ "${{ matrix.folder }}" ]] && FOLDER_CHANGED="${{ matrix.folder }}" || FOLDER_CHANGED=""
+
         if [ -z "$FOLDER_CHANGED" ]; then
-          exit 78
+          exit 1
         fi
-    
         echo "FOLDER_CHANGED=$FOLDER_CHANGED" >> $GITHUB_ENV
 
         if [[ "$FOLDER_CHANGED" == "seafile-caddy" ]]; then
@@ -47,32 +57,10 @@ jobs:
           echo "SEAFILE_VERSION=$SEAFILE_VERSION" >> $GITHUB_ENV
         fi
 
-    - name: Get Previous Tag and Build Number
-      id: build_number
-      run: |
-        LATEST_TAG=$(git describe --tags --match "${{ env.FOLDER_CHANGED }}-*" 2>/dev/null)
-
-        if [[ -n "$LATEST_TAG" ]]; then
-          echo "LATEST_TAG=$LATEST_TAG" >> $GITHUB_ENV
-          PREVIOUS_BUILD=$(echo $LATEST_TAG | awk -F_ '{print $2}')
-          NEXT_BUILD=$(printf "%03d" $((PREVIOUS_BUILD + 1)))
-        else
-          NEXT_BUILD="001"
-        fi
-
-        echo "NEXT_BUILD=$NEXT_BUILD" >> $GITHUB_ENV
-
     - name: Get Commit Messages
       id: get_messages
       run: |
         MESSAGES=""
-
-        if [[ -z "$LATEST_TAG" ]]; then
-          COMMIT_RANGE="--all"
-        else
-          COMMIT_RANGE="${LATEST_TAG}..HEAD"
-        fi
-        
         for commit in $(git log --pretty=format:'%H' $COMMIT_RANGE); do
           if git diff-tree --no-commit-id --name-only -r $commit | grep "^$FOLDER_CHANGED/"; then
             MESSAGE=$(git log --format=%B -n 1 $commit)
@@ -81,7 +69,7 @@ jobs:
         done
 
         if [ -z "$MESSAGES" ]; then
-          exit 78
+          exit 1
         fi
 
         if [[ "$FOLDER_CHANGED" == "seafile-caddy" ]]; then
@@ -89,7 +77,6 @@ jobs:
         else
           MESSAGES="Seafile version: $SEAFILE_VERSION"$'\n'"Image build version: $NEXT_BUILD"$'\n'"Changelog:"$'\n'"$MESSAGES"
         fi
-        
         MESSAGES="${MESSAGES//$'\n'/%0A}"
         echo "MESSAGES=$MESSAGES" >> $GITHUB_ENV
 
