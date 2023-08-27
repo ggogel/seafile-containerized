@@ -102,7 +102,7 @@ jobs:
           MESSAGES="Seafile version: $SEAFILE_VERSION"$'\n'"Image build version: $NEXT_BUILD"$'\n'"Changelog:"$'\n'"$MESSAGES"
         fi
         
-        MESSAGES="${MESSAGES//$'\n'/'%0A'}"
+        MESSAGES="${MESSAGES//$'\n'/%0A}"
 
         echo "MESSAGES=$MESSAGES" >> $GITHUB_ENV
 
@@ -114,6 +114,7 @@ jobs:
       with:
         tag_name: ${{ env.FOLDER_CHANGED }}-${{ env.SEAFILE_VERSION }}_${{ env.NEXT_BUILD }}
         release_name: ${{ env.FOLDER_CHANGED }}-${{ env.SEAFILE_VERSION }}_${{ env.NEXT_BUILD }}
-        body: ${{ env.MESSAGES }}
+        body: |
+          ${{ env.MESSAGES }}
         draft: false
         prerelease: false
