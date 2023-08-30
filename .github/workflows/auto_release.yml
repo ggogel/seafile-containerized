@@ -8,6 +8,8 @@ on:
 jobs:
   create_release:
     runs-on: ubuntu-latest
+    env:
+      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
     strategy:
       matrix:
         folder: ['seafile-server', 'seahub', 'seahub-media', 'seafile-caddy']
@@ -58,7 +60,7 @@ jobs:
           echo "SEAFILE_VERSION=$SEAFILE_VERSION" >> $GITHUB_ENV
         fi
 
-    - name: Get Commit Messages
+    - name: Get Commit Messages and Write to Markdown
       if: env.PROCEED != 'false'
       id: get_messages
       run: |
@@ -76,22 +78,19 @@ jobs:
         fi
 
         if [[ "$FOLDER_CHANGED" == "seafile-caddy" ]]; then
-          MESSAGES="Caddy version: $SEAFILE_VERSION"$'\n'"Image build version: $NEXT_BUILD"$'\n'"Changelog:"$'\n'"$MESSAGES"
+          echo "Caddy version: $SEAFILE_VERSION" > RELEASE_NOTES.md
         else
-          MESSAGES="Seafile version: $SEAFILE_VERSION"$'\n'"Image build version: $NEXT_BUILD"$'\n'"Changelog:"$'\n'"$MESSAGES"
+          echo "Seafile version: $SEAFILE_VERSION" > RELEASE_NOTES.md
         fi
-        MESSAGES="${MESSAGES//$'\n'/%0A}"
-        echo "MESSAGES=$MESSAGES" >> $GITHUB_ENV
+        echo "Image build version: $NEXT_BUILD" >> RELEASE_NOTES.md
+        echo "Changelog:" >> RELEASE_NOTES.md
+        echo -e "$MESSAGES" >> RELEASE_NOTES.md
 
-    - name: Create Release
+    - name: Create and Upload GitHub Release
       if: env.PROCEED != 'false'
-      uses: actions/create-release@v1
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      with:
-        tag_name: ${{ env.FOLDER_CHANGED }}-${{ env.SEAFILE_VERSION }}_${{ env.NEXT_BUILD }}
-        release_name: ${{ env.FOLDER_CHANGED }}-${{ env.SEAFILE_VERSION }}_${{ env.NEXT_BUILD }}
-        body: |
-          ${{ env.MESSAGES }}
-        draft: false
-        prerelease: false
+      run: |
+        gh release create ${{ env.FOLDER_CHANGED }}-${{ env.SEAFILE_VERSION }}_${{ env.NEXT_BUILD }} \
+          -t ${{ env.FOLDER_CHANGED }}-${{ env.SEAFILE_VERSION }}_${{ env.NEXT_BUILD }} \
+          -F RELEASE_NOTES.md \
+          --draft=false \
+          --prerelease=false
