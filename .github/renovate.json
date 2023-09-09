@@ -1,13 +1,11 @@
 {
-  "extends": [
-    "config:base"
-  ],
-  "regexManagers": [
+  "extends": ["config:base"],
+  "separateMajorMinor": true,
+  "packageRules": [
     {
-      "fileMatch": ["^.*Dockerfile$"],
-      "matchStrings": ["^FROM (?<depName>ubuntu):(?<currentValue>[a-zA-Z]+)-(?<build>\\d+)"],
-      "depNameTemplate": "{{depName}}",
-      "datasourceTemplate": "docker"
+      "datasources": ["docker"],
+      "packageNames": ["ubuntu"],
+      "pinDigests": true
     }
   ]
 }
