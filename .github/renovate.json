@@ -4,7 +4,7 @@
   ],
   "regexManagers": [
     {
-      "fileMatch": ["^.*Dockerfile$"],
+      "fileMatch": ["^/seafile-server/Dockerfile$"],
       "matchStrings": ["^FROM (?<depName>ubuntu):(?<currentValue>[a-zA-Z]+)-(?<build>\\d+)"],
       "depNameTemplate": "{{depName}}",
       "datasourceTemplate": "docker"
