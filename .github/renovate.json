@@ -1,24 +1,13 @@
 {
-    "extends": [
-      "config:base"
-    ],
-    "separateMinorPatch": true,
-    "separateMajorMinor": true,
-    "separateMultipleMajor": true,
-    "regexManagers": [
-      {
-        "fileMatch": ["^.*/?Dockerfile$"],
-        "matchStrings": ["^FROM (?<depName>ubuntu):(?<currentValue>[a-zA-Z]+)-(?<build>\\d+)"],
-        "depNameTemplate": "{{depName}}",
-        "datasourceTemplate": "docker"
-      }
-    ],
-    "packageRules": [
-      {
-        "datasources": ["docker"],
-        "packageNames": ["ubuntu"],
-        "allowedVersions": "/^{{majorVersion}}-/"
-      }
-    ]
-  }
-  
+  "extends": [
+    "config:base"
+  ],
+  "regexManagers": [
+    {
+      "fileMatch": ["^.*/?Dockerfile$"],
+      "matchStrings": ["^FROM (?<depName>ubuntu):(?<currentValue>[a-zA-Z]+)-(?<build>\\d+)"],
+      "depNameTemplate": "{{depName}}",
+      "datasourceTemplate": "docker"
+    }
+  ]
+}
