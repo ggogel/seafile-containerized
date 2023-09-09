@@ -43,6 +43,8 @@ jobs:
         else
           COMMIT_RANGE="${LATEST_TAG}..HEAD"
         fi
+        echo "COMMIT_RANGE=${LATEST_TAG}..HEAD" >> $GITHUB_ENV
+
         CHANGED_FOLDERS=$(git diff --name-only $COMMIT_RANGE | cut -d '/' -f1 | uniq)
         [[ "$CHANGED_FOLDERS" =~ "${{ matrix.folder }}" ]] && FOLDER_CHANGED="${{ matrix.folder }}" || FOLDER_CHANGED=""
 
