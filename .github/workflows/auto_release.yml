@@ -28,7 +28,7 @@ jobs:
         echo "LATEST_TAG=$LATEST_TAG" >> $GITHUB_ENV
 
         if [[ -n "$LATEST_TAG" ]]; then
-          PREVIOUS_BUILD=$(echo $LATEST_TAG | awk -F_ '{print $2}')
+          PREVIOUS_BUILD=$(echo $LATEST_TAG | awk -F_ '{print $2}' | awk -F- '{print $1}')
           NEXT_BUILD=$(printf "%03d" $((PREVIOUS_BUILD + 1)))
         else
           NEXT_BUILD="001"
