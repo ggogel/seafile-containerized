@@ -11,7 +11,7 @@ RUN cd /tmp && \
 
 RUN sed -i '1d' /tmp/seafile-server-${SEAFILE_VERSION}/seahub/thirdpart/wsgidav/seafile_dav_provider.py
 
-FROM ubuntu:jammy AS pip
+FROM ubuntu:jammy@sha256:2b7412e6465c3c7fc5bb21d3e6f1917c167358449fecac8176c6e496e5c1f05f AS pip
 
 RUN apt-get update && \
 DEBIAN_FRONTEND=noninteractive apt-get install -y \
