@@ -42,6 +42,7 @@ django-simple-captcha==0.5.* \
 pycryptodome==3.18.* \
 djangosaml2==1.5.* \
 python-ldap==3.4.* \
+sqlalchemy==2.0.* \
 && rm -r /root/.cache/pip
 
 FROM python:3.10.13-alpine3.18
