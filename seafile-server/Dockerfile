@@ -9,7 +9,23 @@ RUN cd /tmp && \
     tar -zxvf seafile-server_${SEAFILE_VERSION}_x86-64.tar.gz && \
     rm -f seafile-server_${SEAFILE_VERSION}_x86-64.tar.gz
 
+FROM ubuntu:jammy AS pip
+
+RUN apt-get update && \
+DEBIAN_FRONTEND=noninteractive apt-get install -y \
+python3 \
+python3-pip \
+&& rm -rf /var/lib/apt/lists/*
+
+RUN pip3 install --target /pip-deps --timeout=3600 --no-cache-dir \
+sqlalchemy==2.0.*
+
+RUN find /pip-deps -name "__pycache__" -type d -exec rm -r {} + && \
+    rm -rf /pip-deps/pip /pip-deps/wheel /pip-deps/setuptools
+
 FROM ubuntu:jammy@sha256:2b7412e6465c3c7fc5bb21d3e6f1917c167358449fecac8176c6e496e5c1f05f
+
+ENV SEAFILE_VERSION=11.0.1
 
 RUN apt-get update && \
 DEBIAN_FRONTEND=noninteractive apt-get install -y \
@@ -27,7 +43,6 @@ python3-termcolor \
 python3-colorlog \
 python3-pymysql \
 python3-jinja2 \
-python3-sqlalchemy \
 python3-pycryptodome \
 python3-lxml \
 python3-ldap \
@@ -35,9 +50,9 @@ python3-ldap \
 
 RUN cp -r  /usr/lib/python3/dist-packages/Cryptodome /usr/lib/python3/dist-packages/Crypto
 
-ENV SEAFILE_VERSION=11.0.1
-
+COPY --from=pip /pip-deps /usr/local/lib/python3.10/dist-packages
 COPY --from=get /tmp/seafile-server-${SEAFILE_VERSION} /opt/seafile/seafile-server-${SEAFILE_VERSION}
+
 COPY scripts /scripts
 RUN chmod u+x /scripts/*
 
