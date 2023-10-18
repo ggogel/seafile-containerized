@@ -30,7 +30,7 @@ libmemcached-dev
 RUN python3 -m pip install --upgrade pip &&\
 pip3 install --timeout=3600 \
 future==0.18.* \
-pillow==9.3.* \
+pillow==10.0.* \
 captcha==0.4 \
 pyjwt==2.6.* \
 mysqlclient==2.1.* \
