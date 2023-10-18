@@ -40,6 +40,7 @@ django==3.2.* \
 django-pylibmc \
 django-simple-captcha==0.5.* \
 pycryptodome==3.18.* \
+djangosaml2==1.5.* \
 python-ldap==3.4.* \
 && rm -r /root/.cache/pip
 
