@@ -1,5 +1,5 @@
 FROM alpine:3.18.4 AS get
-ENV SEAFILE_SERVER=seafile-server SEAFILE_VERSION=10.0.1
+ENV SEAFILE_SERVER=seafile-server SEAFILE_VERSION=11.0.1
 
 RUN apk add --no-cache wget
 
@@ -25,12 +25,14 @@ openjpeg-dev \
 tiff-dev \
 tk-dev \
 tcl-dev \
-libmemcached-dev
+libmemcached-dev \
+openldap-dev \
+python3-dev
 
 RUN python3 -m pip install --upgrade pip &&\
-pip3 install --timeout=3600 \
+pip3 install --target /pip-deps --timeout=3600 --no-cache-dir  \
 future==0.18.* \
-pillow==9.3.* \
+pillow==10.0.* \
 captcha==0.4 \
 pyjwt==2.6.* \
 mysqlclient==2.1.* \
@@ -38,7 +40,12 @@ django==3.2.* \
 django-pylibmc \
 django-simple-captcha==0.5.* \
 pycryptodome==3.18.* \
-&& rm -r /root/.cache/pip
+djangosaml2==1.5.* \
+python-ldap==3.4.* \
+sqlalchemy==2.0.*
+
+RUN find /pip-deps -name "__pycache__" -type d -exec rm -r {} + && \
+    rm -rf /pip-deps/pip /pip-deps/wheel /pip-deps/setuptools
 
 FROM python:3.10.13-alpine3.18
 
@@ -55,22 +62,25 @@ tk \
 mariadb-dev \
 libmemcached \
 netcat-openbsd \
-gcompat
+gcompat \
+openldap
 
+COPY --from=pip /pip-deps /usr/local/lib/python3.10/site-packages
 COPY --from=get /tmp/seafile-server*/seahub /opt/seafile/seafile-server-latest/seahub
 COPY --from=get /tmp/seafile-server*/runtime /opt/seafile/seafile-server-latest/runtime
 COPY --from=get /tmp/seafile-server*/seahub.sh /opt/seafile/seafile-server-latest/seahub.sh
 COPY --from=get /tmp/seafile-server*/check_init_admin.py /opt/seafile/seafile-server-latest/check_init_admin.py
 COPY --from=get /tmp/seafile-server*/seafile/lib/python3/site-packages /opt/seafile/seafile-server-latest/seafile/lib/python3/site-packages
-COPY --from=pip /usr/local/lib/python3.10/site-packages /usr/local/lib/python3.10/site-packages
-COPY scripts /scripts
+COPY --from=get /tmp/seafile-server*/pro/python/seafevents /opt/seafile/seafile-server-latest/pro/python/seafevents
 
+COPY scripts /scripts
 RUN chmod u+x /scripts/*
+
 RUN mkdir -p /opt/seafile/logs &&\
 touch /opt/seafile/logs/seahub.log &&\
 mkdir -p /opt/seafile/pids
 
-ENV PYTHONPATH=/usr/local/lib/python3.10/site-packages:/opt/seafile/seafile-server-latest/seahub/thirdpart:/opt/seafile/seafile-server-latest/seafile/lib/python3/site-packages:/opt/seafile/seafile-server-latest/seahub
+ENV PYTHONPATH=/usr/local/lib/python3.10/site-packages:/opt/seafile/seafile-server-latest/seahub/thirdpart:/opt/seafile/seafile-server-latest/seafile/lib/python3/site-packages:/opt/seafile/seafile-server-latest/seahub:/opt/seafile/seafile-server-latest/pro/python
 ENV CCNET_CONF_DIR=/opt/seafile/conf/ccnet
 ENV SEAFILE_CONF_DIR=/opt/seafile/seafile-data
 ENV SEAFILE_CENTRAL_CONF_DIR=/opt/seafile/conf
@@ -80,6 +90,7 @@ ENV SEAHUB_LOG_DIR=/opt/seafile/logs
 ENV SEAFILE_ADMIN_EMAIL=me@example.com
 ENV SEAFILE_ADMIN_PASSWORD=asecret
 ENV PYTHON=python3
+ENV SEAHUB_DIR=/opt/seafile/seafile-server-latest/seahub
 
 EXPOSE 8000
 
