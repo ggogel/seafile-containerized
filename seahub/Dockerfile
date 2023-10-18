@@ -25,7 +25,9 @@ openjpeg-dev \
 tiff-dev \
 tk-dev \
 tcl-dev \
-libmemcached-dev
+libmemcached-dev \
+openldap-dev \
+python3-dev
 
 RUN python3 -m pip install --upgrade pip &&\
 pip3 install --timeout=3600 \
@@ -38,6 +40,7 @@ django==3.2.* \
 django-pylibmc \
 django-simple-captcha==0.5.* \
 pycryptodome==3.18.* \
+python-ldap==3.4.* \
 && rm -r /root/.cache/pip
 
 FROM python:3.10.13-alpine3.18
@@ -55,7 +58,8 @@ tk \
 mariadb-dev \
 libmemcached \
 netcat-openbsd \
-gcompat
+gcompat \
+openldap
 
 COPY --from=get /tmp/seafile-server*/seahub /opt/seafile/seafile-server-latest/seahub
 COPY --from=get /tmp/seafile-server*/runtime /opt/seafile/seafile-server-latest/runtime
