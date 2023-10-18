@@ -30,6 +30,7 @@ python3-jinja2 \
 python3-sqlalchemy \
 python3-pycryptodome \
 python3-lxml \
+python3-ldap \
 && rm -rf /var/lib/apt/lists/*
 
 RUN cp -r  /usr/lib/python3/dist-packages/Cryptodome /usr/lib/python3/dist-packages/Crypto
