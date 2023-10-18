@@ -89,6 +89,7 @@ ENV SEAHUB_LOG_DIR=/opt/seafile/logs
 ENV SEAFILE_ADMIN_EMAIL=me@example.com
 ENV SEAFILE_ADMIN_PASSWORD=asecret
 ENV PYTHON=python3
+ENV SEAHUB_DIR=/opt/seafile/seafile-server-latest/seahub
 
 EXPOSE 8000
 
