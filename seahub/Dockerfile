@@ -30,7 +30,7 @@ openldap-dev \
 python3-dev
 
 RUN python3 -m pip install --upgrade pip &&\
-pip3 install --timeout=3600 \
+pip3 install --target /pip-deps --timeout=3600 --no-cache-dir  \
 future==0.18.* \
 pillow==10.0.* \
 captcha==0.4 \
@@ -42,8 +42,10 @@ django-simple-captcha==0.5.* \
 pycryptodome==3.18.* \
 djangosaml2==1.5.* \
 python-ldap==3.4.* \
-sqlalchemy==2.0.* \
-&& rm -r /root/.cache/pip
+sqlalchemy==2.0.*
+
+RUN find /pip-deps -name "__pycache__" -type d -exec rm -r {} + && \
+    rm -rf /pip-deps/pip /pip-deps/wheel /pip-deps/setuptools
 
 FROM python:3.10.13-alpine3.18
 
@@ -63,8 +65,7 @@ netcat-openbsd \
 gcompat \
 openldap
 
-COPY --from=pip /usr/local/lib/python3.10/site-packages /usr/local/lib/python3.10/site-packages
-
+COPY --from=pip /pip-deps /usr/local/lib/python3.10/site-packages
 COPY --from=get /tmp/seafile-server*/seahub /opt/seafile/seafile-server-latest/seahub
 COPY --from=get /tmp/seafile-server*/runtime /opt/seafile/seafile-server-latest/runtime
 COPY --from=get /tmp/seafile-server*/seahub.sh /opt/seafile/seafile-server-latest/seahub.sh
@@ -73,8 +74,8 @@ COPY --from=get /tmp/seafile-server*/seafile/lib/python3/site-packages /opt/seaf
 COPY --from=get /tmp/seafile-server*/pro/python/seafevents /opt/seafile/seafile-server-latest/pro/python/seafevents
 
 COPY scripts /scripts
-
 RUN chmod u+x /scripts/*
+
 RUN mkdir -p /opt/seafile/logs &&\
 touch /opt/seafile/logs/seahub.log &&\
 mkdir -p /opt/seafile/pids
