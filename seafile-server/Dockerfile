@@ -50,7 +50,7 @@ ln -sf /opt/seafile/logs/common.log /opt/seafile/logs/gc.log &&\
 ln -sf /opt/seafile/logs/common.log /opt/seafile/logs/seafdav.log &&\
 ln -sf /opt/seafile/logs/common.log /opt/seafile/logs/notification-server.log &&\
 ln -sf /opt/seafile/logs/common.log /opt/seafile/logs/seafile-monitor.log &&\
-echo "TLS_REQCERT     allow" >> /etc/ldap/ldap.conf
+mkdir -p /etc/ldap/ && echo "TLS_REQCERT     allow" >> /etc/ldap/ldap.conf
 
 EXPOSE 8001 8080 8082 8083
 
