@@ -2,7 +2,7 @@ FROM alpine:3.18.4 AS get
 
 RUN apk add --no-cache wget
 
-ENV SEAFILE_SERVER=seafile-server SEAFILE_VERSION=11.0.1
+ENV SEAFILE_VERSION=11.0.1
 
 RUN cd /tmp && \
     wget https://download.seadrive.org/seafile-server_${SEAFILE_VERSION}_x86-64.tar.gz && \
