@@ -5,7 +5,7 @@ RUN apk add --no-cache wget
 ENV SEAFILE_VERSION=11.0.1
 
 RUN cd /tmp && \
-    wget https://download.seadrive.org/seafile-server_${SEAFILE_VERSION}_x86-64.tar.gz && \
+    wget https://download.seadrive.org/seafile-server_${SEAFILE_VERSION}_x86-64.tar.gz --header="Cache-Control: no-cache" && \
     tar -zxvf seafile-server_${SEAFILE_VERSION}_x86-64.tar.gz && \
     rm -f seafile-server_${SEAFILE_VERSION}_x86-64.tar.gz
 
