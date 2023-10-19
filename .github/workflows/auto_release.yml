@@ -27,7 +27,7 @@ jobs:
         LATEST_TAG=$(git describe --tags --abbrev=0 --match "${{ matrix.folder }}-*" 2>/dev/null)
         echo "LATEST_TAG=$LATEST_TAG" >> $GITHUB_ENV
 
-        PREVIOUS_VERSION=$(echo $LATEST_TAG | awk -F_ '{print $1}' | awk -F- '{print $2}')
+        PREVIOUS_VERSION=$(echo $LATEST_TAG | awk -F'[-_]' '{print $(NF-1)}')
         PREVIOUS_BUILD=$(echo $LATEST_TAG | awk -F_ '{print $2}')
 
         if [[ "${{ matrix.folder }}" == "seafile-caddy" ]]; then
@@ -35,6 +35,7 @@ jobs:
         else
           CURRENT_VERSION=$(grep -m 1 'SEAFILE_VERSION' ${{ matrix.folder }}/Dockerfile | awk -F'SEAFILE_VERSION=' '{print $2}' | awk '{print $1}' | tr -d '\n')
         fi
+        echo "CURRENT_VERSION=$CURRENT_VERSION" >> $GITHUB_ENV
 
         if [[ "$PREVIOUS_VERSION" != "$CURRENT_VERSION" ]] || [[ -z "$LATEST_TAG" ]]; then
           NEXT_BUILD="001"
@@ -43,7 +44,7 @@ jobs:
         fi
         echo "NEXT_BUILD=$NEXT_BUILD" >> $GITHUB_ENV
 
-    - name: Determine Changed Directory and Extract Version
+    - name: Determine Changed Directory
       id: dir_version
       run: |
         if [[ -z "$LATEST_TAG" ]]; then
@@ -61,14 +62,6 @@ jobs:
           exit 0
         fi
         echo "FOLDER_CHANGED=$FOLDER_CHANGED" >> $GITHUB_ENV
-
-        if [[ "$FOLDER_CHANGED" == "seafile-caddy" ]]; then
-          CADDY_VERSION=$(grep -m 1 'FROM caddy:' $FOLDER_CHANGED/Dockerfile | awk -F':' '{print $2}' | awk -F'-' '{print $1}' | tr -d '\n')
-          echo "SEAFILE_VERSION=$CADDY_VERSION" >> $GITHUB_ENV
-        else
-          SEAFILE_VERSION=$(grep -m 1 'SEAFILE_VERSION' $FOLDER_CHANGED/Dockerfile | awk -F'SEAFILE_VERSION=' '{print $2}' | awk '{print $1}' | tr -d '\n')
-          echo "SEAFILE_VERSION=$SEAFILE_VERSION" >> $GITHUB_ENV
-        fi
 
     - name: Get Commit Messages and Write to Markdown
       if: env.PROCEED != 'false'
@@ -88,9 +81,9 @@ jobs:
         fi
 
         if [[ "$FOLDER_CHANGED" == "seafile-caddy" ]]; then
-          echo "Caddy version: $SEAFILE_VERSION" > RELEASE_NOTES.md
+          echo "Caddy version: $CURRENT_VERSION" > RELEASE_NOTES.md
         else
-          echo "Seafile version: $SEAFILE_VERSION" > RELEASE_NOTES.md
+          echo "Seafile version: $CURRENT_VERSION" > RELEASE_NOTES.md
         fi
         echo "Image build version: $NEXT_BUILD" >> RELEASE_NOTES.md
         echo "Changelog:" >> RELEASE_NOTES.md
@@ -99,8 +92,8 @@ jobs:
     - name: Create and Upload GitHub Release
       if: env.PROCEED != 'false'
       run: |
-        gh release create ${{ env.FOLDER_CHANGED }}-${{ env.SEAFILE_VERSION }}_${{ env.NEXT_BUILD }} \
-          -t ${{ env.FOLDER_CHANGED }}-${{ env.SEAFILE_VERSION }}_${{ env.NEXT_BUILD }} \
+        gh release create ${{ env.FOLDER_CHANGED }}-${{ env.CURRENT_VERSION }}_${{ env.NEXT_BUILD }} \
+          -t ${{ env.FOLDER_CHANGED }}-${{ env.CURRENT_VERSION }}_${{ env.NEXT_BUILD }} \
           -F RELEASE_NOTES.md \
           --draft=false \
           --prerelease=false
