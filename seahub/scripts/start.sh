@@ -13,20 +13,20 @@ function start_seahub {
 function start_socat {
     mkdir -p /opt/seafile/seafile-server-latest/runtime
     while true; do
-        while ! nc -z seafile-server 8001 2>/dev/null; do
+        while ! nc -z ${SEAFILE_SERVER_HOST} 8001 2>/dev/null; do
             sleep 1
         done
         echo "Starting socat..."
-        socat -d -d UNIX-LISTEN:/opt/seafile/seafile-server-latest/runtime/seafile.sock,fork,unlink-early TCP:seafile-server:8001,forever,keepalive,keepidle=10,keepintvl=10,keepcnt=2
+        socat -d -d UNIX-LISTEN:/opt/seafile/seafile-server-latest/runtime/seafile.sock,fork,unlink-early TCP:${SEAFILE_SERVER_HOST}:8001,forever,keepalive,keepidle=10,keepintvl=10,keepcnt=2
     done
 }
 
 function watch_server {
     while true; do
         sleep 2
-        if ! nc -z seafile-server 8082 2>/dev/null; then
+        if ! nc -z ${SEAFILE_SERVER_HOST} 8082 2>/dev/null; then
             /opt/seafile/seafile-server-latest/seahub.sh stop
-            while ! nc -z seafile-server 8082 2>/dev/null; do
+            while ! nc -z ${SEAFILE_SERVER_HOST} 8082 2>/dev/null; do
                 sleep 1
             done
             start_seahub &
