@@ -3,27 +3,27 @@
 }
 
 http:// https:// {
-        reverse_proxy {$SEAHUB_SERVER_HOST}:8000 {
+        reverse_proxy {$SEAHUB_HOSTNAME}:8000 {
                 lb_policy header X-Forwarded-For
                 trusted_proxies private_ranges
         }
-        reverse_proxy /seafdav* {$SEAFILE_SERVER_HOST}:8080 {
+        reverse_proxy /seafdav* {$SEAFILE_SERVER_HOSTNAME}:8080 {
                 header_up Destination https:// http://
                 trusted_proxies private_ranges
         }
         handle_path /seafhttp* {
                 uri strip_prefix seafhttp
-                reverse_proxy {$SEAFILE_SERVER_HOST}:8082 {
+                reverse_proxy {$SEAFILE_SERVER_HOSTNAME}:8082 {
                         trusted_proxies private_ranges
                 }
         }
         handle_path /notification* {
                 uri strip_prefix notification
-                reverse_proxy {$SEAFILE_SERVER_HOST}:8083 {
+                reverse_proxy {$SEAFILE_SERVER_HOSTNAME}:8083 {
                         trusted_proxies private_ranges
                 }
         }
-        reverse_proxy /media/* {$SEAHUB_MEDIA_SERVER_HOST}:80 {
+        reverse_proxy /media/* {$SEAHUB_MEDIA_HOSTNAME}:80 {
                 lb_policy header X-Forwarded-For
                 trusted_proxies private_ranges
         }

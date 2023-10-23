@@ -89,7 +89,7 @@ ENV INNER_FILE_SERVER_ROOT=http://seafile-server:8082
 ENV SEAHUB_LOG_DIR=/opt/seafile/logs
 ENV SEAFILE_ADMIN_EMAIL=me@example.com
 ENV SEAFILE_ADMIN_PASSWORD=asecret
-ENV SEAFILE_SERVER_HOST=seafile-server
+ENV SEAFILE_SERVER_HOSTNAME=seafile-server
 ENV PYTHON=python3
 ENV SEAHUB_DIR=/opt/seafile/seafile-server-latest/seahub
 

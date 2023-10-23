@@ -6,13 +6,13 @@ if [ "$SWARM_DNS" = true ]; then
     
     while true; do 
 
-        SEAHUB_IPS=$(dig +short $SEAHUB_SERVER_HOST | sed -e 's/$/:8000/' | tr ' ' '\n' | sort | tr '\n' ' ')
-        SEAHUB_MEDIA_IPS=$(dig +short $SEAHUB_MEDIA_SERVER_HOST | sed -e 's/$/:80/' | tr ' ' '\n' | sort | tr '\n' ' ')
+        SEAHUB_IPS=$(dig +short $SEAHUB_HOSTNAME | sed -e 's/$/:8000/' | tr ' ' '\n' | sort | tr '\n' ' ')
+        SEAHUB_MEDIA_IPS=$(dig +short $SEAHUB_MEDIA_HOSTNAME | sed -e 's/$/:80/' | tr ' ' '\n' | sort | tr '\n' ' ')
 
         cp /etc/caddy/Caddyfile.default /etc/caddy/Caddyfile.tmp
 
-        sed -i "s/$SEAHUB_SERVER_HOST:8000/$(echo $SEAHUB_IPS)/g" /etc/caddy/Caddyfile.tmp
-        sed -i "s/$SEAHUB_MEDIA_SERVER_HOST:80/$(echo $SEAHUB_MEDIA_IPS)/g" /etc/caddy/Caddyfile.tmp
+        sed -i "s/$SEAHUB_HOSTNAME:8000/$(echo $SEAHUB_IPS)/g" /etc/caddy/Caddyfile.tmp
+        sed -i "s/$SEAHUB_MEDIA_HOSTNAME:80/$(echo $SEAHUB_MEDIA_IPS)/g" /etc/caddy/Caddyfile.tmp
 
         if ! diff -q "/etc/caddy/Caddyfile" "/etc/caddy/Caddyfile.tmp"; then
             rm -f /etc/caddy/Caddyfile
