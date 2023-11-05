@@ -51,9 +51,11 @@ def init_seafile_server():
         return
 
     loginfo('Now running setup-seafile-mysql.py in auto mode.')
+    domain = get_conf('SEAFILE_URL', 'seafile.example.com')
+    proto = 'https' if is_https() else 'http'
     env = {
         'SERVER_NAME': 'seafile',
-        'SERVER_IP': get_conf('SEAFILE_URL', 'seafile.example.com'),
+        'SERVER_IP': f'{proto}://{domain}',
         'MYSQL_USER': 'seafile',
         'MYSQL_USER_PASSWD': str(uuid.uuid4()),
         'MYSQL_USER_HOST': '%.%.%.%',
@@ -62,22 +64,20 @@ def init_seafile_server():
         'MYSQL_ROOT_PASSWD': get_conf('DB_ROOT_PASSWD', ''),
     }
 
-    # Change the script to allow mysql root password to be empty
-    # call('''sed -i -e 's/if not mysql_root_passwd/if not mysql_root_passwd and "MYSQL_ROOT_PASSWD" not in os.environ/g' {}'''
-    #     .format(get_script('setup-seafile-mysql.py')))
-
-    # Change the script to disable check MYSQL_USER_HOST
+    # Change setup-seafile-mysql.py to disable check MYSQL_USER_HOST
     call('''sed -i -e '/def validate_mysql_user_host(self, host)/a \ \ \ \ \ \ \ \ return host' {}'''
-        .format(get_script('setup-seafile-mysql.py')))
-
+        .format(get_script('setup-seafile-mysql.py')), shell=True)
     call('''sed -i -e '/def validate_mysql_host(self, host)/a \ \ \ \ \ \ \ \ return host' {}'''
-        .format(get_script('setup-seafile-mysql.py')))
+        .format(get_script('setup-seafile-mysql.py')), shell=True)
+    
+    # Change setup-seafile-mysql.py to allow protocol (http/https) in SERVER_IP
+    call('''sed -i "/SERVER_IP_OR_DOMAIN_REGEX\ =/c\\ \ \ \ SERVER_IP_OR_DOMAIN_REGEX\ \=\ r'^(http:\\/\\/|https:\\/\\/)[^.].+\..+[^.]$'" {}'''
+        .format(get_script('setup-seafile-mysql.py')), shell=True)
+    call('''sed -i '/SERVICE_URL = "http:\/\//s/http:\/\///' {}'''
+        .format(get_script('setup-seafile-mysql.py')), shell=True)
 
     setup_script = get_script('setup-seafile-mysql.sh')
     call('{} auto -n seafile'.format(setup_script), env=env)
-
-    domain = get_conf('SEAFILE_URL', 'seafile.example.com')
-    proto = 'https' if is_https() else 'http'
     with open(join(topdir, 'conf', 'seahub_settings.py'), 'a+') as fp:
         fp.write('\n')
         fp.write("""CACHES = {
