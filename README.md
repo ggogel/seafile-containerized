@@ -98,8 +98,6 @@ Networks:
     wget https://raw.githubusercontent.com/ggogel/seafile-containerized/master/compose/docker-compose.yml
     ```
     
-    _Note:_ We expect certain services names. Do not rename services except `db`.
-    
     #### Docker Swarm 
 
     If you run a single node swarm and don't want to run multiple replicas, you can use the same compose file. Otherwise refer to [Wiki / Docker Swarm](https://github.com/ggogel/seafile-containerized/wiki/Docker-Swarm).
