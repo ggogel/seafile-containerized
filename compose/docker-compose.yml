@@ -9,7 +9,7 @@ services:
       - DB_ROOT_PASSWD=db_dev
       - TIME_ZONE=Europe/Berlin
       - HTTPS=true
-      - SEAFILE_SERVER_HOSTNAME=seafile.mydomain.com # Mandatory on first deployment!
+      - SEAFILE_URL=seafile.mydomain.com # Mandatory on first deployment!
     depends_on:
       - db
       - memcached

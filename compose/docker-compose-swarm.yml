@@ -11,7 +11,7 @@ services:
       - SEAFILE_ADMIN_EMAIL=me@example.com
       - SEAFILE_ADMIN_PASSWORD=asecret
       - HTTPS=false # Set this to true if you plan to use a reverse proxy with HTTPS. Can be changed later in the admin settings on the web-ui.
-      - SEAFILE_SERVER_HOSTNAME=seafile.mydomain.com # Mandatory on first deployment!
+      - SEAFILE_URL=seafile.mydomain.com # Mandatory on first deployment!
     networks:
       - seafile-net
     deploy:

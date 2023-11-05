@@ -9,7 +9,7 @@ services:
       - DB_ROOT_PASSWD=db_dev
       - TIME_ZONE=Europe/Berlin
       - HTTPS=false
-      - SEAFILE_SERVER_HOSTNAME=localhost
+      - SEAFILE_URL=localhost
     depends_on:
       - db
       - memcached

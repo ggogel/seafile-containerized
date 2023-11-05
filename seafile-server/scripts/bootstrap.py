@@ -53,7 +53,7 @@ def init_seafile_server():
     loginfo('Now running setup-seafile-mysql.py in auto mode.')
     env = {
         'SERVER_NAME': 'seafile',
-        'SERVER_IP': get_conf('SEAFILE_SERVER_HOSTNAME', 'seafile.example.com'),
+        'SERVER_IP': get_conf('SEAFILE_URL', 'seafile.example.com'),
         'MYSQL_USER': 'seafile',
         'MYSQL_USER_PASSWD': str(uuid.uuid4()),
         'MYSQL_USER_HOST': '%.%.%.%',
@@ -76,7 +76,7 @@ def init_seafile_server():
     setup_script = get_script('setup-seafile-mysql.sh')
     call('{} auto -n seafile'.format(setup_script), env=env)
 
-    domain = get_conf('SEAFILE_SERVER_HOSTNAME', 'seafile.example.com')
+    domain = get_conf('SEAFILE_URL', 'seafile.example.com')
     proto = 'https' if is_https() else 'http'
     with open(join(topdir, 'conf', 'seahub_settings.py'), 'a+') as fp:
         fp.write('\n')
