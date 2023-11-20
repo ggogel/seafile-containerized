@@ -61,7 +61,7 @@ services:
       - seafile-net
 
   seafile-caddy:
-    image: ggogel/seafile-caddy:2.7.5
+    image: ggogel/seafile-caddy:11.0.2
     ports:
       - "80:80" # Point your reverse proxy to port 80 of this service
     networks:
