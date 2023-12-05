@@ -1,0 +1,48 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  annotations:
+    kompose.service.expose.storage-class-name: default
+    kompose.volume.size: 100Mi
+  creationTimestamp: null
+  labels:
+    io.kompose.service: seahub-media
+  name: seahub-media
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      io.kompose.service: seahub-media
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      annotations:
+        kompose.service.expose.storage-class-name: default
+        kompose.volume.size: 100Mi
+      creationTimestamp: null
+      labels:
+        io.kompose.network/compose-seafile-net: "true"
+        io.kompose.service: seahub-media
+    spec:
+      containers:
+        - image: ggogel/seahub-media:11.0.2
+          name: seahub-media
+          ports:
+            - containerPort: 80
+              protocol: TCP
+          resources: {}
+          volumeMounts:
+            - mountPath: /usr/share/caddy/media/avatars
+              name: seahub-avatars
+            - mountPath: /usr/share/caddy/media/custom
+              name: seahub-custom
+      restartPolicy: Always
+      volumes:
+        - name: seahub-avatars
+          persistentVolumeClaim:
+            claimName: seahub-avatars
+        - name: seahub-custom
+          persistentVolumeClaim:
+            claimName: seahub-custom
+status: {}

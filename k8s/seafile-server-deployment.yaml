@@ -1,0 +1,60 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  annotations:
+    kompose.service.expose.storage-class-name: default
+    kompose.volume.size: 1Gi
+  creationTimestamp: null
+  labels:
+    io.kompose.service: seafile-server
+  name: seafile-server
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      io.kompose.service: seafile-server
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      annotations:
+        kompose.service.expose.storage-class-name: default
+        kompose.volume.size: 1Gi
+      creationTimestamp: null
+      labels:
+        io.kompose.network/compose-seafile-net: "true"
+        io.kompose.service: seafile-server
+    spec:
+      containers:
+        - env:
+            - name: DB_HOST
+              value: db
+            - name: DB_ROOT_PASSWD
+              value: db_dev
+            - name: HTTPS
+              value: "true"
+            - name: SEAFILE_URL
+              value: seafile.mydomain.com
+            - name: TIME_ZONE
+              value: Europe/Berlin
+          image: ggogel/seafile-server:11.0.2
+          name: seafile-server
+          ports:
+            - containerPort: 8001
+              protocol: TCP
+            - containerPort: 8080
+              protocol: TCP
+            - containerPort: 8082
+              protocol: TCP
+            - containerPort: 8083
+              protocol: TCP
+          resources: {}
+          volumeMounts:
+            - mountPath: /shared
+              name: seafile-data
+      restartPolicy: Always
+      volumes:
+        - name: seafile-data
+          persistentVolumeClaim:
+            claimName: seafile-data
+status: {}

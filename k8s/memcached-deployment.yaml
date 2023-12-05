@@ -1,0 +1,33 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  creationTimestamp: null
+  labels:
+    io.kompose.service: memcached
+  name: memcached
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      io.kompose.service: memcached
+  strategy: {}
+  template:
+    metadata:
+      creationTimestamp: null
+      labels:
+        io.kompose.network/compose-seafile-net: "true"
+        io.kompose.service: memcached
+    spec:
+      containers:
+        - command:
+            - memcached
+            - -m
+            - "1024"
+          image: memcached:1.6.22
+          name: memcached
+          ports:
+            - containerPort: 11211
+              protocol: TCP
+          resources: {}
+      restartPolicy: Always
+status: {}

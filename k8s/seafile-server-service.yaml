@@ -1,0 +1,28 @@
+apiVersion: v1
+kind: Service
+metadata:
+  annotations:
+    kompose.service.expose.storage-class-name: default
+    kompose.volume.size: 1Gi
+  creationTimestamp: null
+  labels:
+    io.kompose.service: seafile-server
+  name: seafile-server
+spec:
+  ports:
+    - name: "8001"
+      port: 8001
+      targetPort: 8001
+    - name: "8080"
+      port: 8080
+      targetPort: 8080
+    - name: "8082"
+      port: 8082
+      targetPort: 8082
+    - name: "8083"
+      port: 8083
+      targetPort: 8083
+  selector:
+    io.kompose.service: seafile-server
+status:
+  loadBalancer: {}

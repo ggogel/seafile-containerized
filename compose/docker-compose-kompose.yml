@@ -1,0 +1,109 @@
+version: '3.8'
+services:
+  seafile-server:
+    image: ggogel/seafile-server:11.0.2
+    volumes:
+      - seafile-data:/shared 
+    environment:
+      - DB_HOST=db
+      - DB_ROOT_PASSWD=db_dev
+      - TIME_ZONE=Europe/Berlin
+      - HTTPS=true
+      - SEAFILE_URL=seafile.mydomain.com # Mandatory on first deployment!
+    depends_on:
+      - db
+      - memcached
+      - seafile-caddy
+    networks:
+      - seafile-net
+    expose:
+      - 8001
+      - 8080
+      - 8082
+      - 8083
+    labels:
+      kompose.volume.size: 1Gi
+      kompose.service.expose.storage-class-name: default
+
+  seahub:
+    image: ggogel/seahub:11.0.2
+    volumes:
+      - seafile-data:/shared
+      - seahub-avatars:/shared/seafile/seahub-data/avatars
+      - seahub-custom:/shared/seafile/seahub-data/custom 
+    environment:
+      - SEAFILE_ADMIN_EMAIL=me@example.com
+      - SEAFILE_ADMIN_PASSWORD=asecret
+    depends_on:
+      - seafile-server
+      - seafile-caddy
+      - seahub-media
+    networks:
+      - seafile-net
+    expose:
+      - 8000
+  
+  seahub-media:
+    image: ggogel/seahub-media:11.0.2
+    volumes:
+     - seahub-avatars:/usr/share/caddy/media/avatars
+     - seahub-custom:/usr/share/caddy/media/custom
+    depends_on:
+      - seafile-caddy
+    networks:
+      - seafile-net
+    expose:
+      - 80
+    labels:
+      kompose.volume.size: 100Mi
+      kompose.service.expose.storage-class-name: default
+
+  db:
+    image: mariadb:10.11.6
+    environment:
+      - MYSQL_ROOT_PASSWORD=db_dev
+      - MYSQL_LOG_CONSOLE=true
+      - MARIADB_AUTO_UPGRADE=true
+    volumes:
+      - seafile-mariadb:/var/lib/mysql
+    networks:
+      - seafile-net
+    expose:
+      - 3306
+    labels:
+      kompose.volume.size: 1Gi
+      kompose.service.expose.storage-class-name: default
+
+  memcached:
+    image: memcached:1.6.22
+    entrypoint: memcached -m 1024
+    networks:
+      - seafile-net
+    expose:
+      - 11211
+
+  seafile-caddy:
+    image: ggogel/seafile-caddy:2.7.5
+    networks:
+      - seafile-net
+      - default
+    labels:
+      kompose.service.expose: localhost
+      kompose.service.expose.ingress-class-name: nginx
+      nginx.ingress.kubernetes.io/proxy-body-size: 0
+      nginx.ingress.kubernetes.io/proxy-connect-timeout: 36000
+      nginx.ingress.kubernetes.io/proxy-read-timeout: 36000
+      nginx.ingress.kubernetes.io/proxy-send-timeout: 36000
+      nginx.ingress.kubernetes.io/send-timeout: 36000
+    expose:
+      - 80
+
+networks:
+  seafile-net:
+    internal: true
+
+volumes:
+  seafile-data:
+  seafile-mariadb:
+  seahub-avatars:
+  seahub-custom:
