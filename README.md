@@ -20,7 +20,7 @@
 
 
 # Containerized Seafile Deployment
-A fully containerized deployment of Seafile for Docker and Docker Swarm.
+A fully containerized deployment of Seafile for Docker, Docker Swarm and Kubernetes.
 
 ## Table of Contents
 1. [Features](#features)
