@@ -83,7 +83,7 @@ services:
       - 11211
 
   seafile-caddy:
-    image: ggogel/seafile-caddy:2.7.5
+    image: ggogel/seafile-caddy:2.7.6
     networks:
       - seafile-net
       - default
