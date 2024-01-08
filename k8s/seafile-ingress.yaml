@@ -28,20 +28,13 @@ spec:
             name: seafile-server
             port:
               number: 8082
-      - path: /seafdav(/|$)(.*)
+      - path: /()(seafdav.*)
         pathType: Prefix
         backend:
           service:
             name: seafile-server
             port:
               number: 8080
-      - path: /notification/ping(/|$)(.*)
-        pathType: Prefix
-        backend:
-          service:
-            name: seafile-server
-            port:
-              number: 8083
       - path: /notification(/|$)(.*)
         pathType: Prefix
         backend:
@@ -49,7 +42,7 @@ spec:
             name: seafile-server
             port:
               number: 8083
-      - path: /media
+      - path: /()(media.*)
         pathType: Prefix
         backend:
           service:
