@@ -1,7 +1,7 @@
 version: '3.8'
 services:
   seafile-server:
-    image: ggogel/seafile-server:11.0.3
+    image: ggogel/seafile-server:11.0.4
     volumes:
       - seafile-data:/shared 
     environment:
@@ -26,7 +26,7 @@ services:
       kompose.service.expose.storage-class-name: default
 
   seahub:
-    image: ggogel/seahub:11.0.3
+    image: ggogel/seahub:11.0.4
     volumes:
       - seafile-data:/shared
       - seahub-avatars:/shared/seafile/seahub-data/avatars
@@ -44,7 +44,7 @@ services:
       - 8000
   
   seahub-media:
-    image: ggogel/seahub-media:11.0.3
+    image: ggogel/seahub-media:11.0.4
     volumes:
      - seahub-avatars:/usr/share/caddy/media/avatars
      - seahub-custom:/usr/share/caddy/media/custom
