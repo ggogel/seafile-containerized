@@ -36,7 +36,7 @@ A fully containerized deployment of Seafile for Docker, Docker Swarm and Kuberne
 - Increased Security:
     - The caddy reverse proxy serves as a single entry point to the stack. Everything else runs in an isolated network.
     - Using [Alpine Linux](https://alpinelinux.org/about/) based images for the frontend, which is designed with security in mind and comes with proactive security features.
-    - Official Seafile Docker deployment uses entirely outdated base images and dependencies. Here base images and dependencies are updated on a regular basis.
+    - Official Seafile Docker deployment uses entirely outdated base images and dependencies. Here base images and dependencies are updated regularly.
 - Reworked Dockerfiles featuring multi-stage builds, allowing for smaller images and faster builds.
 - Schedule offline garbage collection with cron job.
 - Runs upgrade scripts automatically when a new image version is deployed.
@@ -60,7 +60,7 @@ Services:
     - database cache for *seahub*
 - *seafile-caddy*
     - reverse proxy that forwards paths to the correct endpoints: *seafile-server*, *seahub* or *seahub-media*
-    - is the single external entrypoint to the deployment
+    - is the single external entry point to the deployment
 
 Volumes:
 
@@ -77,7 +77,7 @@ Volumes:
     - contains user avatars
     - stored by *seahub* and served by *seahub-media*
 
-*Note: In the official docker deployment custom and avatars are served by nginx. Seahub alone is not able to serve them for some reason, hence the separate volumes.*
+*Note: In the official docker deployment custom and avatars are served by nginx. Seahub alone cannot serve them for some reason, hence the separate volumes.*
 
 Networks:
 - *seafile-net*
@@ -89,25 +89,22 @@ Networks:
 
     Requires Docker and docker-compose to be installed.
 
-2. ***Get the compose file***
-    
-    #### Docker Compose
+    For deployment on Kubernetes see [Wiki / Kubernetes](https://github.com/ggogel/seafile-containerized/wiki/Kubernetes).
 
+    For additional considerations when using Docker in Swarm Mode see [Wiki / Docker Swarm](https://github.com/ggogel/seafile-containerized/wiki/Docker-Swarm).
+
+3. ***Get the compose file***
+    
     Use this compose file as a starting point.
     ```
     wget https://raw.githubusercontent.com/ggogel/seafile-containerized/master/compose/docker-compose.yml
     ```
-    
-    #### Docker Swarm 
-
-    If you run a single node swarm and don't want to run multiple replicas, you can use the same compose file. Otherwise refer to [Wiki / Docker Swarm](https://github.com/ggogel/seafile-containerized/wiki/Docker-Swarm).
    
+4. ***Set environment variables***
 
-3. ***Set environment variables***
+    **Important:** The environment variables are only relevant for the first deployment. The existing configuration in the volumes is **not** overwritten.
 
-    **Important:** The environment variables are only relevant for the first deployment. Existing configuration in the volumes is **not** overwritten.
-
-    On a first deployment you need to carefully set those values. Changing them later can be tricky. Refer to the Seafile documentation on how to change configuration values.
+    On a first deployment, you need to carefully set those values. Changing them later can be tricky. Please take a look at the Seafile documentation on how to change configuration values.
    
     ### *seafile-server*
     The name of the mariadb service, which is automatically the docker-internal hostname.
@@ -124,7 +121,7 @@ Networks:
      ```
    
     This will be used for the SERVICE_URL and FILE_SERVER_ROOT. 
-    Important: Changing those values in the config files later won't have any effect because they are written to the database. Those values have priority over the config files. To change them enter the "System Admin" section on the web-ui. If you encounter issues with file upload, it's likely that those are configured incorrectly.
+    Important: Changing those values in the config files later won't have any effect because they are written to the database. Those values have priority over the config files. To change them enter the "System Admin" section on the web-ui. If you encounter issues with file upload, those are likely misconfigured.
      ```
     - SEAFILE_URL=seafile.mydomain.com 
      ```
@@ -153,7 +150,7 @@ Networks:
     - MYSQL_LOG_CONSOLE=true
     ```
 
-4. ***(Optional) Migrating volumes from official Docker deployment or native install***
+5. ***(Optional) Migrating volumes from official Docker deployment or native install***
 
     **If you set up Seafile from scratch you can skip this part.**
 
@@ -193,12 +190,12 @@ chown -R root:root /var/lib/docker/volumes/seafile_seahub-avatars
 6. ***Deployment***
     
     #### Docker Compose
-    After you followed the above steps and you have configured everything correctly run:
+    After you followed the above steps and have configured everything correctly run:
     ```
     docker-compose -p seafile up -d
     ```
     #### Docker Swarm
-    After you followed the above steps and you have configured everything correctly run:
+    After you followed the above steps and have configured everything correctly run:
     ```
     docker stack deploy -c docker-compose.yml seafile
     ```
