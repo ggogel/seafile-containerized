@@ -3,6 +3,7 @@ source /scripts/utils.sh
 SEAFILE_DIR=/opt/seafile/seafile-server-latest
 
 if [[ $SEAFILE_SERVER != *"pro"* ]]; then
+    touch /tmp/gc_active
     echo "Seafile CE: Stop Seafile to perform offline garbage collection."
     stop_socat
     $SEAFILE_DIR/seafile.sh stop
@@ -17,8 +18,7 @@ fi
 $SEAFILE_DIR/seaf-gc.sh "$@"
 
 if [[ $SEAFILE_SERVER != *"pro"* ]]; then
-    echo "Seafile CE: Offline garbage collection completed. Starting Seafile."
-    sleep 3
-    $SEAFILE_DIR/seafile.sh start
-    start_socat &
+    echo "Seafile CE: Offline garbage collection completed. Exiting..."
+    echo "Set the restart policy of this container to unless-stopped to restart it automatically after garbage collection."
+    rm -f /tmp/gc_active
 fi

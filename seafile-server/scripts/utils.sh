@@ -47,12 +47,6 @@ function logger {
     tail -f /opt/seafile/logs/common.log | tee
 }
 
-function keep_running {
-    while true; do
-        tail -f /dev/null & wait ${!}
-    done
-}
-
 function sig_kill_all () {
     pkill -SIGKILL -f "seaf-server -c ${default_ccnet_conf_dir}"
     pkill -SIGKILL -f "fileserver -c ${default_ccnet_conf_dir}"
