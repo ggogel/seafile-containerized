@@ -32,7 +32,7 @@ A fully containerized deployment of Seafile for Docker, Docker Swarm and Kuberne
 - Complete redesign of the [official Docker deployment](https://manual.seafile.com/docker/deploy%20seafile%20with%20docker/) with containerization best-practices in mind.
 - Runs seahub (frontend) and seafile server (backend) in separate containers, which commuicate with each other over TCP.
 - Cluster without pro edition.
-- Completely removed Nginx and self-implemented Let's Encrypt and replaced it with two caddy services.
+- Separate Caddy container as reverse proxy
 - Increased Security:
     - The caddy reverse proxy serves as a single entry point to the stack. Everything else runs in an isolated network.
     - Using [Alpine Linux](https://alpinelinux.org/about/) based images for the frontend, which is designed with security in mind and comes with proactive security features.
