@@ -150,44 +150,13 @@ Networks:
     - MYSQL_LOG_CONSOLE=true
     ```
 
-5. ***(Optional) Migrating volumes from official Docker deployment or native install***
-
-    **If you set up Seafile from scratch you can skip this part.**
-
-     This deployment uses [named volumes](https://docs.docker.com/storage/volumes/), which come with several advantages over bind mounts, used in the official Seafile Docker deployment. They are the recommended mechanism for persisted storage on Docker. 
-     
-     The default path for named volumes on Docker is `/var/lib/docker/volumes/PROJECT-NAME_VOLUME-NAME/_data`.
-    
-     To migrate storage from the official Docker deployment or native (non-Docker) deployment run:
-
-```
-mkdir -p /var/lib/docker/volumes/seafile_seafile-data/_data
-mkdir -p /var/lib/docker/volumes/seafile_seafile-mariadb/_data
-mkdir -p /var/lib/docker/volumes/seafile_seahub-custom/_data
-mkdir -p /var/lib/docker/volumes/seafile_seahub-avatars/_data
-
-cp -r /opt/seafile-data /var/lib/docker/volumes/seafile_seafile-data/_data
-cp -r /opt/seafile-mysql/db /var/lib/docker/volumes/seafile_seafile-mariadb/_data
-mv /var/lib/docker/volumes/seafile_seafile-data/_data/seafile/seahub-data/custom /var/lib/docker/volumes/seafile_seahub-custom/_data
-mv /var/lib/docker/volumes/seafile_seafile-data/_data/seafile/seahub-data/avatars /var/lib/docker/volumes/seafile_seahub-avatars/_data
-```
-
-If you are migrating from a native (non-Docker) deployment, you additionally need to change the ownership of the folders:
-    
-```
-chown -R root:root /var/lib/docker/volumes/seafile_seafile-data
-chown -R root:root /var/lib/docker/volumes/seafile_seafile-mariadb
-chown -R root:root /var/lib/docker/volumes/seafile_seahub-custom
-chown -R root:root /var/lib/docker/volumes/seafile_seahub-avatars
-```
-
-5. ***(Optional) Reverse Proxy***
+4. ***(Optional) Reverse Proxy***
     
     The caddy reverse proxy integrated with the deployment exposes **port 80**. Point your existing reverse proxy to that port.
     
     This deployment does by design **not** include a reverse proxy capable of HTTPS and Let's Encrypt, unlike the official deployment, because usually Docker users already have some docker-based reverse proxy solution deployed, which does exactly that.
     
-6. ***Deployment***
+5. ***Deployment***
     
     #### Docker Compose
     After you followed the above steps and have configured everything correctly run:
