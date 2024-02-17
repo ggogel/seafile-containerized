@@ -1,28 +1,25 @@
 #!/bin/bash
 
-if [ "$SWARM_DNS" = true ]; then
-    
-    cp /etc/caddy/Caddyfile /etc/caddy/Caddyfile.default
-    
-    while true; do 
+cp /etc/caddy/Caddyfile /etc/caddy/Caddyfile.default
 
-        SEAHUB_IPS=$(dig +short $SEAHUB_HOSTNAME | sed -e 's/$/:8000/' | tr ' ' '\n' | sort | tr '\n' ' ')
-        SEAHUB_MEDIA_IPS=$(dig +short $SEAHUB_MEDIA_HOSTNAME | sed -e 's/$/:80/' | tr ' ' '\n' | sort | tr '\n' ' ')
+while true; do 
 
-        cp /etc/caddy/Caddyfile.default /etc/caddy/Caddyfile.tmp
+    SEAHUB_IPS=$(dig +short $SEAHUB_HOSTNAME | sed -e 's/$/:8000/' | tr ' ' '\n' | sort | tr '\n' ' ')
+    SEAHUB_MEDIA_IPS=$(dig +short $SEAHUB_MEDIA_HOSTNAME | sed -e 's/$/:80/' | tr ' ' '\n' | sort | tr '\n' ' ')
 
-        sed -i "s/$SEAHUB_HOSTNAME:8000/$(echo $SEAHUB_IPS)/g" /etc/caddy/Caddyfile.tmp
-        sed -i "s/$SEAHUB_MEDIA_HOSTNAME:80/$(echo $SEAHUB_MEDIA_IPS)/g" /etc/caddy/Caddyfile.tmp
+    cp /etc/caddy/Caddyfile.default /etc/caddy/Caddyfile.tmp
 
-        if ! diff -q "/etc/caddy/Caddyfile" "/etc/caddy/Caddyfile.tmp"; then
-            rm -f /etc/caddy/Caddyfile
-            mv /etc/caddy/Caddyfile.tmp /etc/caddy/Caddyfile
-            echo "Applying new Caddyfile:"
-            cat /etc/caddy/Caddyfile
-            caddy reload --config /etc/caddy/Caddyfile
-        fi
+    sed -i "s/$SEAHUB_HOSTNAME:8000/$(echo $SEAHUB_IPS)/g" /etc/caddy/Caddyfile.tmp
+    sed -i "s/$SEAHUB_MEDIA_HOSTNAME:80/$(echo $SEAHUB_MEDIA_IPS)/g" /etc/caddy/Caddyfile.tmp
 
-        sleep 10
+    if ! diff -q "/etc/caddy/Caddyfile" "/etc/caddy/Caddyfile.tmp"; then
+        rm -f /etc/caddy/Caddyfile
+        mv /etc/caddy/Caddyfile.tmp /etc/caddy/Caddyfile
+        echo "Applying new Caddyfile:"
+        cat /etc/caddy/Caddyfile
+        caddy reload --config /etc/caddy/Caddyfile
+    fi
 
-    done
-fi
+    sleep 10
+
+done

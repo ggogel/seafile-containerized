@@ -3,6 +3,10 @@ kind: Deployment
 metadata:
   annotations:
     kompose.service.expose.storage-class-name: default
+    kompose.service.healthcheck.readiness.interval: 10s
+    kompose.service.healthcheck.readiness.retries: "3"
+    kompose.service.healthcheck.readiness.test: healthcheck.sh --su-mysql --connect --innodb_initialized
+    kompose.service.healthcheck.readiness.timeout: 10s
     kompose.volume.size: 1Gi
   creationTimestamp: null
   labels:
@@ -19,6 +23,10 @@ spec:
     metadata:
       annotations:
         kompose.service.expose.storage-class-name: default
+        kompose.service.healthcheck.readiness.interval: 10s
+        kompose.service.healthcheck.readiness.retries: "3"
+        kompose.service.healthcheck.readiness.test: healthcheck.sh --su-mysql --connect --innodb_initialized
+        kompose.service.healthcheck.readiness.timeout: 10s
         kompose.volume.size: 1Gi
       creationTimestamp: null
       labels:
@@ -38,6 +46,16 @@ spec:
           ports:
             - containerPort: 3306
               protocol: TCP
+          readinessProbe:
+            exec:
+              command:
+                - healthcheck.sh
+                - --su-mysql
+                - --connect
+                - --innodb_initialized
+            failureThreshold: 3
+            periodSeconds: 10
+            timeoutSeconds: 10
           resources: {}
           volumeMounts:
             - mountPath: /var/lib/mysql

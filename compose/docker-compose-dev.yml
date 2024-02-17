@@ -10,12 +10,17 @@ services:
       - TIME_ZONE=Europe/Berlin
       - HTTPS=false
       - SEAFILE_URL=localhost
-    depends_on:
-      - db
-      - memcached
-      - seafile-caddy
     networks:
       - seafile-net
+    depends_on:
+      db:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "nc", "-z", "localhost", "8082"]
+      interval: 10s
+      timeout: 10s
+      retries: 3
+    restart: unless-stopped
 
   seahub:
     build: ../seahub/.
@@ -26,22 +31,23 @@ services:
     environment:
       - SEAFILE_ADMIN_EMAIL=me@example.com
       - SEAFILE_ADMIN_PASSWORD=asecret
-    depends_on:
-      - seafile-server
-      - seafile-caddy
-      - seahub-media
     networks:
       - seafile-net
+    depends_on:
+      db:
+        condition: service_healthy
+      seafile-server:
+        condition: service_healthy
+    restart: unless-stopped
 
   seahub-media:
     build: ../seahub-media/.
     volumes:
       - seahub-avatars:/usr/share/caddy/media/avatars
       - seahub-custom:/usr/share/caddy/media/custom
-    depends_on:
-      - seafile-caddy
     networks:
       - seafile-net
+    restart: unless-stopped
 
   db:
     image: mariadb:10.11.7
@@ -53,20 +59,28 @@ services:
       - seafile-mariadb:/var/lib/mysql
     networks:
       - seafile-net
+    healthcheck:
+      test: ["CMD", "healthcheck.sh", "--su-mysql", "--connect", "--innodb_initialized"]
+      interval: 10s
+      timeout: 10s
+      retries: 3
+    restart: unless-stopped
 
   memcached:
     image: memcached:1.6.23
     entrypoint: memcached -m 1024
     networks:
       - seafile-net
+    restart: unless-stopped
 
   seafile-caddy:
     build: ../seafile-caddy/.
     ports:
-      - "80:80"
+      - "8080:80"
     networks:
       - seafile-net
       - default
+    restart: unless-stopped
 
 networks:
   seafile-net:

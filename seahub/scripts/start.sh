@@ -23,30 +23,36 @@ function start_socat {
 
 function watch_server {
     while true; do
-        sleep 2
+        sleep 1
         if ! nc -z ${SEAFILE_SERVER_HOSTNAME} 8082 2>/dev/null; then
+            echo "Lost connection to seafiler-server. Stopping seahub..."
             /opt/seafile/seafile-server-latest/seahub.sh stop
-            while ! nc -z ${SEAFILE_SERVER_HOSTNAME} 8082 2>/dev/null; do
-                sleep 1
-            done
-            start_seahub &
+        fi
+    done
+}
+
+function watch_seahub {
+    while true; do
+        sleep 1
+        if ! pgrep -f "seahub.wsgi:application" >/dev/null; then
+            echo "Seahub process was stopped. Exiting container..."
+            break
         fi
     done
 }
 
 function logger {
-    tail -f /opt/seafile/logs/seahub.log | tee /proc/1/fd/1
+    tail -f /opt/seafile/logs/seahub.log | tee
 }
 
-function keep_running {
-    while true; do
-        tail -f /dev/null & wait ${!}
-    done
-}
+init_seahub
+start_seahub
 
 start_socat &
-init_seahub
-start_seahub &
 watch_server &
-logger
-keep_running
+watch_seahub &
+logger &
+
+wait -n 
+
+exit $?

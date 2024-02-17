@@ -29,6 +29,7 @@ ENV SEAFILE_VERSION=11.0.5
 
 RUN apt-get update && \
 DEBIAN_FRONTEND=noninteractive apt-get install -y \
+netcat-openbsd \
 socat \
 cron \
 tzdata \

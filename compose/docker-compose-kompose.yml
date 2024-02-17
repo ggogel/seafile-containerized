@@ -1,3 +1,6 @@
+# This is a compose file with additional fields for the tool kompose.
+# Generate Kubernetes manifests with the following command:
+# kompose convert --with-kompose-annotation=false -o k8s -f compose/docker-compose-kompose.yml
 version: '3.8'
 services:
   seafile-server:
@@ -10,10 +13,6 @@ services:
       - TIME_ZONE=Europe/Berlin
       - HTTPS=true
       - SEAFILE_URL=seafile.mydomain.com # Mandatory on first deployment!
-    depends_on:
-      - db
-      - memcached
-      - seafile-caddy
     networks:
       - seafile-net
     expose:
@@ -24,6 +23,10 @@ services:
     labels:
       kompose.volume.size: 1Gi
       kompose.service.expose.storage-class-name: default
+      kompose.service.healthcheck.readiness.tcp_port: 8082
+      kompose.service.healthcheck.readiness.interval: 10s
+      kompose.service.healthcheck.readiness.timeout: 10s
+    restart: always
 
   seahub:
     image: ggogel/seahub:11.0.4
@@ -34,22 +37,17 @@ services:
     environment:
       - SEAFILE_ADMIN_EMAIL=me@example.com
       - SEAFILE_ADMIN_PASSWORD=asecret
-    depends_on:
-      - seafile-server
-      - seafile-caddy
-      - seahub-media
     networks:
       - seafile-net
     expose:
       - 8000
+    restart: always
   
   seahub-media:
     image: ggogel/seahub-media:11.0.4
     volumes:
      - seahub-avatars:/usr/share/caddy/media/avatars
      - seahub-custom:/usr/share/caddy/media/custom
-    depends_on:
-      - seafile-caddy
     networks:
       - seafile-net
     expose:
@@ -57,6 +55,7 @@ services:
     labels:
       kompose.volume.size: 100Mi
       kompose.service.expose.storage-class-name: default
+    restart: always
 
   db:
     image: mariadb:10.11.7
@@ -73,6 +72,11 @@ services:
     labels:
       kompose.volume.size: 1Gi
       kompose.service.expose.storage-class-name: default
+      kompose.service.healthcheck.readiness.test: "healthcheck.sh --su-mysql --connect --innodb_initialized"
+      kompose.service.healthcheck.readiness.interval: 10s
+      kompose.service.healthcheck.readiness.timeout: 10s
+      kompose.service.healthcheck.readiness.retries: 3
+    restart: always
 
   memcached:
     image: memcached:1.6.23
@@ -81,22 +85,7 @@ services:
       - seafile-net
     expose:
       - 11211
-
-  seafile-caddy:
-    image: ggogel/seafile-caddy:2.7.6
-    networks:
-      - seafile-net
-      - default
-    labels:
-      kompose.service.expose: localhost
-      kompose.service.expose.ingress-class-name: nginx
-      nginx.ingress.kubernetes.io/proxy-body-size: 0
-      nginx.ingress.kubernetes.io/proxy-connect-timeout: 36000
-      nginx.ingress.kubernetes.io/proxy-read-timeout: 36000
-      nginx.ingress.kubernetes.io/proxy-send-timeout: 36000
-      nginx.ingress.kubernetes.io/send-timeout: 36000
-    expose:
-      - 80
+    restart: always
 
 networks:
   seafile-net:

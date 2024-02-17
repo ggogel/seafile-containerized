@@ -3,6 +3,9 @@ kind: Deployment
 metadata:
   annotations:
     kompose.service.expose.storage-class-name: default
+    kompose.service.healthcheck.readiness.interval: 10s
+    kompose.service.healthcheck.readiness.tcp_port: "8082"
+    kompose.service.healthcheck.readiness.timeout: 10s
     kompose.volume.size: 1Gi
   creationTimestamp: null
   labels:
@@ -19,6 +22,9 @@ spec:
     metadata:
       annotations:
         kompose.service.expose.storage-class-name: default
+        kompose.service.healthcheck.readiness.interval: 10s
+        kompose.service.healthcheck.readiness.tcp_port: "8082"
+        kompose.service.healthcheck.readiness.timeout: 10s
         kompose.volume.size: 1Gi
       creationTimestamp: null
       labels:
@@ -48,6 +54,11 @@ spec:
               protocol: TCP
             - containerPort: 8083
               protocol: TCP
+          readinessProbe:
+            periodSeconds: 10
+            tcpSocket:
+              port: 8082
+            timeoutSeconds: 10
           resources: {}
           volumeMounts:
             - mountPath: /shared

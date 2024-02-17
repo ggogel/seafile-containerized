@@ -1,5 +1,11 @@
 #!/bin/bash
 
-/scripts/swarm-dns.sh &
+if [ "$SWARM_DNS" = true ]; then
+    /scripts/swarm-dns.sh &
+fi
 
-caddy run --config /etc/caddy/Caddyfile --adapter caddyfile
+caddy run --config /etc/caddy/Caddyfile --adapter caddyfile &
+
+wait -n
+
+exit $?
