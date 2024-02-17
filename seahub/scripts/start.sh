@@ -46,9 +46,9 @@ function logger {
 }
 
 init_seahub
-start_seahub
-
 start_socat &
+sleep 1
+start_seahub
 watch_server &
 watch_seahub &
 logger &
