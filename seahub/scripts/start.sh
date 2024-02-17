@@ -12,20 +12,20 @@ function start_seahub {
 
 function start_socat {
     mkdir -p /opt/seafile/seafile-server-latest/runtime
-    while true; do
-        while ! nc -z ${SEAFILE_SERVER_HOSTNAME} 8001 2>/dev/null; do
-            sleep 1
-        done
-        echo "Starting socat..."
-        socat -d -d UNIX-LISTEN:/opt/seafile/seafile-server-latest/runtime/seafile.sock,fork,unlink-early TCP:${SEAFILE_SERVER_HOSTNAME}:8001,forever,keepalive,keepidle=10,keepintvl=10,keepcnt=2
-    done
+    if ! nc -z ${SEAFILE_SERVER_HOSTNAME} 8001 2>/dev/null; then
+        echo "Failed to establish socat bridge with seafile-server on port 8001. Terminating..."
+        exit
+    fi
+    echo "Starting socat..."
+    socat -d -d UNIX-LISTEN:/opt/seafile/seafile-server-latest/runtime/seafile.sock,fork,unlink-early TCP:${SEAFILE_SERVER_HOSTNAME}:8001,forever,keepalive,keepidle=10,keepintvl=10,keepcnt=2
+    echo "Socat process was stopped. Exiting container..."
 }
 
 function watch_server {
     while true; do
         sleep 1
         if ! nc -z ${SEAFILE_SERVER_HOSTNAME} 8082 2>/dev/null; then
-            echo "Lost connection to seafiler-server. Stopping seahub..."
+            echo "Lost connection to seafile-server. Stopping seahub..."
             /opt/seafile/seafile-server-latest/seahub.sh stop
         fi
     done
