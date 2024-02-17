@@ -6,9 +6,23 @@
       "datasources": ["docker"],
       "packageNames": ["ubuntu"],
       "pinDigests": true
+    },
+    {
+      "packageNames": ["haiwen/seahub"],
+      "commitMessageTopic": "Seafile"
     }
   ],
   "kubernetes": {
     "fileMatch": ["k8s/.+\\.yaml$"]
-  }
+  },
+  "customManagers": [
+    {
+      "customType": "regex",
+      "fileMatch": [".*Dockerfile$"],
+      "matchStrings": ["ENV SEAFILE_VERSION=(?<currentValue>.*?)\\n"],
+      "depNameTemplate": "haiwen/seahub",
+      "datasourceTemplate": "github-releases",
+      "extractVersionTemplate": "^v(?<version>.*)-server$"
+    }
+  ]
 }
