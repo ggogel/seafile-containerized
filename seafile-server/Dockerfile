@@ -49,9 +49,8 @@ ca-certificates \
 python3 \
 && rm -rf /var/lib/apt/lists/*
 
-RUN cp -r  /usr/lib/python3/dist-packages/Cryptodome /usr/lib/python3/dist-packages/Crypto
-
 COPY --from=pip /pip-deps /usr/local/lib/python3.10/dist-packages
+
 COPY --from=get /tmp/seafile-server-${SEAFILE_VERSION} /opt/seafile/seafile-server-${SEAFILE_VERSION}
 
 COPY scripts /scripts
