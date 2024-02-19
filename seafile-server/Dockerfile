@@ -27,7 +27,7 @@ colorlog==6.8.2 \
 pymysql==1.1.0 \
 jinja2==3.1.3 \
 pycryptodome==3.20.0 \
-lxml==4.9.4 \
+lxml==5.1.0 \
 python-ldap==3.4.4
 
 RUN find /pip-deps -name "__pycache__" -type d -exec rm -r {} + && \
