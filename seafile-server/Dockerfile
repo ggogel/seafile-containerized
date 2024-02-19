@@ -19,7 +19,7 @@ python3-pip \
 
 RUN pip3 install --target /pip-deps --timeout=3600 --no-cache-dir \
 sqlalchemy==2.0.27 \
-click==8.0.3 \
+click==8.1.7 \
 termcolor==1.1.0 \
 colorlog==6.6.0 \
 pymysql==1.0.2 \
