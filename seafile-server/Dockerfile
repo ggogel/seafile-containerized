@@ -22,7 +22,7 @@ sqlalchemy==2.0.27 \
 click==8.0.3 \
 termcolor==1.1.0 \
 colorlog==6.6.0 \
-pymysql==1.0.2 \
+pymysql==1.1.0 \
 jinja2==3.0.3 \
 pycryptodome==3.11.0 \
 lxml==4.8.0 \
