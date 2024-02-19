@@ -40,7 +40,7 @@ django==3.2.24 \
 django-pylibmc==0.6.1 \
 django-simple-captcha==0.5.20 \
 pycryptodome==3.20.0 \
-djangosaml2==1.5.8 \
+djangosaml2==1.9.2 \
 python-ldap==3.4.4 \
 sqlalchemy==2.0.27
 
