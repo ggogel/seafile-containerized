@@ -18,7 +18,7 @@ python3-pip \
 && rm -rf /var/lib/apt/lists/*
 
 RUN pip3 install --target /pip-deps --timeout=3600 --no-cache-dir \
-sqlalchemy==2.0.*
+sqlalchemy==2.0.27
 
 RUN find /pip-deps -name "__pycache__" -type d -exec rm -r {} + && \
     rm -rf /pip-deps/pip /pip-deps/wheel /pip-deps/setuptools

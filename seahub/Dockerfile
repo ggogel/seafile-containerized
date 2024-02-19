@@ -31,18 +31,18 @@ python3-dev
 
 RUN python3 -m pip install --upgrade pip &&\
 pip3 install --target /pip-deps --timeout=3600 --no-cache-dir  \
-future==0.18.* \
-pillow==10.0.* \
+future==0.18.3 \
+pillow==10.0.1 \
 captcha==0.4 \
-pyjwt==2.6.* \
-mysqlclient==2.1.* \
-django==3.2.* \
-django-pylibmc \
-django-simple-captcha==0.5.* \
-pycryptodome==3.18.* \
-djangosaml2==1.5.* \
-python-ldap==3.4.* \
-sqlalchemy==2.0.*
+pyjwt==2.6.0 \
+mysqlclient==2.1.1 \
+django==3.2.24 \
+django-pylibmc==0.6.1 \
+django-simple-captcha==0.5.20 \
+pycryptodome==3.18.0 \
+djangosaml2==1.5.8 \
+python-ldap==3.4.4 \
+sqlalchemy==2.0.27
 
 RUN find /pip-deps -name "__pycache__" -type d -exec rm -r {} + && \
     rm -rf /pip-deps/pip /pip-deps/wheel /pip-deps/setuptools
