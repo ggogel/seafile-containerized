@@ -24,5 +24,8 @@
       "datasourceTemplate": "github-releases",
       "extractVersionTemplate": "^v(?<version>.*)-server$"
     }
-  ]
+  ],
+  "pip_requirements": {
+    "fileMatch": [".*Dockerfile$"]
+  }
 }
