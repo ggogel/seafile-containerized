@@ -26,7 +26,7 @@ pymysql==1.0.2 \
 jinja2==3.0.3 \
 pycryptodome==3.11.0 \
 lxml==4.8.0 \
-python-ldap==3.2.0
+python-ldap==3.4.4
 
 RUN find /pip-deps -name "__pycache__" -type d -exec rm -r {} + && \
     rm -rf /pip-deps/pip /pip-deps/wheel /pip-deps/setuptools
