@@ -18,7 +18,15 @@ python3-pip \
 && rm -rf /var/lib/apt/lists/*
 
 RUN pip3 install --target /pip-deps --timeout=3600 --no-cache-dir \
-sqlalchemy==2.0.27
+sqlalchemy==2.0.27 \
+click==8.0.3 \
+termcolor==1.1.0 \
+colorlog==6.6.0 \
+pymysql==1.0.2 \
+jinja2==3.0.3 \
+pycryptodome==3.11.0 \
+lxml==4.8.0 \
+python-ldap==3.2.0
 
 RUN find /pip-deps -name "__pycache__" -type d -exec rm -r {} + && \
     rm -rf /pip-deps/pip /pip-deps/wheel /pip-deps/setuptools
@@ -39,14 +47,6 @@ libmariadb-dev \
 ldap-utils \
 ca-certificates \
 python3 \
-python3-click \
-python3-termcolor \
-python3-colorlog \
-python3-pymysql \
-python3-jinja2 \
-python3-pycryptodome \
-python3-lxml \
-python3-ldap \
 && rm -rf /var/lib/apt/lists/*
 
 RUN cp -r  /usr/lib/python3/dist-packages/Cryptodome /usr/lib/python3/dist-packages/Crypto
