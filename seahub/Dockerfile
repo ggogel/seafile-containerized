@@ -31,7 +31,7 @@ python3-dev
 
 RUN python3 -m pip install --upgrade pip &&\
 pip3 install --target /pip-deps --timeout=3600 --no-cache-dir  \
-future==0.18.3 \
+future==1.0.0 \
 pillow==10.2.0 \
 captcha==0.5.0 \
 pyjwt==2.8.0 \
