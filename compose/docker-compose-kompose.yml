@@ -44,7 +44,7 @@ services:
     restart: always
   
   seahub-media:
-    image: ggogel/seahub-media:11.0.5
+    image: ggogel/seahub-media:11.0.6
     volumes:
      - seahub-avatars:/usr/share/caddy/media/avatars
      - seahub-custom:/usr/share/caddy/media/custom

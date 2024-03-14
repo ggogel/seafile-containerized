@@ -26,7 +26,7 @@ spec:
         io.kompose.service: seahub-media
     spec:
       containers:
-        - image: ggogel/seahub-media:11.0.5
+        - image: ggogel/seahub-media:11.0.6
           name: seahub-media
           ports:
             - containerPort: 80
