@@ -23,7 +23,7 @@
       "fileMatch": [".*Dockerfile$"],
       "matchStrings": ["ENV SEAFILE_VERSION=(?<currentValue>.*?)\\n"],
       "depNameTemplate": "haiwen/seahub",
-      "datasourceTemplate": "github-releases",
+      "datasourceTemplate": "github-tags",
       "extractVersionTemplate": "^v(?<version>.*)-server$"
     }
   ],
