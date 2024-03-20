@@ -12,7 +12,7 @@ RUN sed -i "s@.*INNER_FILE_SERVER_ROOT.*@INNER_FILE_SERVER_ROOT = os.environ.get
 
 RUN sed -i '/warning_if_seafile_not_running;/d' /tmp/seafile-server-${SEAFILE_VERSION}/seahub.sh
 
-FROM python:3.10.13-alpine3.18 AS pip
+FROM python:3.10.14-alpine3.18 AS pip
 
 RUN apk add --no-cache \
 mariadb-dev \
@@ -47,7 +47,7 @@ sqlalchemy==2.0.28
 RUN find /pip-deps -name "__pycache__" -type d -exec rm -r {} + && \
     rm -rf /pip-deps/pip /pip-deps/wheel /pip-deps/setuptools
 
-FROM python:3.10.13-alpine3.18
+FROM python:3.10.14-alpine3.18
 
 RUN apk add --no-cache \
 bash \
