@@ -2,7 +2,7 @@ FROM alpine:3.18.6 AS get
 
 RUN apk add --no-cache wget
 
-ENV SEAFILE_VERSION=11.0.7
+ENV SEAFILE_VERSION=11.0.6
 
 RUN cd /tmp && \
     wget https://download.seadrive.org/seafile-server_${SEAFILE_VERSION}_x86-64.tar.gz?nocache=$(date +%s) -O seafile-server_${SEAFILE_VERSION}_x86-64.tar.gz && \
@@ -35,7 +35,7 @@ RUN find /pip-deps -name "__pycache__" -type d -exec rm -r {} + && \
 
 FROM ubuntu:jammy@sha256:193c13d13beb11bedfc07587d208f880bce5535dc5f5cbb277e22a3847cc84a8
 
-ENV SEAFILE_VERSION=11.0.7
+ENV SEAFILE_VERSION=11.0.6
 
 RUN apt-get update && \
 DEBIAN_FRONTEND=noninteractive apt-get install -y \
