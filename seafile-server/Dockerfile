@@ -9,7 +9,7 @@ RUN cd /tmp && \
     tar -zxvf seafile-server_${SEAFILE_VERSION}_x86-64.tar.gz && \
     rm -f seafile-server_${SEAFILE_VERSION}_x86-64.tar.gz
 
-FROM ubuntu:jammy@sha256:77906da86b60585ce12215807090eb327e7386c8fafb5402369e421f44eff17e AS pip
+FROM ubuntu:jammy@sha256:193c13d13beb11bedfc07587d208f880bce5535dc5f5cbb277e22a3847cc84a8 AS pip
 
 RUN apt-get update && \
 DEBIAN_FRONTEND=noninteractive apt-get install -y \
@@ -33,7 +33,7 @@ python-ldap==3.4.4
 RUN find /pip-deps -name "__pycache__" -type d -exec rm -r {} + && \
     rm -rf /pip-deps/pip /pip-deps/wheel /pip-deps/setuptools
 
-FROM ubuntu:jammy@sha256:77906da86b60585ce12215807090eb327e7386c8fafb5402369e421f44eff17e
+FROM ubuntu:jammy@sha256:193c13d13beb11bedfc07587d208f880bce5535dc5f5cbb277e22a3847cc84a8
 
 ENV SEAFILE_VERSION=11.0.6
 
