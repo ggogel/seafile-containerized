@@ -18,7 +18,7 @@ services:
       endpoint_mode: dnsrr
 
   seahub:
-    image: ggogel/seahub:11.0.7
+    image: ggogel/seahub:11.0.8
     volumes:
       - seafile-data:/shared
       - seahub-avatars:/shared/seafile/seahub-data/avatars
