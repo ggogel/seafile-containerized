@@ -42,7 +42,7 @@ django-simple-captcha==0.6.0 \
 pycryptodome==3.20.0 \
 djangosaml2==1.9.2 \
 python-ldap==3.4.4 \
-sqlalchemy==2.0.29
+sqlalchemy==2.0.30
 
 RUN find /pip-deps -name "__pycache__" -type d -exec rm -r {} + && \
     rm -rf /pip-deps/pip /pip-deps/wheel /pip-deps/setuptools
