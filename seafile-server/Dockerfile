@@ -25,7 +25,7 @@ click==8.1.7 \
 termcolor==2.4.0 \
 colorlog==6.8.2 \
 pymysql==1.1.0 \
-jinja2==3.1.3 \
+jinja2==3.1.4 \
 pycryptodome==3.20.0 \
 lxml==5.2.1 \
 python-ldap==3.4.4
