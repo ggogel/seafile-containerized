@@ -79,7 +79,7 @@ services:
     restart: always
 
   memcached:
-    image: memcached:1.6.26
+    image: memcached:1.6.27
     entrypoint: memcached -m 1024
     networks:
       - seafile-net
