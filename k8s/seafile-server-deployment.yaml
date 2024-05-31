@@ -43,7 +43,7 @@ spec:
               value: seafile.mydomain.com
             - name: TIME_ZONE
               value: Europe/Berlin
-          image: ggogel/seafile-server:11.0.8
+          image: ggogel/seafile-server:11.0.9
           name: seafile-server
           ports:
             - containerPort: 8001
