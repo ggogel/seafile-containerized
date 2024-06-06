@@ -170,5 +170,6 @@ Networks:
     ```
 ## Advanced Configuration and Troubleshooting
 
-For advanced configuration and troubleshooting see the [Wiki](https://github.com/ggogel/seafile-containerized/wiki).
+For advanced configuration and troubleshooting see the [Wiki](https://github.com/ggogel/seafile-containerized/wiki). If you encounter a bug or have a feature request, please feel free to open an issue.
 
+This project supports only Compose Specification-compatible tools such as `docker compose`, `podman compose`, and `nerdctl compose`, as well as Kubernetes. Deployment methods that do not fully comply with these standards, such as `podman quadlet` or `podman play`, are not supported. Currently, these tools run all containers in the same pod, which creates an entirely different networking structure. Please avoid opening issues related to them.
