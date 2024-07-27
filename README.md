@@ -168,6 +168,13 @@ Networks:
     ```
     docker stack deploy -c docker-compose.yml seafile
     ```
+## FAQ
+
+1. ***Seafile can't connect to LDAP, OAuth, SMTP, or other external services using the Docker Compose deployment.***
+   
+    All services are connected to `seafile-net`, which is defined as `internal` network by default, blocking all connectivity with endpoints outside of this network. See this [Wiki article](https://github.com/ggogel/seafile-containerized/wiki/LDAP) for a solution.
+    
+
 ## Advanced Configuration and Troubleshooting
 
 For advanced configuration and troubleshooting see the [Wiki](https://github.com/ggogel/seafile-containerized/wiki). If you encounter a bug or have a feature request, please feel free to open an issue.
