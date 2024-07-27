@@ -1,8 +1,6 @@
 name: Automatic Release
 
 on:
-  schedule:
-    - cron: '0 0 * * *'  # Scheduled to run every day at midnight
   workflow_dispatch: {}
 
 jobs:
