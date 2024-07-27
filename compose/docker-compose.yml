@@ -74,7 +74,7 @@ services:
     restart: unless-stopped
 
   seafile-caddy:
-    image: ggogel/seafile-caddy:2.7.6
+    image: ggogel/seafile-caddy:2.8.4
     ports:
       - "80:80" # Point your reverse proxy to port 80 of this service
     networks:
