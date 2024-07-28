@@ -1,4 +1,3 @@
-# syntax=docker/dockerfile:1.7-labs
 FROM alpine:3.20.2 AS get
 
 RUN apk add --no-cache wget
@@ -9,6 +8,14 @@ RUN cd /tmp && \
     wget https://download.seadrive.org/seafile-server_${SEAFILE_VERSION}_x86-64.tar.gz?nocache=$(date +%s) -O seafile-server_${SEAFILE_VERSION}_x86-64.tar.gz && \
     tar -zxvf seafile-server_${SEAFILE_VERSION}_x86-64.tar.gz && \
     rm -f seafile-server_${SEAFILE_VERSION}_x86-64.tar.gz
+
+FROM alpine:3.20.2 AS clean
+
+ENV SEAFILE_VERSION=11.0.9
+
+COPY --from=get /tmp/seafile-server-${SEAFILE_VERSION} /tmp/seafile-server-${SEAFILE_VERSION}
+
+RUN rm -rf /tmp/seafile-server-${SEAFILE_VERSION}/seahub
 
 FROM ubuntu:jammy@sha256:340d9b015b194dc6e2a13938944e0d016e57b9679963fdeb9ce021daac430221 AS pip
 
@@ -57,7 +64,7 @@ python3 \
 
 COPY --from=pip /pip-deps /usr/local/lib/python3.10/dist-packages
 
-COPY --from=get --exclude=/tmp/seafile-server-${SEAFILE_VERSION}/seahub /tmp/seafile-server-${SEAFILE_VERSION} /opt/seafile/seafile-server-${SEAFILE_VERSION}
+COPY --from=clean /tmp/seafile-server-${SEAFILE_VERSION} /opt/seafile/seafile-server-${SEAFILE_VERSION}
 COPY --from=get /tmp/seafile-server-${SEAFILE_VERSION}/seahub/thirdpart/seafobj /opt/seafile/seafile-server-${SEAFILE_VERSION}/seahub/thirdpart/seafobj
 COPY --from=get /tmp/seafile-server-${SEAFILE_VERSION}/seahub/scripts /opt/seafile/seafile-server-${SEAFILE_VERSION}/seahub/thirdpart/scripts
 COPY --from=get /tmp/seafile-server-${SEAFILE_VERSION}/seahub/media/avatars /opt/seafile/seafile-server-${SEAFILE_VERSION}/seahub/media/avatars
