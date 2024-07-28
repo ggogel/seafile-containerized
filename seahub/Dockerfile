@@ -59,7 +59,7 @@ sqlalchemy==2.0.31 \
 django-statici18n==2.5.0 \
 django_webpack_loader==3.1.0 \
 django_picklefield==3.2 \
-django_formtools==2.4.1 \
+django_formtools==2.5.1 \
 djangorestframework==3.15.2 \
 python-dateutil==2.9.0.post0 \
 python-cas==1.6.0 \
