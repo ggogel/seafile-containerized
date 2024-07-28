@@ -68,6 +68,7 @@ COPY --from=clean /tmp/seafile-server-${SEAFILE_VERSION} /opt/seafile/seafile-se
 COPY --from=get /tmp/seafile-server-${SEAFILE_VERSION}/seahub/thirdpart/seafobj /opt/seafile/seafile-server-${SEAFILE_VERSION}/seahub/thirdpart/seafobj
 COPY --from=get /tmp/seafile-server-${SEAFILE_VERSION}/seahub/scripts /opt/seafile/seafile-server-${SEAFILE_VERSION}/seahub/thirdpart/scripts
 COPY --from=get /tmp/seafile-server-${SEAFILE_VERSION}/seahub/media/avatars /opt/seafile/seafile-server-${SEAFILE_VERSION}/seahub/media/avatars
+COPY --from=get /tmp/seafile-server-${SEAFILE_VERSION}/seahub/seahub/settings.py /opt/seafile/seafile-server-${SEAFILE_VERSION}/seahub/seahub/settings.py
 
 COPY scripts /scripts
 RUN chmod u+x /scripts/*
