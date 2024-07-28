@@ -12,6 +12,14 @@ RUN sed -i "s@.*INNER_FILE_SERVER_ROOT.*@INNER_FILE_SERVER_ROOT = os.environ.get
 
 RUN sed -i '/warning_if_seafile_not_running;/d' /tmp/seafile-server-${SEAFILE_VERSION}/seahub.sh
 
+FROM alpine:3.20.2 AS clean
+
+ENV SEAFILE_VERSION=11.0.9
+
+COPY --from=get /tmp/seafile-server-${SEAFILE_VERSION} /tmp/seafile-server-${SEAFILE_VERSION}
+
+RUN rm -rf /tmp/seafile-server-${SEAFILE_VERSION}/seahub/thirdpart
+
 FROM python:3.10.14-alpine3.20 AS pip
 
 RUN apk add --no-cache \
@@ -66,12 +74,14 @@ gcompat \
 openldap
 
 COPY --from=pip /pip-deps /usr/local/lib/python3.10/site-packages
-COPY --from=get /tmp/seafile-server*/seahub /opt/seafile/seafile-server-latest/seahub
-COPY --from=get /tmp/seafile-server*/runtime /opt/seafile/seafile-server-latest/runtime
-COPY --from=get /tmp/seafile-server*/seahub.sh /opt/seafile/seafile-server-latest/seahub.sh
-COPY --from=get /tmp/seafile-server*/check_init_admin.py /opt/seafile/seafile-server-latest/check_init_admin.py
-COPY --from=get /tmp/seafile-server*/seafile/lib/python3/site-packages /opt/seafile/seafile-server-latest/seafile/lib/python3/site-packages
-COPY --from=get /tmp/seafile-server*/pro/python/seafevents /opt/seafile/seafile-server-latest/pro/python/seafevents
+COPY --from=clean /tmp/seafile-server*/seahub /opt/seafile/seafile-server-latest/seahub
+COPY --from=clean /tmp/seafile-server*/runtime /opt/seafile/seafile-server-latest/runtime
+COPY --from=clean /tmp/seafile-server*/seahub.sh /opt/seafile/seafile-server-latest/seahub.sh
+COPY --from=clean /tmp/seafile-server*/check_init_admin.py /opt/seafile/seafile-server-latest/check_init_admin.py
+COPY --from=clean /tmp/seafile-server*/seafile/lib/python3/site-packages /opt/seafile/seafile-server-latest/seafile/lib/python3/site-packages
+COPY --from=clean /tmp/seafile-server*/pro/python/seafevents /opt/seafile/seafile-server-latest/pro/python/seafevents
+COPY --from=get /tmp/seafile-server*/seahub/thirdpart/bin /opt/seafile/seafile-server-latest/seahub/thirdpart/bin
+COPY --from=get /tmp/seafile-server*/seahub/thirdpart/gunicorn /opt/seafile/seafile-server-latest/seahub/thirdpart/gunicorn
 
 COPY scripts /scripts
 RUN chmod u+x /scripts/*
