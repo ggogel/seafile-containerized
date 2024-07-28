@@ -1,12 +1,16 @@
-FROM alpine:3.20.2 AS get
+FROM ubuntu:jammy@sha256:340d9b015b194dc6e2a13938944e0d016e57b9679963fdeb9ce021daac430221 AS build
+
+RUN apt-get update && \
+DEBIAN_FRONTEND=noninteractive apt-get install -y \ 
+wget
+
 ENV SEAFILE_VERSION=11.0.9
 
-RUN apk add --no-cache wget
-
-RUN cd /tmp && \
-    wget https://download.seadrive.org/seafile-server_${SEAFILE_VERSION}_x86-64.tar.gz?nocache=$(date +%s) -O seafile-server_${SEAFILE_VERSION}_x86-64.tar.gz && \
-    tar -zxvf seafile-server_${SEAFILE_VERSION}_x86-64.tar.gz && \
-    rm -f seafile-server_${SEAFILE_VERSION}_x86-64.tar.gz
+WORKDIR /tmp
+RUN wget https://raw.githubusercontent.com/haiwen/seafile-docker/master/build/seafile-build.sh
+RUN wget https://raw.githubusercontent.com/haiwen/seafile-docker/master/build/seafile-build.py
+RUN chmod +x ./seafile-build.sh
+RUN ./seafile-build.sh ${SEAFILE_VERSION}
 
 RUN sed -i "s@.*INNER_FILE_SERVER_ROOT.*@INNER_FILE_SERVER_ROOT = os.environ.get('INNER_FILE_SERVER_ROOT')@" /tmp/seafile-server-${SEAFILE_VERSION}/seahub/seahub/settings.py
 
@@ -66,12 +70,12 @@ gcompat \
 openldap
 
 COPY --from=pip /pip-deps /usr/local/lib/python3.10/site-packages
-COPY --from=get /tmp/seafile-server*/seahub /opt/seafile/seafile-server-latest/seahub
-COPY --from=get /tmp/seafile-server*/runtime /opt/seafile/seafile-server-latest/runtime
-COPY --from=get /tmp/seafile-server*/seahub.sh /opt/seafile/seafile-server-latest/seahub.sh
-COPY --from=get /tmp/seafile-server*/check_init_admin.py /opt/seafile/seafile-server-latest/check_init_admin.py
-COPY --from=get /tmp/seafile-server*/seafile/lib/python3/site-packages /opt/seafile/seafile-server-latest/seafile/lib/python3/site-packages
-COPY --from=get /tmp/seafile-server*/pro/python/seafevents /opt/seafile/seafile-server-latest/pro/python/seafevents
+COPY --from=build /tmp/seafile-server*/seahub /opt/seafile/seafile-server-latest/seahub
+COPY --from=build /tmp/seafile-server*/runtime /opt/seafile/seafile-server-latest/runtime
+COPY --from=build /tmp/seafile-server*/seahub.sh /opt/seafile/seafile-server-latest/seahub.sh
+COPY --from=build /tmp/seafile-server*/check_init_admin.py /opt/seafile/seafile-server-latest/check_init_admin.py
+COPY --from=build /tmp/seafile-server*/seafile/lib/python3/site-packages /opt/seafile/seafile-server-latest/seafile/lib/python3/site-packages
+COPY --from=build /tmp/seafile-server*/pro/python/seafevents /opt/seafile/seafile-server-latest/pro/python/seafevents
 
 COPY scripts /scripts
 RUN chmod u+x /scripts/*

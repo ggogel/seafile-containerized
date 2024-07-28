@@ -1,19 +1,22 @@
-FROM alpine:3.20.2 AS get
+FROM ubuntu:jammy@sha256:340d9b015b194dc6e2a13938944e0d016e57b9679963fdeb9ce021daac430221 AS build
 
-RUN apk add --no-cache wget
+RUN apt-get update && \
+DEBIAN_FRONTEND=noninteractive apt-get install -y \ 
+wget
 
 ENV SEAFILE_VERSION=11.0.9
 
-RUN cd /tmp && \
-    wget https://download.seadrive.org/seafile-server_${SEAFILE_VERSION}_x86-64.tar.gz?nocache=$(date +%s) -O seafile-server_${SEAFILE_VERSION}_x86-64.tar.gz && \
-    tar -zxvf seafile-server_${SEAFILE_VERSION}_x86-64.tar.gz && \
-    rm -f seafile-server_${SEAFILE_VERSION}_x86-64.tar.gz
+WORKDIR /tmp
+RUN wget https://raw.githubusercontent.com/haiwen/seafile-docker/master/build/seafile-build.sh
+RUN wget https://raw.githubusercontent.com/haiwen/seafile-docker/master/build/seafile-build.py
+RUN chmod +x ./seafile-build.sh
+RUN ./seafile-build.sh ${SEAFILE_VERSION}
 
 FROM alpine:3.20.2 AS clean
 
 ENV SEAFILE_VERSION=11.0.9
 
-COPY --from=get /tmp/seafile-server-${SEAFILE_VERSION} /tmp/seafile-server-${SEAFILE_VERSION}
+COPY --from=build /tmp/seafile-server-${SEAFILE_VERSION} /tmp/seafile-server-${SEAFILE_VERSION}
 
 RUN rm -rf /tmp/seafile-server-${SEAFILE_VERSION}/seahub
 
@@ -65,10 +68,10 @@ python3 \
 COPY --from=pip /pip-deps /usr/local/lib/python3.10/dist-packages
 
 COPY --from=clean /tmp/seafile-server-${SEAFILE_VERSION} /opt/seafile/seafile-server-${SEAFILE_VERSION}
-COPY --from=get /tmp/seafile-server-${SEAFILE_VERSION}/seahub/thirdpart/seafobj /opt/seafile/seafile-server-${SEAFILE_VERSION}/seahub/thirdpart/seafobj
-COPY --from=get /tmp/seafile-server-${SEAFILE_VERSION}/seahub/scripts /opt/seafile/seafile-server-${SEAFILE_VERSION}/seahub/thirdpart/scripts
-COPY --from=get /tmp/seafile-server-${SEAFILE_VERSION}/seahub/media/avatars /opt/seafile/seafile-server-${SEAFILE_VERSION}/seahub/media/avatars
-COPY --from=get /tmp/seafile-server-${SEAFILE_VERSION}/seahub/seahub/settings.py /opt/seafile/seafile-server-${SEAFILE_VERSION}/seahub/seahub/settings.py
+COPY --from=build /tmp/seafile-server-${SEAFILE_VERSION}/seahub/thirdpart/seafobj /opt/seafile/seafile-server-${SEAFILE_VERSION}/seahub/thirdpart/seafobj
+COPY --from=build /tmp/seafile-server-${SEAFILE_VERSION}/seahub/scripts /opt/seafile/seafile-server-${SEAFILE_VERSION}/seahub/thirdpart/scripts
+COPY --from=build /tmp/seafile-server-${SEAFILE_VERSION}/seahub/media/avatars /opt/seafile/seafile-server-${SEAFILE_VERSION}/seahub/media/avatars
+COPY --from=build /tmp/seafile-server-${SEAFILE_VERSION}/seahub/seahub/settings.py /opt/seafile/seafile-server-${SEAFILE_VERSION}/seahub/seahub/settings.py
 
 COPY scripts /scripts
 RUN chmod u+x /scripts/*
