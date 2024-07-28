@@ -1,3 +1,4 @@
+# syntax=docker/dockerfile:1.7-labs
 FROM alpine:3.20.2 AS get
 
 RUN apk add --no-cache wget
@@ -56,7 +57,10 @@ python3 \
 
 COPY --from=pip /pip-deps /usr/local/lib/python3.10/dist-packages
 
-COPY --from=get /tmp/seafile-server-${SEAFILE_VERSION} /opt/seafile/seafile-server-${SEAFILE_VERSION}
+COPY --from=get --exclude=/tmp/seafile-server-${SEAFILE_VERSION}/seahub /tmp/seafile-server-${SEAFILE_VERSION} /opt/seafile/seafile-server-${SEAFILE_VERSION}
+COPY --from=get /tmp/seafile-server-${SEAFILE_VERSION}/seahub/thirdpart/seafobj /opt/seafile/seafile-server-${SEAFILE_VERSION}/seahub/thirdpart/seafobj
+COPY --from=get /tmp/seafile-server-${SEAFILE_VERSION}/seahub/scripts /opt/seafile/seafile-server-${SEAFILE_VERSION}/seahub/thirdpart/scripts
+COPY --from=get /tmp/seafile-server-${SEAFILE_VERSION}/seahub/media/avatars /opt/seafile/seafile-server-${SEAFILE_VERSION}/seahub/media/avatars
 
 COPY scripts /scripts
 RUN chmod u+x /scripts/*
