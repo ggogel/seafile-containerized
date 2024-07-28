@@ -9,7 +9,7 @@ services:
       - DB_ROOT_PASSWD=db_dev
       - TIME_ZONE=Europe/Berlin
       - HTTPS=false
-      - SEAFILE_URL=localhost
+      - SEAFILE_URL=localhost:8080
     networks:
       - seafile-net
     depends_on:
