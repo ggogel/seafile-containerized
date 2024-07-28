@@ -1,4 +1,4 @@
-# syntax=docker/dockerfile:1.7-labs
+# syntax=docker/dockerfile:1.9-labs
 FROM alpine:3.20.2 AS get
 
 RUN apk add --no-cache wget
