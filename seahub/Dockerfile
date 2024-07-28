@@ -16,6 +16,14 @@ RUN sed -i "s@.*INNER_FILE_SERVER_ROOT.*@INNER_FILE_SERVER_ROOT = os.environ.get
 
 RUN sed -i '/warning_if_seafile_not_running;/d' /tmp/seafile-server-${SEAFILE_VERSION}/seahub.sh
 
+FROM alpine:3.20.2 AS clean
+
+ENV SEAFILE_VERSION=11.0.9
+
+COPY --from=build /tmp/seafile-server-${SEAFILE_VERSION} /tmp/seafile-server-${SEAFILE_VERSION}
+
+RUN rm -rf /tmp/seafile-server-${SEAFILE_VERSION}/seahub/thirdpart
+
 FROM python:3.10.14-alpine3.20 AS pip
 
 RUN apk add --no-cache \
@@ -46,7 +54,24 @@ django-simple-captcha==0.6.0 \
 pycryptodome==3.20.0 \
 djangosaml2==1.9.3 \
 python-ldap==3.4.4 \
-sqlalchemy==2.0.31
+sqlalchemy==2.0.31 \
+django-statici18n==2.3.* \
+django_webpack_loader==1.7.* \
+django_picklefield==3.1 \
+django_formtools==2.4 \
+djangorestframework==3.14.* \
+python-dateutil==2.8.* \
+python-cas==1.6.* \
+requests==2.31.* \
+requests_oauthlib==1.3.* \
+qrcode==7.3.* \
+chardet==5.1.* \
+openpyxl==3.0.* \
+Markdown==3.4.* \
+bleach==5.0.* \
+pypinyin==0.50.* \
+PyMuPDF==1.24.* \
+pymysql==1.1.1
 
 RUN find /pip-deps -name "__pycache__" -type d -exec rm -r {} + && \
     rm -rf /pip-deps/pip /pip-deps/wheel /pip-deps/setuptools
@@ -70,12 +95,18 @@ gcompat \
 openldap
 
 COPY --from=pip /pip-deps /usr/local/lib/python3.10/site-packages
-COPY --from=build /tmp/seafile-server*/seahub /opt/seafile/seafile-server-latest/seahub
-COPY --from=build /tmp/seafile-server*/runtime /opt/seafile/seafile-server-latest/runtime
-COPY --from=build /tmp/seafile-server*/seahub.sh /opt/seafile/seafile-server-latest/seahub.sh
-COPY --from=build /tmp/seafile-server*/check_init_admin.py /opt/seafile/seafile-server-latest/check_init_admin.py
-COPY --from=build /tmp/seafile-server*/seafile/lib/python3/site-packages /opt/seafile/seafile-server-latest/seafile/lib/python3/site-packages
-COPY --from=build /tmp/seafile-server*/pro/python/seafevents /opt/seafile/seafile-server-latest/pro/python/seafevents
+COPY --from=clean /tmp/seafile-server*/seahub /opt/seafile/seafile-server-latest/seahub
+COPY --from=clean /tmp/seafile-server*/runtime /opt/seafile/seafile-server-latest/runtime
+COPY --from=clean /tmp/seafile-server*/seahub.sh /opt/seafile/seafile-server-latest/seahub.sh
+COPY --from=clean /tmp/seafile-server*/check_init_admin.py /opt/seafile/seafile-server-latest/check_init_admin.py
+COPY --from=clean /tmp/seafile-server*/seafile/lib/python3/site-packages /opt/seafile/seafile-server-latest/seafile/lib/python3/site-packages
+COPY --from=clean /tmp/seafile-server*/pro/python/seafevents /opt/seafile/seafile-server-latest/pro/python/seafevents
+COPY --from=build /tmp/seafile-server*/seahub/thirdpart/bin /opt/seafile/seafile-server-latest/seahub/thirdpart/bin
+COPY --from=build /tmp/seafile-server*/seahub/thirdpart/gunicorn /opt/seafile/seafile-server-latest/seahub/thirdpart/gunicorn 
+COPY --from=build /tmp/seafile-server*/seahub/thirdpart/registration /opt/seafile/seafile-server-latest/seahub/thirdpart/registration
+COPY --from=build /tmp/seafile-server*/seahub/thirdpart/constance /opt/seafile/seafile-server-latest/seahub/thirdpart/constance
+COPY --from=build /tmp/seafile-server*/seahub/thirdpart/termsandconditions /opt/seafile/seafile-server-latest/seahub/thirdpart/termsandconditions
+COPY --from=build /tmp/seafile-server*/seahub/thirdpart/seafobj /opt/seafile/seafile-server-latest/seahub/thirdpart/seafobj
 
 COPY scripts /scripts
 RUN chmod u+x /scripts/*
