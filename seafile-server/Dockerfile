@@ -1,8 +1,8 @@
 FROM ubuntu:jammy@sha256:340d9b015b194dc6e2a13938944e0d016e57b9679963fdeb9ce021daac430221 AS build
 
 RUN apt-get update && \
-DEBIAN_FRONTEND=noninteractive apt-get install -y \ 
-wget
+    apt-get install -y software-properties-common wget && \
+    add-apt-repository ppa:longsleep/golang-backports
 
 ENV SEAFILE_VERSION=11.0.9
 
