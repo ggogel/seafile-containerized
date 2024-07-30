@@ -38,7 +38,7 @@ jobs:
         if [[ "$PREVIOUS_VERSION" != "$CURRENT_VERSION" ]] || [[ -z "$LATEST_TAG" ]]; then
           NEXT_BUILD="001"
         else
-          NEXT_BUILD=$(printf "%03d" $((PREVIOUS_BUILD + 1)))
+          NEXT_BUILD=$(printf "%03d" $((10#$PREVIOUS_BUILD + 1)))
         fi
         echo "NEXT_BUILD=$NEXT_BUILD" >> $GITHUB_ENV
 
