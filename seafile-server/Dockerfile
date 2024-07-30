@@ -70,6 +70,7 @@ COPY --from=pip /pip-deps /usr/local/lib/python3.10/dist-packages
 COPY --from=clean /tmp/seafile-server-${SEAFILE_VERSION} /opt/seafile/seafile-server-${SEAFILE_VERSION}
 COPY --from=build /tmp/seafile-server-${SEAFILE_VERSION}/seahub/thirdpart/seafobj /opt/seafile/seafile-server-${SEAFILE_VERSION}/seahub/thirdpart/seafobj
 COPY --from=build /tmp/seafile-server-${SEAFILE_VERSION}/seahub/scripts /opt/seafile/seafile-server-${SEAFILE_VERSION}/seahub/scripts
+COPY --from=build /tmp/seafile-server-${SEAFILE_VERSION}/seahub/tools /opt/seafile/seafile-server-${SEAFILE_VERSION}/seahub/tools
 COPY --from=build /tmp/seafile-server-${SEAFILE_VERSION}/seahub/media/avatars /opt/seafile/seafile-server-${SEAFILE_VERSION}/seahub/media/avatars
 COPY --from=build /tmp/seafile-server-${SEAFILE_VERSION}/seahub/seahub/settings.py /opt/seafile/seafile-server-${SEAFILE_VERSION}/seahub/seahub/settings.py
 
