@@ -71,6 +71,7 @@ COPY --from=clean /tmp/seafile-server-${SEAFILE_VERSION} /opt/seafile/seafile-se
 COPY --from=build /tmp/seafile-server-${SEAFILE_VERSION}/seahub/thirdpart/seafobj /opt/seafile/seafile-server-${SEAFILE_VERSION}/seahub/thirdpart/seafobj
 COPY --from=build /tmp/seafile-server-${SEAFILE_VERSION}/seahub/scripts /opt/seafile/seafile-server-${SEAFILE_VERSION}/seahub/scripts
 COPY --from=build /tmp/seafile-server-${SEAFILE_VERSION}/seahub/tools /opt/seafile/seafile-server-${SEAFILE_VERSION}/seahub/tools
+COPY --from=build /tmp/seafile-server-${SEAFILE_VERSION}/seahub/sql /opt/seafile/seafile-server-${SEAFILE_VERSION}/seahub/sql
 COPY --from=build /tmp/seafile-server-${SEAFILE_VERSION}/seahub/media/avatars /opt/seafile/seafile-server-${SEAFILE_VERSION}/seahub/media/avatars
 COPY --from=build /tmp/seafile-server-${SEAFILE_VERSION}/seahub/seahub/settings.py /opt/seafile/seafile-server-${SEAFILE_VERSION}/seahub/seahub/settings.py
 
