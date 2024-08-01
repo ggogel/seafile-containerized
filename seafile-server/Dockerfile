@@ -39,7 +39,13 @@ pymysql==1.1.1 \
 jinja2==3.1.4 \
 pycryptodome==3.20.0 \
 lxml==5.2.2 \
-python-ldap==3.4.4
+python-ldap==3.4.4 \
+pytz==2024.1 \
+django==4.2.14 \
+requests==2.32.3 \
+PyYAML==6.0.1 \
+defusedxml==0.7.1 \
+json5==0.9.25
 
 RUN find /pip-deps -name "__pycache__" -type d -exec rm -r {} + && \
     rm -rf /pip-deps/pip /pip-deps/wheel /pip-deps/setuptools
@@ -65,7 +71,11 @@ python3 \
 COPY --from=pip /pip-deps /usr/local/lib/python3.10/dist-packages
 
 COPY --from=clean /tmp/seafile-server-${SEAFILE_VERSION} /opt/seafile/seafile-server-${SEAFILE_VERSION}
-COPY --from=build /tmp/seafile-server-${SEAFILE_VERSION}/seahub/thirdpart /opt/seafile/seafile-server-${SEAFILE_VERSION}/seahub/thirdpart
+COPY --from=build /tmp/seafile-server-${SEAFILE_VERSION}/seahub/thirdpart/seafobj /opt/seafile/seafile-server-${SEAFILE_VERSION}/seahub/thirdpart/seafobj
+COPY --from=build /tmp/seafile-server-${SEAFILE_VERSION}/seahub/thirdpart/wsgidav /opt/seafile/seafile-server-${SEAFILE_VERSION}/seahub/thirdpart/wsgidav
+COPY --from=build /tmp/seafile-server-${SEAFILE_VERSION}/seahub/thirdpart/gunicorn /opt/seafile/seafile-server-${SEAFILE_VERSION}/seahub/thirdpart/gunicorn
+COPY --from=build /tmp/seafile-server-${SEAFILE_VERSION}/seahub/thirdpart/pkg_resources /opt/seafile/seafile-server-${SEAFILE_VERSION}/seahub/thirdpart/pkg_resources
+COPY --from=build /tmp/seafile-server-${SEAFILE_VERSION}/seahub/thirdpart/setuptools /opt/seafile/seafile-server-${SEAFILE_VERSION}/seahub/thirdpart/setuptools
 COPY --from=build /tmp/seafile-server-${SEAFILE_VERSION}/seahub/scripts /opt/seafile/seafile-server-${SEAFILE_VERSION}/seahub/scripts
 COPY --from=build /tmp/seafile-server-${SEAFILE_VERSION}/seahub/tools /opt/seafile/seafile-server-${SEAFILE_VERSION}/seahub/tools
 COPY --from=build /tmp/seafile-server-${SEAFILE_VERSION}/seahub/sql /opt/seafile/seafile-server-${SEAFILE_VERSION}/seahub/sql
