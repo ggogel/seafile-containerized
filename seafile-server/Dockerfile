@@ -42,7 +42,7 @@ lxml==5.2.2 \
 python-ldap==3.4.4 \
 pytz==2024.1 \
 django==4.2.14 \
-requests==2.32.3
+requests==2.32.3 
 
 RUN find /pip-deps -name "__pycache__" -type d -exec rm -r {} + && \
     rm -rf /pip-deps/pip /pip-deps/wheel /pip-deps/setuptools
