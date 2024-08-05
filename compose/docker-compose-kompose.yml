@@ -29,7 +29,7 @@ services:
     restart: always
 
   seahub:
-    image: ggogel/seahub:11.0.9
+    image: ggogel/seahub:11.0.10
     volumes:
       - seafile-data:/shared
       - seahub-avatars:/shared/seafile/seahub-data/avatars

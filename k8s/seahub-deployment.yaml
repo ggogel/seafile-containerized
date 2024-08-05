@@ -25,7 +25,7 @@ spec:
               value: me@example.com
             - name: SEAFILE_ADMIN_PASSWORD
               value: asecret
-          image: ggogel/seahub:11.0.9
+          image: ggogel/seahub:11.0.10
           name: seahub
           ports:
             - containerPort: 8000
