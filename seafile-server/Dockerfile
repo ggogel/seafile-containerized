@@ -4,7 +4,7 @@ RUN apt-get update && \
     apt-get install -y software-properties-common wget && \
     add-apt-repository ppa:longsleep/golang-backports
 
-ENV SEAFILE_VERSION=11.0.9
+ENV SEAFILE_VERSION=11.0.10
 
 WORKDIR /tmp
 RUN wget https://raw.githubusercontent.com/haiwen/seafile-docker/master/build/seafile-build.sh
@@ -14,7 +14,7 @@ RUN ./seafile-build.sh ${SEAFILE_VERSION}
 
 FROM alpine:3.20.2 AS clean
 
-ENV SEAFILE_VERSION=11.0.9
+ENV SEAFILE_VERSION=11.0.10
 
 COPY --from=build /tmp/seafile-server-${SEAFILE_VERSION} /tmp/seafile-server-${SEAFILE_VERSION}
 
@@ -52,7 +52,7 @@ RUN find /pip-deps -name "__pycache__" -type d -exec rm -r {} + && \
 
 FROM ubuntu:jammy@sha256:340d9b015b194dc6e2a13938944e0d016e57b9679963fdeb9ce021daac430221
 
-ENV SEAFILE_VERSION=11.0.9
+ENV SEAFILE_VERSION=11.0.10
 
 RUN apt-get update && \
 DEBIAN_FRONTEND=noninteractive apt-get install -y \
