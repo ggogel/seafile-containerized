@@ -23,7 +23,7 @@ services:
     restart: unless-stopped
 
   seahub:
-    image: ggogel/seahub:11.0.10
+    image: ggogel/seahub:11.0.11
     volumes:
       - seafile-data:/shared
       - seahub-avatars:/shared/seafile/seahub-data/avatars
