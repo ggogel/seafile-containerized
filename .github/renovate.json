@@ -3,6 +3,7 @@
   "separateMajorMinor": true,
   "separateMinorPatch": true,
   "separateMultipleMajor": true,
+  "prHourlyLimit": 10,
   "packageRules": [
     {
       "datasources": ["docker"],
