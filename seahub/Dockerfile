@@ -68,7 +68,7 @@ requests_oauthlib==2.0.0 \
 qrcode==7.4.2 \
 chardet==5.2.0 \
 openpyxl==3.1.5 \
-Markdown==3.6 \
+Markdown==3.7 \
 bleach==6.1.0 \
 pypinyin==0.52.0 \
 PyMuPDF==1.24.9 \
