@@ -57,7 +57,7 @@ python-ldap==3.4.4 \
 sqlalchemy==2.0.32 \
 sqlalchemy==2.0.32 \
 django-statici18n==2.5.0 \
-django_webpack_loader==3.1.0 \
+django_webpack_loader==3.1.1 \
 django_picklefield==3.2 \
 django_formtools==2.5.1 \
 djangorestframework==3.15.2 \
