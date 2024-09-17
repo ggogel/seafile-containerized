@@ -41,7 +41,7 @@ pycryptodome==3.20.0 \
 lxml==5.3.0 \
 python-ldap==3.4.4 \
 pytz==2024.2 \
-django==4.2.15 \
+django==4.2.16 \
 requests==2.32.3 \
 PyYAML==6.0.2 \
 defusedxml==0.7.1 \
