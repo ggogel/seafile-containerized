@@ -1,4 +1,4 @@
-FROM ubuntu:jammy@sha256:adbb90115a21969d2fe6fa7f9af4253e16d45f8d4c1e930182610c4731962658 AS build
+FROM ubuntu:jammy@sha256:58b87898e82351c6cf9cf5b9f3c20257bb9e2dcf33af051e12ce532d7f94e3fe AS build
 
 RUN apt-get update && \
     apt-get install -y software-properties-common wget && \
@@ -20,7 +20,7 @@ COPY --from=build /tmp/seafile-server-${SEAFILE_VERSION} /tmp/seafile-server-${S
 
 RUN rm -rf /tmp/seafile-server-${SEAFILE_VERSION}/seahub
 
-FROM ubuntu:jammy@sha256:adbb90115a21969d2fe6fa7f9af4253e16d45f8d4c1e930182610c4731962658 AS pip
+FROM ubuntu:jammy@sha256:58b87898e82351c6cf9cf5b9f3c20257bb9e2dcf33af051e12ce532d7f94e3fe AS pip
 
 RUN apt-get update && \
 DEBIAN_FRONTEND=noninteractive apt-get install -y \
@@ -50,7 +50,7 @@ json5==0.9.25
 RUN find /pip-deps -name "__pycache__" -type d -exec rm -r {} + && \
     rm -rf /pip-deps/pip /pip-deps/wheel /pip-deps/setuptools
 
-FROM ubuntu:jammy@sha256:adbb90115a21969d2fe6fa7f9af4253e16d45f8d4c1e930182610c4731962658
+FROM ubuntu:jammy@sha256:58b87898e82351c6cf9cf5b9f3c20257bb9e2dcf33af051e12ce532d7f94e3fe
 
 ENV SEAFILE_VERSION=11.0.12
 
