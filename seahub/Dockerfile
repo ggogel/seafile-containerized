@@ -65,7 +65,7 @@ python-dateutil==2.9.0.post0 \
 python-cas==1.6.0 \
 requests==2.32.3 \
 requests_oauthlib==2.0.0 \
-qrcode==7.4.2 \
+qrcode==8.0 \
 chardet==5.2.0 \
 openpyxl==3.1.5 \
 Markdown==3.7 \
