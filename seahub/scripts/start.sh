@@ -4,6 +4,30 @@ function init_seahub {
     /scripts/create_data_links.sh
     echo "{ \"email\": \"${SEAFILE_ADMIN_EMAIL}\",\"password\": \"${SEAFILE_ADMIN_PASSWORD}\"}" >/opt/seafile/conf/admin.txt
     sed -i 's@bind =.*@bind = "0.0.0.0:8000"@' /opt/seafile/conf/gunicorn.conf.py
+    /opt/seafile/seafile-server-latest/conf/seahub_settings.py
+}
+
+function init_csrf {
+    CONFIG_FILE="/opt/seafile/conf/seahub_settings.py"
+
+    # Check if CSRF_TRUSTED_ORIGINS is already set
+    if grep -q '^CSRF_TRUSTED_ORIGINS' "$CONFIG_FILE"; then
+        echo "CSRF_TRUSTED_ORIGINS is already set in $CONFIG_FILE"
+        return 0
+    fi
+
+    # Read SERVICE_URL from the config file
+    SERVICE_URL=$(grep '^SERVICE_URL' "$CONFIG_FILE" | sed 's/.*= *"//;s/"//')
+
+    # If SERVICE_URL is empty, exit with error
+    if [ -z "$SERVICE_URL" ]; then
+        echo "SERVICE_URL is not set in $CONFIG_FILE"
+        return 1
+    fi
+
+    # Append CSRF_TRUSTED_ORIGINS line to the config file
+    echo "CSRF_TRUSTED_ORIGINS = ['$SERVICE_URL']" >> "$CONFIG_FILE"
+    echo "CSRF_TRUSTED_ORIGINS has been set to ['$SERVICE_URL'] in $CONFIG_FILE"
 }
 
 function start_seahub {
@@ -46,6 +70,7 @@ function logger {
 }
 
 init_seahub
+init_csrf
 start_socat &
 sleep 1
 start_seahub
