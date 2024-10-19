@@ -37,7 +37,7 @@ termcolor==2.4.0 \
 colorlog==6.8.2 \
 pymysql==1.1.1 \
 jinja2==3.1.4 \
-pycryptodome==3.20.0 \
+pycryptodome==3.21.0 \
 lxml==5.3.0 \
 python-ldap==3.4.4 \
 pytz==2024.2 \

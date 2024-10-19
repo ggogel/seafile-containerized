@@ -51,7 +51,7 @@ mysqlclient==2.2.4 \
 django==4.2.16 \
 django-pylibmc==0.6.1 \
 django-simple-captcha==0.6.0 \
-pycryptodome==3.20.0 \
+pycryptodome==3.21.0 \
 djangosaml2==1.9.3 \
 python-ldap==3.4.4 \
 sqlalchemy==2.0.35 \
