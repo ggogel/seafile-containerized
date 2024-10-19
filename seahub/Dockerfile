@@ -54,8 +54,8 @@ django-simple-captcha==0.6.0 \
 pycryptodome==3.21.0 \
 djangosaml2==1.9.3 \
 python-ldap==3.4.4 \
-sqlalchemy==2.0.35 \
-sqlalchemy==2.0.35 \
+sqlalchemy==2.0.36 \
+sqlalchemy==2.0.36 \
 django-statici18n==2.5.0 \
 django_webpack_loader==3.1.1 \
 django_picklefield==3.2 \
