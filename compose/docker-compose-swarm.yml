@@ -57,7 +57,7 @@ services:
       - seafile-net
 
   memcached:
-    image: memcached:1.6.31
+    image: memcached:1.6.32
     entrypoint: memcached -m 1024
     networks:
       - seafile-net
