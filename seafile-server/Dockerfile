@@ -34,7 +34,7 @@ RUN pip3 install --target /pip-deps --timeout=3600 --no-cache-dir \
 sqlalchemy==2.0.36 \
 click==8.1.7 \
 termcolor==2.5.0 \
-colorlog==6.8.2 \
+colorlog==6.9.0 \
 pymysql==1.1.1 \
 jinja2==3.1.4 \
 pycryptodome==3.21.0 \
