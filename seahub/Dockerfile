@@ -69,7 +69,7 @@ qrcode==8.0 \
 chardet==5.2.0 \
 openpyxl==3.1.5 \
 Markdown==3.7 \
-bleach==6.1.0 \
+bleach==6.2.0 \
 pypinyin==0.53.0 \
 PyMuPDF==1.24.13 \
 pymysql==1.1.1
