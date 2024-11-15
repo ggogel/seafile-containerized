@@ -41,7 +41,7 @@ spec:
               value: "true"
             - name: MYSQL_ROOT_PASSWORD
               value: db_dev
-          image: mariadb:10.11.9
+          image: mariadb:10.11.10
           name: db
           ports:
             - containerPort: 3306
