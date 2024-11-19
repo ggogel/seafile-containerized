@@ -71,7 +71,7 @@ openpyxl==3.1.5 \
 Markdown==3.7 \
 bleach==6.2.0 \
 pypinyin==0.53.0 \
-PyMuPDF==1.24.13 \
+PyMuPDF==1.24.14 \
 pymysql==1.1.1
 
 RUN find /pip-deps -name "__pycache__" -type d -exec rm -r {} + && \
