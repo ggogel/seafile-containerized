@@ -44,7 +44,7 @@ python3-dev
 RUN python3 -m pip install --upgrade pip &&\
 pip3 install --target /pip-deps --timeout=3600 --no-cache-dir  \
 future==1.0.0 \
-pillow==11.0.0 \
+pillow==11.1.0 \
 captcha==0.6.0 \
 pyjwt==2.9.0 \
 mysqlclient==2.2.6 \
