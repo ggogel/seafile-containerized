@@ -45,7 +45,7 @@ django==4.2.16 \
 requests==2.32.3 \
 PyYAML==6.0.2 \
 defusedxml==0.7.1 \
-json5==0.9.28
+json5==0.10.0
 
 RUN find /pip-deps -name "__pycache__" -type d -exec rm -r {} + && \
     rm -rf /pip-deps/pip /pip-deps/wheel /pip-deps/setuptools
