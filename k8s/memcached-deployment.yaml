@@ -23,7 +23,7 @@ spec:
             - memcached
             - -m
             - "1024"
-          image: memcached:1.6.32
+          image: memcached:1.6.34
           name: memcached
           ports:
             - containerPort: 11211
