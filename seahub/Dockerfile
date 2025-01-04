@@ -24,7 +24,7 @@ COPY --from=build /tmp/seafile-server-${SEAFILE_VERSION} /tmp/seafile-server-${S
 
 RUN rm -rf /tmp/seafile-server-${SEAFILE_VERSION}/seahub/thirdpart
 
-FROM python:3.10.15-alpine3.20 AS pip
+FROM python:3.13.1-alpine3.20 AS pip
 
 RUN apk add --no-cache \
 mariadb-dev \
@@ -77,7 +77,7 @@ pymysql==1.1.1
 RUN find /pip-deps -name "__pycache__" -type d -exec rm -r {} + && \
     rm -rf /pip-deps/pip /pip-deps/wheel /pip-deps/setuptools
 
-FROM python:3.10.15-alpine3.20
+FROM python:3.13.1-alpine3.20
 
 RUN apk add --no-cache \
 bash \
