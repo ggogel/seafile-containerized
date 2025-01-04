@@ -46,7 +46,7 @@ pip3 install --target /pip-deps --timeout=3600 --no-cache-dir  \
 future==1.0.0 \
 pillow==11.0.0 \
 captcha==0.6.0 \
-pyjwt==2.9.0 \
+pyjwt==2.10.1 \
 mysqlclient==2.2.6 \
 django==4.2.16 \
 django-pylibmc==0.6.1 \
