@@ -32,7 +32,7 @@ libsasl2-dev \
 
 RUN pip3 install --target /pip-deps --timeout=3600 --no-cache-dir \
 sqlalchemy==2.0.36 \
-click==8.1.7 \
+click==8.1.8 \
 termcolor==2.5.0 \
 colorlog==6.9.0 \
 pymysql==1.1.1 \
