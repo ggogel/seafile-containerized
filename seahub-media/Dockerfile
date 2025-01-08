@@ -12,6 +12,6 @@ RUN wget https://raw.githubusercontent.com/haiwen/seafile-docker/master/build/se
 RUN chmod +x ./seafile-build.sh
 RUN ./seafile-build.sh ${SEAFILE_VERSION}
 
-FROM caddy:2.8.4-alpine
+FROM caddy:2.9.1-alpine
 
 COPY --from=build /tmp/seafile-server*/seahub/media /usr/share/caddy/media
