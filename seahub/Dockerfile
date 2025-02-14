@@ -16,7 +16,7 @@ RUN sed -i "s@.*INNER_FILE_SERVER_ROOT.*@INNER_FILE_SERVER_ROOT = os.environ.get
 
 RUN sed -i '/warning_if_seafile_not_running;/d' /tmp/seafile-server-${SEAFILE_VERSION}/seahub.sh
 
-FROM alpine:3.20.3 AS clean
+FROM alpine:3.21.3 AS clean
 
 ENV SEAFILE_VERSION=11.0.13
 

@@ -12,7 +12,7 @@ RUN wget https://raw.githubusercontent.com/haiwen/seafile-docker/master/build/se
 RUN chmod +x ./seafile-build.sh
 RUN ./seafile-build.sh ${SEAFILE_VERSION}
 
-FROM alpine:3.20.3 AS clean
+FROM alpine:3.21.3 AS clean
 
 ENV SEAFILE_VERSION=11.0.13
 
