@@ -50,7 +50,7 @@ pyjwt==2.9.0 \
 mysqlclient==2.2.6 \
 django==4.2.17 \
 django-pylibmc==0.6.1 \
-django-simple-captcha==0.6.0 \
+django-simple-captcha==0.6.2 \
 pycryptodome==3.21.0 \
 djangosaml2==1.9.3 \
 python-ldap==3.4.4 \
