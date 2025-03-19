@@ -4,7 +4,7 @@ RUN apt-get update && \
     apt-get install -y software-properties-common wget && \
     add-apt-repository ppa:longsleep/golang-backports
 
-ENV SEAFILE_VERSION=11.0.13
+ENV SEAFILE_VERSION=12.0.11
 
 WORKDIR /tmp
 RUN wget https://raw.githubusercontent.com/haiwen/seafile-docker/master/build/seafile-build.sh
@@ -18,7 +18,7 @@ RUN sed -i '/warning_if_seafile_not_running;/d' /tmp/seafile-server-${SEAFILE_VE
 
 FROM alpine:3.20.3 AS clean
 
-ENV SEAFILE_VERSION=11.0.13
+ENV SEAFILE_VERSION=12.0.11
 
 COPY --from=build /tmp/seafile-server-${SEAFILE_VERSION} /tmp/seafile-server-${SEAFILE_VERSION}
 
