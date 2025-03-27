@@ -31,7 +31,7 @@ libsasl2-dev \
 && rm -rf /var/lib/apt/lists/*
 
 RUN pip3 install --target /pip-deps --timeout=3600 --no-cache-dir \
-sqlalchemy==2.0.36 \
+sqlalchemy==2.0.40 \
 click==8.1.8 \
 termcolor==2.5.0 \
 colorlog==6.9.0 \
