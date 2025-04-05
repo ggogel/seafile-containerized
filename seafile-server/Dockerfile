@@ -38,7 +38,7 @@ colorlog==6.9.0 \
 pymysql==1.1.1 \
 jinja2==3.1.5 \
 pycryptodome==3.21.0 \
-lxml==5.3.0 \
+lxml==5.3.2 \
 python-ldap==3.4.4 \
 pytz==2024.2 \
 django==4.2.17 \
