@@ -1,4 +1,4 @@
-FROM ubuntu:jammy@sha256:0e5e4a57c2499249aafc3b40fcd541e9a456aab7296681a3994d631587203f97 AS build
+FROM ubuntu:jammy@sha256:d80997daaa3811b175119350d84305e1ec9129e1799bba0bd1e3120da3ff52c3 AS build
 
 RUN apt-get update && \
     apt-get install -y software-properties-common wget && \
