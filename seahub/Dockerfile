@@ -47,7 +47,7 @@ future==1.0.0 \
 pillow==11.0.0 \
 captcha==0.6.0 \
 pyjwt==2.9.0 \
-mysqlclient==2.2.6 \
+mysqlclient==2.2.7 \
 django==4.2.17 \
 django-pylibmc==0.6.1 \
 django-simple-captcha==0.6.0 \
