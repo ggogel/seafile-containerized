@@ -58,7 +58,7 @@ services:
     restart: always
 
   db:
-    image: mariadb:10.11.10
+    image: mariadb:10.11.11
     environment:
       - MYSQL_ROOT_PASSWORD=db_dev
       - MYSQL_LOG_CONSOLE=true
