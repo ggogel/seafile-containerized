@@ -55,7 +55,8 @@ def init_seafile_server():
     proto = 'https' if is_https() else 'http'
     env = {
         'SERVER_NAME': 'seafile',
-        'SERVER_IP': f'{proto}://{domain}',
+        'SERVER_IP': domain,
+        'FORCE_HTTPS_IN_CONF': 'true' if is_https() else 'false',
         'MYSQL_USER': 'seafile',
         'MYSQL_USER_PASSWD': str(uuid.uuid4()),
         'MYSQL_USER_HOST': '%.%.%.%',
@@ -71,8 +72,6 @@ def init_seafile_server():
         .format(get_script('setup-seafile-mysql.py')), shell=True)
     
     # Change setup-seafile-mysql.py to allow protocol (http/https) in SERVER_IP
-    call('''sed -i "/SERVER_IP_OR_DOMAIN_REGEX\ =/c\\ \ \ \ SERVER_IP_OR_DOMAIN_REGEX\ \=\ r'^(http:\\/\\/|https:\\/\\/)[^.].+\..+[^.]$'" {}'''
-        .format(get_script('setup-seafile-mysql.py')), shell=True)
     call('''sed -i '/SERVICE_URL = "http:\/\//s/http:\/\///' {}'''
         .format(get_script('setup-seafile-mysql.py')), shell=True)
 
